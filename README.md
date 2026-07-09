@@ -1,7 +1,5 @@
 <<<<<<< HEAD
 
-Ai health assistant
-=======
 # AI Health Companion
 
 A full-stack wellness application with authentication, health tracking, AI chat, anomaly detection, and reporting.
