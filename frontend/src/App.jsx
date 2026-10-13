@@ -1,75 +1,202 @@
-import { Routes, Route, NavLink, Navigate } from 'react-router-dom';
-import { motion, useReducedMotion } from 'framer-motion';
-import { Canvas } from '@react-three/fiber';
-import { Float, MeshDistortMaterial, Sphere } from '@react-three/drei';
-import { useMemo, useState } from 'react';
-import LandingPage from './pages/LandingPage';
-import DashboardPage from './pages/DashboardPage';
-import ChatPage from './pages/ChatPage';
-import TrackerPage from './pages/TrackerPage';
-import VitalsPage from './pages/VitalsPage';
+import { lazy, Suspense, useEffect, useRef, useState } from "react";
+import {
+  Routes,
+  Route,
+  NavLink,
+  Navigate,
+  Link,
+  useNavigate,
+  useLocation,
+} from "react-router-dom";
+import { MotionConfig } from "framer-motion";
+import LandingPage from "./pages/LandingPage";
+import AuthPanel from "./components/AuthPanel";
+import Icon from "./components/Icon";
+const DashboardPage = lazy(() => import("./pages/DashboardPage"));
+const ChatPage = lazy(() => import("./pages/ChatPage"));
+const TrackerPage = lazy(() => import("./pages/TrackerPage"));
+const VitalsPage = lazy(() => import("./pages/VitalsPage"));
 
-function PulseModel() {
-  const prefersReducedMotion = useReducedMotion();
-
+export default function App() {
+  const [token, setToken] = useState(() => localStorage.getItem("token"));
+  const [authMode, setAuthMode] = useState(null);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const dialog = useRef(null);
+  const navigate = useNavigate();
+  const location = useLocation();
+  useEffect(() => {
+    setMenuOpen(false);
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
+  useEffect(() => {
+    if (authMode) {
+      dialog.current.showModal();
+      document.body.style.overflow = "hidden";
+    } else {
+      dialog.current.close();
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [authMode]);
+  const start = () => (token ? navigate("/dashboard") : setAuthMode("signup"));
   return (
-    <Canvas camera={{ position: [0, 0, 4], fov: 45 }}>
-      <ambientLight intensity={0.7} />
-      <pointLight position={[5, 5, 5]} />
-      <Float speed={2.5} rotationIntensity={0.7} floatIntensity={0.8}>
-        <Sphere args={[1, 64, 64]}>
-          <MeshDistortMaterial color="#7c3aed" attach="material" roughness={0.3} metalness={0.4} distort={0.25} speed={2} />
-        </Sphere>
-      </Float>
-      {prefersReducedMotion ? null : (
-        <mesh rotation={[0, 0, 0]}>
-          <torusKnotGeometry args={[1.15, 0.16, 200, 16]} />
-          <meshStandardMaterial color="#22d3ee" emissive="#0f172a" />
-        </mesh>
-      )}
-    </Canvas>
+    <MotionConfig reducedMotion="user">
+      <div className="app-shell">
+        <a className="skip-link" href="#main-content">
+          Skip to content
+        </a>
+        <header className="site-header">
+          <Link to="/" className="brand" aria-label="Health Companion home">
+            <span className="brand-mark">
+              <Icon name="leaf" size={24} />
+            </span>
+            <span>
+              health<span className="brand-light">companion</span>
+              <span className="brand-dot">.</span>
+            </span>
+          </Link>
+          <button
+            className="mobile-toggle"
+            aria-label={menuOpen ? "Close menu" : "Open menu"}
+            aria-expanded={menuOpen}
+            aria-controls="main-navigation"
+            onClick={() => setMenuOpen(!menuOpen)}
+          >
+            <Icon name={menuOpen ? "close" : "menu"} />
+          </button>
+          <nav
+            id="main-navigation"
+            className={menuOpen ? "main-nav is-open" : "main-nav"}
+            aria-label="Main navigation"
+          >
+            {token ? (
+              <>
+                <NavLink to="/dashboard">Overview</NavLink>
+                <NavLink to="/tracker">Daily tracker</NavLink>
+                <NavLink to="/vitals">Vitals</NavLink>
+                <NavLink to="/chat">Assistant</NavLink>
+              </>
+            ) : (
+              <>
+                <a href="/#features" onClick={() => setMenuOpen(false)}>
+                  The little things
+                </a>
+                <a href="/#how-it-works" onClick={() => setMenuOpen(false)}>
+                  How it works
+                </a>
+                <a href="/#our-approach" onClick={() => setMenuOpen(false)}>
+                  Our approach
+                </a>
+              </>
+            )}
+            <div className="nav-actions">
+              {token ? (
+                <button
+                  className="text-btn"
+                  onClick={() => {
+                    localStorage.removeItem("token");
+                    setToken(null);
+                    navigate("/");
+                  }}
+                >
+                  Log out
+                </button>
+              ) : (
+                <>
+                  <button
+                    className="text-btn"
+                    onClick={() => {
+                      setMenuOpen(false);
+                      setAuthMode("login");
+                    }}
+                  >
+                    Log in
+                  </button>
+                  <button className="primary-btn nav-cta" onClick={start}>
+                    Get started <Icon size={16} />
+                  </button>
+                </>
+              )}
+            </div>
+          </nav>
+        </header>
+        <main id="main-content">
+          <Suspense
+            fallback={
+              <div className="route-loading" role="status">
+                Getting things ready…
+              </div>
+            }
+          >
+            <Routes>
+              <Route path="/" element={<LandingPage onStart={start} />} />
+              {[
+                ["dashboard", DashboardPage],
+                ["tracker", TrackerPage],
+                ["vitals", VitalsPage],
+                ["chat", ChatPage],
+              ].map(([path, Page]) => (
+                <Route
+                  key={path}
+                  path={`/${path}`}
+                  element={
+                    token ? (
+                      <div className="workspace-content">
+                        <Link to="/" className="back-link">
+                          ← Back to home
+                        </Link>
+                        <Page token={token} />
+                      </div>
+                    ) : (
+                      <Navigate to="/" replace />
+                    )
+                  }
+                />
+              ))}
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
+          </Suspense>
+        </main>
+        <footer className="site-footer">
+          <Link to="/" className="brand">
+            <Icon name="leaf" />
+            <span>healthcompanion.</span>
+          </Link>
+          <p>A little better, every day.</p>
+          <span>© {new Date().getFullYear()} Health Companion</span>
+        </footer>
+        <dialog
+          ref={dialog}
+          className="auth-dialog"
+          aria-labelledby="auth-title"
+          onCancel={() => setAuthMode(null)}
+          onClick={(e) => {
+            if (e.target === dialog.current) setAuthMode(null);
+          }}
+        >
+          <button
+            className="dialog-close"
+            aria-label="Close sign in"
+            onClick={() => setAuthMode(null)}
+          >
+            <Icon name="close" />
+          </button>
+          {authMode && (
+            <AuthPanel
+              key={authMode}
+              initialMode={authMode}
+              onAuthenticated={(value) => {
+                localStorage.setItem("token", value);
+                setToken(value);
+                setAuthMode(null);
+                navigate("/dashboard");
+              }}
+            />
+          )}
+        </dialog>
+      </div>
+    </MotionConfig>
   );
 }
-
-function App() {
-  const [token, setToken] = useState(localStorage.getItem('token'));
-  const prefersReducedMotion = useReducedMotion();
-
-  const isAuthenticated = Boolean(token);
-
-  const navLinkClass = ({ isActive }) => `nav-link ${isActive ? 'active' : ''}`;
-
-  const heroMotion = useMemo(() => ({
-    initial: { opacity: 0, y: 20 },
-    animate: { opacity: 1, y: 0 },
-    transition: { duration: prefersReducedMotion ? 0.1 : 0.5 }
-  }), [prefersReducedMotion]);
-
-  return (
-    <div className="app-shell">
-      <header className="topbar glass-card">
-        <div className="brand">AI Health Companion</div>
-        <nav>
-          <NavLink className={navLinkClass} to="/">Home</NavLink>
-          {isAuthenticated && <NavLink className={navLinkClass} to="/dashboard">Dashboard</NavLink>}
-          {isAuthenticated && <NavLink className={navLinkClass} to="/chat">Assistant</NavLink>}
-          {isAuthenticated && <NavLink className={navLinkClass} to="/tracker">Tracker</NavLink>}
-          {isAuthenticated && <NavLink className={navLinkClass} to="/vitals">Vitals</NavLink>}
-          {!isAuthenticated ? <button className="ghost-btn" onClick={() => setToken('demo-token')}>Demo Login</button> : <button className="ghost-btn" onClick={() => { localStorage.removeItem('token'); setToken(null); }}>Logout</button>}
-        </nav>
-      </header>
-
-      <motion.main className="content" {...heroMotion}>
-        <Routes>
-          <Route path="/" element={<LandingPage pulseModel={<PulseModel />} onAuthenticated={(value) => { localStorage.setItem('token', value); setToken(value); }} />} />
-          <Route path="/dashboard" element={isAuthenticated ? <DashboardPage token={token} /> : <Navigate to="/" replace />} />
-          <Route path="/chat" element={isAuthenticated ? <ChatPage token={token} /> : <Navigate to="/" replace />} />
-          <Route path="/tracker" element={isAuthenticated ? <TrackerPage token={token} /> : <Navigate to="/" replace />} />
-          <Route path="/vitals" element={isAuthenticated ? <VitalsPage token={token} /> : <Navigate to="/" replace />} />
-        </Routes>
-      </motion.main>
-    </div>
-  );
-}
-
-export default App;

@@ -1,54 +1,124 @@
-import { useState } from 'react';
+import { useState } from "react";
+import Icon from "./Icon";
 
-export default function AuthPanel({ onAuthenticated }) {
-  const [mode, setMode] = useState('login');
-  const [form, setForm] = useState({ name: '', email: '', password: '' });
-  const [error, setError] = useState('');
-
+export default function AuthPanel({ onAuthenticated, initialMode = "signup" }) {
+  const [mode, setMode] = useState(initialMode);
+  const [form, setForm] = useState({ name: "", email: "", password: "" });
+  const [error, setError] = useState("");
+  const [pending, setPending] = useState(false);
   const submit = async (event) => {
     event.preventDefault();
-    setError('');
-    const endpoint = mode === 'login' ? '/api/auth/login' : '/api/auth/signup';
-    const payload = mode === 'login' ? { email: form.email, password: form.password } : { name: form.name, email: form.email, password: form.password };
-    const response = await fetch(endpoint, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    });
-    const data = await response.json();
-    if (!response.ok) {
-      setError(data.message || 'Authentication failed');
-      return;
+    setError("");
+    setPending(true);
+    try {
+      const response = await fetch(`/api/auth/${mode}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+        signal: AbortSignal.timeout(15000),
+      });
+      const data = await response.json();
+      if (!response.ok)
+        throw new Error(
+          data.message ||
+            data.errors?.[0]?.msg ||
+            "We couldn’t sign you in. Please check your details.",
+        );
+      onAuthenticated(data.token);
+    } catch (err) {
+      setError(
+        err.name === "TimeoutError"
+          ? "This is taking longer than expected. Please try again."
+          : err.message === "Failed to fetch"
+            ? "Unable to connect. Please try again in a moment."
+            : err.message,
+      );
+    } finally {
+      setPending(false);
     }
-    localStorage.setItem('token', data.token);
-    onAuthenticated(data.token);
   };
-
   return (
-    <div className="panel glass-card" style={{ marginTop: 16 }}>
-      <h3>{mode === 'login' ? 'Login to your dashboard' : 'Create your account'}</h3>
-      <div style={{ display: 'flex', gap: 8, marginBottom: 12 }}>
-        <button className="secondary-btn" onClick={() => setMode('login')}>Login</button>
-        <button className="secondary-btn" onClick={() => setMode('signup')}>Sign up</button>
-      </div>
-      <form onSubmit={submit} className="form-grid">
-        {mode === 'signup' && (
-          <label style={{ gridColumn: '1 / -1' }}>
-            Name
-            <input value={form.name} onChange={(event) => setForm({ ...form, name: event.target.value })} placeholder="Ava" />
+    <div className="auth-panel">
+      <span className="icon-tile">
+        <Icon name="leaf" size={26} />
+      </span>
+      <p className="eyebrow mt-6">YOUR NEXT CHAPTER</p>
+      <h2 id="auth-title">
+        {mode === "login" ? "Welcome back." : "Make room for you."}
+      </h2>
+      <p className="muted">
+        {mode === "login"
+          ? "A little check-in can make a big difference."
+          : "Start building a healthier everyday, one small step at a time."}
+      </p>
+      <form onSubmit={submit} className="mt-7 space-y-4">
+        {mode === "signup" && (
+          <label>
+            Your name
+            <input
+              required
+              autoComplete="name"
+              value={form.name}
+              onChange={(e) => setForm({ ...form, name: e.target.value })}
+              placeholder="Alex Morgan"
+            />
           </label>
         )}
-        <label style={{ gridColumn: '1 / -1' }}>
-          Email
-          <input type="email" value={form.email} onChange={(event) => setForm({ ...form, email: event.target.value })} placeholder="you@example.com" />
+        <label>
+          Email address
+          <input
+            required
+            type="email"
+            autoComplete="email"
+            value={form.email}
+            onChange={(e) => setForm({ ...form, email: e.target.value })}
+            placeholder="you@example.com"
+          />
         </label>
-        <label style={{ gridColumn: '1 / -1' }}>
+        <label>
           Password
-          <input type="password" value={form.password} onChange={(event) => setForm({ ...form, password: event.target.value })} placeholder="••••••" />
+          <input
+            required
+            type="password"
+            minLength={6}
+            autoComplete={
+              mode === "login" ? "current-password" : "new-password"
+            }
+            value={form.password}
+            onChange={(e) => setForm({ ...form, password: e.target.value })}
+            placeholder="At least 6 characters"
+          />
         </label>
-        {error && <div style={{ color: '#fda4af', gridColumn: '1 / -1' }}>{error}</div>}
-        <button className="primary-btn" type="submit">{mode === 'login' ? 'Sign in' : 'Create account'}</button>
+        {error && (
+          <p role="alert" className="form-error">
+            {error}
+          </p>
+        )}
+        <button
+          disabled={pending}
+          className="primary-btn w-full justify-center"
+          type="submit"
+        >
+          {pending
+            ? "One moment…"
+            : mode === "login"
+              ? "Log in"
+              : "Create your account"}
+          {!pending && <Icon />}
+        </button>
       </form>
+      <p className="auth-switch">
+        {mode === "login" ? "New here?" : "Already have an account?"}{" "}
+        <button
+          disabled={pending}
+          onClick={() => {
+            setMode(mode === "login" ? "signup" : "login");
+            setError("");
+          }}
+        >
+          {mode === "login" ? "Get started" : "Log in"}
+        </button>
+      </p>
     </div>
   );
 }
