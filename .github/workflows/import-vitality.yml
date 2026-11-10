@@ -1,0 +1,30 @@
+name: One-time Vitality source replacement
+on:
+  push:
+    branches: [main]
+    paths: [.github/workflows/import-vitality.yml]
+permissions:
+  contents: write
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Replace source with pinned Vitality snapshot
+        run: |
+          set -euo pipefail
+          upstream=c6f84b257cb97b49f95dde490323abff37a8ec82
+          git fetch --no-tags https://github.com/ohwisey/vitality-oss.git "$upstream"
+          git read-tree --reset -u "$upstream"
+          test -f LICENSE
+          test -f .env.example
+          test ! -f .env.local
+          test ! -d .github/workflows
+          printf '%s\n' '# AI Health Companion' '' 'Development base: https://github.com/ohwisey/vitality-oss' 'Imported upstream commit: c6f84b257cb97b49f95dde490323abff37a8ec82' '' 'Original MIT license and attribution are retained in LICENSE.' 'See README.md and SETUP-PROMPT.md for upstream setup details.' '' 'Copy .env.example to .env.local and fill credentials locally. Never commit secrets.' 'Supabase URL, anon key and server-only service-role key are required.' 'ANTHROPIC_API_KEY enables AI features; USDA_API_KEY enables nutrition search.' 'API keys are not configured. The imported application has not been runtime-tested.' > HEALTH-COMPANION.md
+          git add HEALTH-COMPANION.md
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git -c core.hooksPath=/dev/null commit -m "chore: replace previous app with pinned Vitality source"
+          git push origin HEAD:main
