@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 
 import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { getPriceId, getStripe } from '@/lib/stripe/client'
 
 // POST /api/stripe/checkout
@@ -50,7 +51,8 @@ export async function POST() {
     })
     customerId = customer.id
 
-    const { error: saveError } = await supabase
+    // Server-owned billing field; identity was verified by getUser() above.
+    const { error: saveError } = await createAdminClient()
       .from('profiles')
       .update({ stripe_customer_id: customerId })
       .eq('id', user.id)

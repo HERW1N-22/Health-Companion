@@ -35,10 +35,16 @@ async function loadEnv() {
   return out
 }
 
-const TEST_EMAIL = 'stripe-test@vitality.test'
-const TEST_PASSWORD = 'test1234'
+const TEST_EMAIL = process.env.HEALTH_COMPANION_TEST_EMAIL
+const TEST_PASSWORD = process.env.HEALTH_COMPANION_TEST_PASSWORD
 
 async function main() {
+  if (process.env.NODE_ENV === 'production' || process.env.ALLOW_TEST_USER_CREATION !== 'true') {
+    throw new Error('Test-user creation is disabled. Opt in only against a development database.')
+  }
+  if (!TEST_EMAIL || !TEST_PASSWORD || TEST_PASSWORD.length < 16) {
+    throw new Error('Set HEALTH_COMPANION_TEST_EMAIL and a unique HEALTH_COMPANION_TEST_PASSWORD of at least 16 characters in your local environment.')
+  }
   const env = await loadEnv()
   const url = env.NEXT_PUBLIC_SUPABASE_URL
   const serviceKey = env.SUPABASE_SERVICE_ROLE_KEY
@@ -128,7 +134,7 @@ async function main() {
   console.log('  Test user ready. Sign in at /login with:')
   console.log('')
   console.log(`    Email:    ${TEST_EMAIL}`)
-  console.log(`    Password: ${TEST_PASSWORD}`)
+  console.log('    Password: supplied privately through the local environment')
   console.log('')
   console.log(`  User id: ${userId}`)
   console.log('───────────────────────────────────────────────')

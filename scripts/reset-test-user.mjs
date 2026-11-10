@@ -6,7 +6,7 @@
  * lingering, subscription stuck, profiles row mismatched, etc. — run this
  * script and you're back to a clean known baseline:
  *
- *   stripe-test@vitality.test  /  test1234
+ *   Credentials must be provided privately through the local environment.
  *   tier=free, onboarded=true, no Stripe customer, no subscriptions
  *
  * Steps:
@@ -35,8 +35,8 @@ import { createClient } from '@supabase/supabase-js'
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..')
 
-const TEST_EMAIL = 'stripe-test@vitality.test'
-const TEST_PASSWORD = 'test1234'
+const TEST_EMAIL = process.env.HEALTH_COMPANION_TEST_EMAIL
+const TEST_PASSWORD = process.env.HEALTH_COMPANION_TEST_PASSWORD
 
 async function loadEnv() {
   const text = await readFile(join(ROOT, '.env.local'), 'utf8')
@@ -52,6 +52,8 @@ async function loadEnv() {
 }
 
 async function main() {
+  if (process.env.NODE_ENV === 'production' || process.env.ALLOW_TEST_USER_RESET !== 'true') throw new Error('Test-user reset is disabled; opt in only for a disposable development account.')
+  if (!TEST_EMAIL || !TEST_PASSWORD || TEST_PASSWORD.length < 16) throw new Error('Provide a unique test email and password of at least 16 characters through the local environment.')
   const env = await loadEnv()
   const url = env.NEXT_PUBLIC_SUPABASE_URL
   const serviceKey = env.SUPABASE_SERVICE_ROLE_KEY
@@ -170,7 +172,7 @@ async function main() {
   console.log('  Reset complete. Clean test user:')
   console.log('')
   console.log(`    Email:    ${TEST_EMAIL}`)
-  console.log(`    Password: ${TEST_PASSWORD}`)
+  console.log('    Password: supplied privately through the local environment')
   console.log(`    Tier:     free`)
   console.log(`    User id:  ${newUserId}`)
   console.log('───────────────────────────────────────────────')
