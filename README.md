@@ -1,6 +1,6 @@
 # Health Companion
 
-A student college project exploring personal health tracking and AI-assisted wellness. It includes nutrition and macro logging, workouts, hydration, weight trends, sleep and recovery, and optional AI coaching.
+Health Companion is a personal health and wellness application that brings nutrition and macro logging, workouts, hydration, weight trends, sleep, and recovery tracking into one dashboard, with optional AI-powered coaching.
 
 ## Features
 - Food logging, food-photo analysis, barcode lookup, calorie and macro tracking.
@@ -59,7 +59,7 @@ pnpm lint
 pnpm build
 ```
 
-Runtime setup, dependency vulnerability scanning and full user-journey testing remain pending. Review SECURITY-REVIEW.md before using real health information. The existing signup flow needs email-confirmation testing. This is an educational wellness application, not a medical diagnosis service.
+Runtime setup, dependency vulnerability scanning and full user-journey testing remain pending. Review SECURITY-REVIEW.md before using real health information. The existing signup flow needs email-confirmation testing. This is a wellness application, not a medical diagnosis service.
 
 ## License
 MIT. Required third-party copyright and permission notices are retained in LICENSE.
