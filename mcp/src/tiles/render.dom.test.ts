@@ -2,7 +2,7 @@
 // but it cannot prove the tile actually RUNS. A tile that lints green but throws on
 // first render is worse than no tile (this is exactly how the `var history` global
 // shadow shipped and broke all six templates). Here we mount each template in a real
-// DOM (jsdom), act as the Vitality host (reply to load, capture report/save), and
+// DOM (jsdom), act as the HealthCompanion host (reply to load, capture report/save), and
 // assert: no throw at mount or on interaction, the section renders, and the tile fires
 // exactly one contract-valid report with a local date key.
 
@@ -34,11 +34,11 @@ function mount(html: string): Mounted {
   win.addEventListener('unhandledrejection', (e: any) => errors.push(e.reason || 'unhandledrejection'));
   const reports: unknown[] = [];
   const saves: unknown[] = [];
-  // Act as the Vitality host: reply to the tile's load, capture report + save.
+  // Act as the HealthCompanion host: reply to the tile's load, capture report + save.
   win.addEventListener('message', (e: any) => {
     const m = e.data;
-    if (!m || m.source !== 'vitality-tile') return;
-    if (m.type === 'load') win.postMessage({ source: 'vitality-host', type: 'load:result', id: m.id, data: [] }, '*');
+    if (!m || m.source !== 'healthcompanion-tile') return;
+    if (m.type === 'load') win.postMessage({ source: 'healthcompanion-host', type: 'load:result', id: m.id, data: [] }, '*');
     else if (m.type === 'report') reports.push(m.stream);
     else if (m.type === 'save') saves.push(m.data);
   });

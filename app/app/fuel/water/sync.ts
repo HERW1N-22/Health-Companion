@@ -7,7 +7,7 @@ import type { WaterState } from './types'
  * Best-effort mirror of the local water state into Supabase
  * (`water_prefs` + `water_days`).
  *
- * localStorage (`vitality_water_v1`) remains the PRIMARY client store — this
+ * localStorage (`healthcompanion_water_v1`) remains the PRIMARY client store — this
  * adds a durable, cross-device, MCP-readable copy on top. Any failure is
  * swallowed so the UI is never affected. Modelled on the BUILD13 finance
  * migration.

@@ -36,6 +36,6 @@ describe('newerTables', () => {
 
   test('watches the four blob modules (water excluded — relational)', () => {
     expect(Object.values(WATCHED_TABLES).sort()).toEqual(['brand_state', 'goals_state', 'peak_state', 'supplements_state'].sort())
-    expect(Object.keys(WATCHED_TABLES)).not.toContain('vitality_water_v1')
+    expect(Object.keys(WATCHED_TABLES)).not.toContain('healthcompanion_water_v1')
   })
 })

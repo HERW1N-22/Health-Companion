@@ -1,6 +1,6 @@
 /**
  * Tile -> Vee bridge logic: turns a reported stream (the report contract) into
- * something the existing "Vitality noticed" engine already understands. This is
+ * something the existing "HealthCompanion noticed" engine already understands. This is
  * the piece that makes "the user thinks they built a beer tracker, but they
  * actually handed Vee a categorized life-stream" true, with zero per-tile code.
  *
@@ -128,7 +128,7 @@ export function seamForStream(
  * getting started" line, never a fabricated trend, and it never divides by an
  * empty window. Every line is grounded in a real number the user can point at.
  *
- * Color LAW (a Vitality hard rule): tone is only ever 'good' (azure-mint),
+ * Color LAW (a HealthCompanion hard rule): tone is only ever 'good' (azure-mint),
  * 'caution' (amber), or 'neutral'. There is no red. A move in the wrong
  * direction is surfaced as a gentle caution, never an alarm, and a bad
  * direction is never dressed up as good.

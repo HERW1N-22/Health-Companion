@@ -92,7 +92,7 @@ Inline SVG. Two stacked circles: a faint track and an azure arc. The arc length 
     <circle id="ringArc" cx="66" cy="66" r="44" fill="none" stroke="var(--azure)" stroke-width="9"
       stroke-linecap="round" transform="rotate(-90 66 66)"/>
   </svg>
-  <div class="ring-in"><span class="ring-val">74</span><span class="ring-lbl">Vitality</span></div>
+  <div class="ring-in"><span class="ring-val">74</span><span class="ring-lbl">Health Companion</span></div>
 </div>
 <script>
   (function(){var r=44,c=2*Math.PI*r,pct=74,a=document.getElementById('ringArc');

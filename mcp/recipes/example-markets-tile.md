@@ -12,7 +12,7 @@ A trivial counter is one number and two buttons. A Fuel-grade tile earns its pla
 
 - **Multi-section layout.** A header with a title and a settings gear, a hero headline number, a live holdings list, an add form, an actions row, a settings drawer, a footer. Distinct sections, one calm rhythm.
 - **Responsive, small on the grid AND opened full.** A centered `max-width` column, `clamp()` type that scales with the viewport, flex rows that wrap, and a narrow breakpoint that simplifies the add form. It reads well in a small grid cell and full-screen.
-- **A real capability (bring your own key).** It calls a live quote API straight from the user's browser with the user's own free key, the Aikido move from `api-plugins.md`. No Vitality key ever touches a tile.
+- **A real capability (bring your own key).** It calls a live quote API straight from the user's browser with the user's own free key, the Aikido move from `api-plugins.md`. No Health Companion key ever touches a tile.
 - **Honest, warm states.** No key shows a gentle doorway, not a broken screen. Empty shows an invitation. A failed fetch shows one calm line, never a red stack trace. A remove asks before it deletes.
 - **The bug-lessons baked in.** Local date keys, transform/opacity-only motion, host-bridge persistence with a standalone localStorage fallback wrapped in try/catch, saves held behind a loaded flag, inputs clamped, glyphs drawn as inline SVG, mint `::selection`, a `prefers-reduced-motion` escape hatch. These are the `gotchas.md` rules, already applied.
 - **One report, done right.** It reports a single stream (portfolio value, `kind:'money'`) so it feeds the dashboard and the optional Vee tile, and only when it has real numbers.
@@ -181,7 +181,7 @@ input{caret-color:var(--mint);user-select:text;-webkit-user-select:text}
     <h3>live price key</h3>
     <input id="key" type="password" placeholder="paste your finnhub key" autocomplete="off">
     <button class="btn" id="saveKey" type="button" style="align-self:flex-start">save key</button>
-    <p>Your key stays in this tile and talks straight to the price service from your own browser. It never passes through Vitality.</p>
+    <p>Your key stays in this tile and talks straight to the price service from your own browser. It never passes through Health Companion.</p>
     <ol>
       <li>Open finnhub.io and make a free account.</li>
       <li>Copy the API key from your dashboard.</li>
@@ -207,28 +207,28 @@ input{caret-color:var(--mint);user-select:text;-webkit-user-select:text}
 
 <script>
 /* ---- the host bridge: save/load/report, with a standalone fallback ---- */
-var Vitality = (function () {
-  var waiters = {}, LS = 'vitality-markets-tile';
+var Health Companion = (function () {
+  var waiters = {}, LS = 'healthcompanion-markets-tile';
   function lsGet(){ try { return JSON.parse(localStorage.getItem(LS) || 'null'); } catch (e) { return null; } }
   function lsSet(d){ try { localStorage.setItem(LS, JSON.stringify(d)); } catch (e) {} }
   window.addEventListener('message', function (e) {
     var m = e.data;
-    if (m && m.source === 'vitality-host' && m.type === 'load:result' && waiters[m.id]) {
+    if (m && m.source === 'healthcompanion-host' && m.type === 'load:result' && waiters[m.id]) {
       waiters[m.id](m.data); delete waiters[m.id];
     }
   });
   return {
-    save: function (d) { lsSet(d); try { parent.postMessage({ source:'vitality-tile', type:'save', data:d }, '*'); } catch (e) {} },
+    save: function (d) { lsSet(d); try { parent.postMessage({ source:'healthcompanion-tile', type:'save', data:d }, '*'); } catch (e) {} },
     load: function () {
       return new Promise(function (res) {
         if (window.parent === window) { res(lsGet()); return; }   // opened standalone, no host frame
         var id = Math.random().toString(36).slice(2);
         waiters[id] = res;
-        try { parent.postMessage({ source:'vitality-tile', type:'load', id:id }, '*'); } catch (e) {}
+        try { parent.postMessage({ source:'healthcompanion-tile', type:'load', id:id }, '*'); } catch (e) {}
         setTimeout(function () { if (waiters[id]) { delete waiters[id]; res(lsGet()); } }, 1200); // never stuck empty
       });
     },
-    report: function (s) { try { parent.postMessage({ source:'vitality-tile', type:'report', stream:s }, '*'); } catch (e) {} }
+    report: function (s) { try { parent.postMessage({ source:'healthcompanion-tile', type:'report', stream:s }, '*'); } catch (e) {} }
   };
 })();
 
@@ -349,7 +349,7 @@ async function refresh(){
 function reportTotal(){
   var t = totals();
   if (t.have > 0 && t.value > 0) {
-    Vitality.report({ key:'portfolio', label:'Portfolio', value:Math.round(t.value), date:today(), kind:'money', goalDirection:'up' });
+    Health Companion.report({ key:'portfolio', label:'Portfolio', value:Math.round(t.value), date:today(), kind:'money', goalDirection:'up' });
   }
 }
 
@@ -400,7 +400,7 @@ document.getElementById('list').addEventListener('click', function (e) {
 });
 
 /* ---- hydrate once, then allow saves (never persist empty defaults over real data) ---- */
-Vitality.load().then(function (saved) {
+Health Companion.load().then(function (saved) {
   if (saved && typeof saved === 'object') {
     state.apiKey = saved.apiKey || '';
     state.holdings = Array.isArray(saved.holdings) ? saved.holdings : [];
@@ -411,7 +411,7 @@ Vitality.load().then(function (saved) {
   render();
   if (hasKey() && state.holdings.length) refresh();
 });
-function persist(){ if (loaded) Vitality.save({ apiKey:state.apiKey, holdings:state.holdings, quotes:state.quotes }); }
+function persist(){ if (loaded) Health Companion.save({ apiKey:state.apiKey, holdings:state.holdings, quotes:state.quotes }); }
 </script>
 </body>
 </html>
@@ -425,7 +425,7 @@ function persist(){ if (loaded) Vitality.save({ apiKey:state.apiKey, holdings:st
 
 **Responsiveness comes from three cheap moves**, not a framework: a centered column with a `max-width`, `clamp()` on the type and the padding so nothing is fixed to one screen size, and `flex-wrap` plus one `@media (max-width:420px)` rule that lets the shares field drop to its own line and hides the eyebrow label when space is tight. That is the whole trick behind "small on the grid, opens full."
 
-**The capability is bring-your-own-key, the Aikido move.** The gear opens a drawer with a password field. The key is saved inside the tile's own data via `Vitality.save`, next to the holdings, so it survives a reload and never lives in the HTML. `quote()` calls the live API straight from the user's browser with that key. A sealed tile cannot hold a Vitality key, but it can hold the user's, and that is enough to make it feel alive. Sell it on privacy: the request never passes through Vitality. The full pattern, and the Anthropic version for an AI tile, are in `api-plugins.md` and `ai-mentor.md`.
+**The capability is bring-your-own-key, the Aikido move.** The gear opens a drawer with a password field. The key is saved inside the tile's own data via `Health Companion.save`, next to the holdings, so it survives a reload and never lives in the HTML. `quote()` calls the live API straight from the user's browser with that key. A sealed tile cannot hold a Health Companion key, but it can hold the user's, and that is enough to make it feel alive. Sell it on privacy: the request never passes through Health Companion. The full pattern, and the Anthropic version for an AI tile, are in `api-plugins.md` and `ai-mentor.md`.
 
 **Every state is honest and warm.** No key opens the drawer and says so kindly. An empty list invites the first symbol. A failed fetch shows one calm line through `flash(..., true)`, never a red stack trace, and red is reserved for genuine destruction anyway, so a price drop is amber caution, not alarm. Removing a holding asks first with an inline remove-or-keep, the soft-confirm from the gotchas, so a misfire never loses real work.
 
@@ -444,4 +444,4 @@ Keep the shell, change four things:
 3. **The API call.** `quote()` is one function. Point it at a different free-key endpoint (see the pairing table in `api-plugins.md`) and reshape the response. Keep the `fetch`, the status checks, and the warm throw.
 4. **The report.** Pick the one number that matters and the `kind` that fits it (`money`, `count`, `measure`, `intake`, `duration`, `rating`, `done`), and report it only when it is real.
 
-Everything else, the layout, the motion, the persistence, the states, the brand, the floor, is already correct. Build from here and the tile clears the Vitality bar by default. Run `check_tile` on your result and it should read PASS, zero errors, zero warnings, exactly as this one does.
+Everything else, the layout, the motion, the persistence, the states, the brand, the floor, is already correct. Build from here and the tile clears the Health Companion bar by default. Run `check_tile` on your result and it should read PASS, zero errors, zero warnings, exactly as this one does.

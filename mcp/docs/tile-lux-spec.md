@@ -1,14 +1,14 @@
-# Vitality Tile Lux Spec
+# Health Companion Tile Lux Spec
 
 The buildable design spec for the upgraded MCP tile templates. Implement this verbatim into the TypeScript template functions in `mcp/src/tiles/templates.ts`. Every hex, rgba, clamp, and duration below is taken from the real shipped app (`app/globals.css`, `app/app/fuel/macros/macros.module.css`, `app/welcome/welcome.module.css`) and the DNA pack (`mcp/dna/*`). Do not invent values.
 
-North star (founder's words): **Apple-minimal luxury. Rolls-Royce / Mercedes feel but more Apple: minimal, clean, efficient, professional, never glitchy, strong, simplistic.** The new default tile must read as rich and premium as a real Vitality module (Fuel / Train), not a bare counter. Calm, one accent, lots of negative space, one signature moment, honest states.
+North star (founder's words): **Apple-minimal luxury. Rolls-Royce / Mercedes feel but more Apple: minimal, clean, efficient, professional, never glitchy, strong, simplistic.** The new default tile must read as rich and premium as a real Health Companion module (Fuel / Train), not a bare counter. Calm, one accent, lots of negative space, one signature moment, honest states.
 
 ---
 
 ## 1. EXACT CSS TOKENS (inline these in every tile's `:root`)
 
-These are the real Vitality values from `app/globals.css`. A sealed tile inlines them; it does NOT import globals. The tile body stays transparent so the host paints black. Only `--bg` changes meaning (the tile never paints it).
+These are the real Health Companion values from `app/globals.css`. A sealed tile inlines them; it does NOT import globals. The tile body stays transparent so the host paints black. Only `--bg` changes meaning (the tile never paints it).
 
 ```css
 :root{
@@ -85,7 +85,7 @@ These are the real Vitality values from `app/globals.css`. A sealed tile inlines
 
 ### The bug (must fix)
 
-The current `HEAD` const in `mcp/src/tiles/templates.ts` (line 54) has **no font `<link>` at all**. `body` sets `font-family:-apple-system,BlinkMacSystemFont,'Inter','Segoe UI',sans-serif` (Inter is named but never loaded, so it silently falls to the system UI font), and `.title` sets `font-family:'Instrument Serif',Georgia,serif` (Instrument Serif is never loaded, so **every title renders in Georgia**). Result: the signature serif number/title look is missing on every generated tile. This is the single biggest reason the tiles read as "generic" instead of "Vitality."
+The current `HEAD` const in `mcp/src/tiles/templates.ts` (line 54) has **no font `<link>` at all**. `body` sets `font-family:-apple-system,BlinkMacSystemFont,'Inter','Segoe UI',sans-serif` (Inter is named but never loaded, so it silently falls to the system UI font), and `.title` sets `font-family:'Instrument Serif',Georgia,serif` (Instrument Serif is never loaded, so **every title renders in Georgia**). Result: the signature serif number/title look is missing on every generated tile. This is the single biggest reason the tiles read as "generic" instead of "Health Companion."
 
 ### The fix (put these three lines in every tile's `<head>`, before the `<style>`)
 
@@ -131,7 +131,7 @@ Helper for serif-italic voice: `.serif-italic{font-family:var(--font-serif);font
 
 ---
 
-## 3. THE SHARED "VITALITY TILE SHELL" (HTML + CSS every template inherits)
+## 3. THE SHARED "HEALTH_COMPANION TILE SHELL" (HTML + CSS every template inherits)
 
 Every template renders this skeleton, then fills the hero/section slots for its kind. It is: a header row (eyebrow number + mono label + a settings gear), a hero (serif number + mono unit + a status pill), a primary action, at least one real section/card, and honest empty + error states. One centered `max-width` column, one `gap` rhythm, generous negative space, one accent. This is the whole "small on the grid, opens full" trick: a centered column, `clamp()` type/padding, `flex-wrap`, and one narrow `@media`.
 
@@ -143,7 +143,7 @@ Every template renders this skeleton, then fills the hero/section slots for its 
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Vitality Tile</title>
+<title>Health Companion Tile</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -442,7 +442,7 @@ Habits: did I read, took my supplement, no-alcohol day.
 - **Microcopy:** a missed day is never shame: "missed yesterday, no big deal. today is a fresh mark." A win can be warm: "five days straight. you are quietly becoming the person who just does this."
 - **Report:** `{kind:'done', value: 1 if done today else 0, goalDirection}`.
 
-**Across all kinds:** persist through the host bridge (`Vitality.save`/`load`) with a try/catch localStorage fallback, hold saves behind a `loaded` flag, build local date keys with local getters (never `toISOString().slice`), and `report()` only when the value is real.
+**Across all kinds:** persist through the host bridge (`Health Companion.save`/`load`) with a try/catch localStorage fallback, hold saves behind a `loaded` flag, build local date keys with local getters (never `toISOString().slice`), and `report()` only when the value is real.
 
 ---
 
@@ -462,7 +462,7 @@ Habits: did I read, took my supplement, no-alcohol day.
 **DON'T**
 - Don't ship a bare number with two buttons and call it a tile.
 - Don't use red for state, ever. Amber is the strongest caution. Never shame.
-- Don't leave Instrument Serif unloaded (the current bug: it falls to Georgia and the tile stops looking like Vitality).
+- Don't leave Instrument Serif unloaded (the current bug: it falls to Georgia and the tile stops looking like Health Companion).
 - Don't use em dashes, en dashes, emojis, or OS-blue selection/caret/tap-flash.
 - Don't animate layout properties or `box-shadow` in a loop, or transition `filter:blur` on mobile. Transform + opacity only.
 - Don't paint a solid grey hex for text; use white at an opacity.

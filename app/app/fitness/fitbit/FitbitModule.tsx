@@ -33,8 +33,8 @@ export interface FitbitData {
   recoveryTrend: number[]
   sleepDebt7d: { day: string; hours: number }[]
   sleepTargetHours: number
-  vitalityScore: number | null
-  vitalityTier: string
+  healthcompanionScore: number | null
+  healthcompanionTier: string
   lastSyncedMinutes: number | null
   daysAvailable: number
 }
@@ -83,7 +83,7 @@ export default function FitbitModule({ view }: Props) {
     if (typeof window === 'undefined' || !view.data) return
     try {
       const d = view.data
-      localStorage.setItem('vitality_fitbit_v1', JSON.stringify({
+      localStorage.setItem('healthcompanion_fitbit_v1', JSON.stringify({
         recovery: d.recovery,
         hrv: d.hrv,
         hrvBaseline: d.hrvBaseline,
@@ -110,7 +110,7 @@ export default function FitbitModule({ view }: Props) {
   }
 
   const onDisconnect = async () => {
-    if (!confirm('Disconnect your Fitbit account? Vitality will stop pulling new data.')) return
+    if (!confirm('Disconnect your Fitbit account? HealthCompanion will stop pulling new data.')) return
     await fetch('/api/fitbit/disconnect', { method: 'POST' })
     router.refresh()
   }
@@ -127,8 +127,8 @@ export default function FitbitModule({ view }: Props) {
               <h1 className={fitnessStyles.title}>Fitbit</h1>
               <p className={fitnessStyles.subtitle}>Recovery · sleep · strain · HRV</p>
             </div>
-            {view.connected && view.data && view.data.vitalityScore != null && (
-              <VitalityScoreBadge score={view.data.vitalityScore} tier={view.data.vitalityTier} />
+            {view.connected && view.data && view.data.healthcompanionScore != null && (
+              <HealthCompanionScoreBadge score={view.data.healthcompanionScore} tier={view.data.healthcompanionTier} />
             )}
           </div>
         </div>
@@ -157,7 +157,7 @@ function ConnectPanel() {
   return (
     <section className={styles.connectPanel}>
       <p className={styles.connectIntro}>
-        Bring your <em>recovery</em>, <em>sleep</em>, and <em>strain</em> into Vitality.
+        Bring your <em>recovery</em>, <em>sleep</em>, and <em>strain</em> into HealthCompanion.
         One tap. Sign in with Fitbit, allow access, you&rsquo;re back here.
       </p>
       <p className={styles.connectSub}>We never see your Fitbit password. You can disconnect anytime.</p>
@@ -193,12 +193,12 @@ function NoDataPanel({
   )
 }
 
-function VitalityScoreBadge({ score, tier }: { score: number; tier: string }) {
+function HealthCompanionScoreBadge({ score, tier }: { score: number; tier: string }) {
   return (
-    <aside className={styles.scoreBadge} aria-label="Vitality Score">
+    <aside className={styles.scoreBadge} aria-label="HealthCompanion Score">
       <div className={styles.scoreNumber}>{score}</div>
       <div className={styles.scoreCol}>
-        <div className={styles.scoreLabel}>Vitality Score</div>
+        <div className={styles.scoreLabel}>HealthCompanion Score</div>
         <div className={styles.scoreTier}>{tier}</div>
       </div>
     </aside>

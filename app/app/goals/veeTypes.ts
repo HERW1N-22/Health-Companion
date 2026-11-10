@@ -61,7 +61,7 @@ export interface HabitTracking {
   hours?: number
 }
 
-/** A small "THIS WEEK with Vitality" goal — auto-tracked or manually tapped. */
+/** A small "THIS WEEK with HealthCompanion" goal — auto-tracked or manually tapped. */
 export interface HabitGoal {
   id: string
   parentGoalId: string | null

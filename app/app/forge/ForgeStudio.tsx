@@ -21,7 +21,7 @@ import styles from './forge.module.css'
  *
  *   UNIVERSAL - Copy the build brief (works in ANY AI, no tools assumed),
  *   paste it wherever, get ONE .html file back, drop it on the drop zone.
- *   The server gate (/api/forge/gate, the same floor vitality_add_tile
+ *   The server gate (/api/forge/gate, the same floor healthcompanion_add_tile
  *   enforces) answers accepted or rejected. Rejected shows a fix note
  *   written FOR the AI with one copy button: paste it back, drop the
  *   corrected file. Round-trip until green.
@@ -205,7 +205,7 @@ export default function ForgeStudio({ userId }: { userId: string }) {
         t: 'rejected',
         errors: ['- too-large: the file is over 1000kb'],
         fixBrief:
-          'You built a Vitality dashboard tile and the file is over the 1000kb ceiling. Inline assets leaner (no embedded video or large images) and return ONE smaller sealed .html file.',
+          'You built a HealthCompanion dashboard tile and the file is over the 1000kb ceiling. Inline assets leaner (no embedded video or large images) and return ONE smaller sealed .html file.',
       })
       return
     }
@@ -230,7 +230,7 @@ export default function ForgeStudio({ userId }: { userId: string }) {
           t: 'rejected',
           errors: ['- install-failed: the tile passed the gate but could not be saved'],
           fixBrief:
-            'The tile passed the Vitality gate but failed to install (likely a storage limit on this device). Try again; if it repeats, return a leaner single .html file.',
+            'The tile passed the HealthCompanion gate but failed to install (likely a storage limit on this device). Try again; if it repeats, return a leaner single .html file.',
         })
         return
       }
@@ -258,7 +258,7 @@ export default function ForgeStudio({ userId }: { userId: string }) {
       <div className={styles.grain} aria-hidden />
 
       {/* Always-there way home */}
-      <Link href="/app" className={styles.homePill} aria-label="Back to your Vitality dashboard">
+      <Link href="/app" className={styles.homePill} aria-label="Back to your HealthCompanion dashboard">
         <svg viewBox="0 0 24 24">
           <path d={P.chev} />
         </svg>
@@ -271,7 +271,7 @@ export default function ForgeStudio({ userId }: { userId: string }) {
             <svg viewBox="0 0 24 24">
               <path d={P.spark} />
             </svg>
-            VITALITY · FORGE
+            HEALTH_COMPANION · FORGE
           </div>
 
           <h1 className={styles.title}>
@@ -482,7 +482,7 @@ export default function ForgeStudio({ userId }: { userId: string }) {
               </button>
               <span className={styles.codeHint}>
                 Paste once in any terminal, then just ask for tiles. Undo anytime with claude mcp
-                remove vitality.
+                remove healthcompanion.
               </span>
             </div>
           )}

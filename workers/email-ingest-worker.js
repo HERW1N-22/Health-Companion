@@ -1,8 +1,8 @@
 /**
- * Vitality inbound-email Worker  (BUILD71)
+ * HealthCompanion inbound-email Worker  (BUILD71)
  * =========================================
  * Cloudflare Email Routing delivers any message sent to  *@in.<yourdomain>  to
- * this Worker. It parses the MIME, then POSTs the parts to Vitality's
+ * this Worker. It parses the MIME, then POSTs the parts to HealthCompanion's
  * /api/wearables/email, which reverses the u-<handle>@ address back to a user,
  * runs the Claude extractor on the text, and saves the reading.
  *
@@ -40,7 +40,7 @@ export default {
       method: 'POST',
       headers: {
         'content-type': 'application/json',
-        'x-vitality-ingest-secret': env.INGEST_SECRET,
+        'x-healthcompanion-ingest-secret': env.INGEST_SECRET,
       },
       body: JSON.stringify(payload),
     })
@@ -48,7 +48,7 @@ export default {
     // Log the result so failures show in the Worker's tail; never throw (a thrown
     // Worker bounces the email, which we don't want for a transient API blip).
     if (!res.ok) {
-      console.error('vitality ingest failed', res.status, await res.text())
+      console.error('healthcompanion ingest failed', res.status, await res.text())
     }
   },
 }

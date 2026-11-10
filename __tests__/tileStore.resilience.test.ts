@@ -60,8 +60,8 @@ const withWindow = () => {
 }
 
 const A = 'user-a'
-const indexKey = (userId: string) => `vitality:${userId}:tiles`
-const dataKey = (userId: string, id: string) => `vitality:${userId}:tile:${id}:data`
+const indexKey = (userId: string) => `healthcompanion:${userId}:tiles`
+const dataKey = (userId: string, id: string) => `healthcompanion:${userId}:tile:${id}:data`
 
 const valid = (over: Partial<TileEnvelope> = {}): TileEnvelope => ({
   name: 'My to-dos',

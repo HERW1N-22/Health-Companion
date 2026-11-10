@@ -364,7 +364,7 @@ export async function startDeload(): Promise<ExerciseOverrideResult> {
   const { data: { user }, error: authError } = await supabase.auth.getUser()
   if (authError || !user) return { ok: false, error: 'unauthorized' }
 
-  const cookieDate = cookies().get('vitality_local_date')?.value
+  const cookieDate = cookies().get('healthcompanion_local_date')?.value
   const today = cookieDate && /^\d{4}-\d{2}-\d{2}$/.test(cookieDate) ? cookieDate : getLocalDateKey()
 
   const { error } = await supabase

@@ -15,7 +15,7 @@ import { useMacros, type MacrosInit, SKIP_ANSWER } from './useMacros'
 import { buildDrinkMeal, buildTemplateMeal, buildRecentMeal } from './build'
 import WelcomeBackdrop from '@/components/WelcomeBackdrop'
 import type { DrinkLogResult } from './DrinksLibrary'
-import VitalityIcon, { type IconName } from '@/components/VitalityIcon'
+import HealthCompanionIcon, { type IconName } from '@/components/HealthCompanionIcon'
 import FuelInfo from './FuelInfo'
 
 // Interaction-only sheets/modals: none render at first paint, so they load on
@@ -40,7 +40,7 @@ const TYPE_LABEL: Record<MealType, string> = {
 
 const round = (n: number) => Math.round(n || 0)
 
-// Meal-type → Vitality icon (sunrise / noon sun / moon+star / cookie; plate for the rest).
+// Meal-type → HealthCompanion icon (sunrise / noon sun / moon+star / cookie; plate for the rest).
 const MEAL_ICON: Record<MealType, IconName> = {
   breakfast: 'breakfast',
   lunch: 'lunch',
@@ -135,7 +135,7 @@ export default function Macros({ extraSections, coachSlot, foodStoryDone = false
               ← Dashboard
             </Link>
             <button className={styles.adjustBtn} onClick={() => setShowSettings(true)} aria-label="Targets and settings">
-              <VitalityIcon name="gear" size={15} /> Adjust targets
+              <HealthCompanionIcon name="gear" size={15} /> Adjust targets
             </button>
           </div>
           <div className={styles.headline}>
@@ -189,7 +189,7 @@ export default function Macros({ extraSections, coachSlot, foodStoryDone = false
         {!m.tipsSeen && (
           <div className={styles.onboard}>
             <ol className={styles.onboardSteps}>
-              <li><strong>Snap a photo.</strong> Vitality finds the foods and estimates the portions.</li>
+              <li><strong>Snap a photo.</strong> HealthCompanion finds the foods and estimates the portions.</li>
               <li><strong>Or add by name.</strong> Search foods, then set the amount.</li>
               <li><strong>Or skip the photo.</strong> Use Quick drinks, add by name, or scan a barcode.</li>
             </ol>
@@ -209,7 +209,7 @@ export default function Macros({ extraSections, coachSlot, foodStoryDone = false
           <div className={styles.fuelGrid}>
             <div className={styles.calTile}>
               <div className={styles.tileTop}>
-                <span className={styles.tileIc}><VitalityIcon name="kcal" size={22} /></span>
+                <span className={styles.tileIc}><HealthCompanionIcon name="kcal" size={22} /></span>
                 <span className={styles.tileLbl}>Calories</span>
               </div>
               <div className={styles.calBig}>
@@ -261,20 +261,20 @@ export default function Macros({ extraSections, coachSlot, foodStoryDone = false
         <div className={styles.actions}>
           <button className={styles.snap} onClick={() => fileRef.current?.click()}>
             <span className={styles.snapInner}>
-              <VitalityIcon name="camera" size={20} /> Snap a meal
+              <HealthCompanionIcon name="camera" size={20} /> Snap a meal
             </span>
           </button>
           <div className={styles.actionTrio}>
             <button className={styles.actionCell} onClick={() => setShowManual(true)}>
-              <span className={styles.actionIc}><VitalityIcon name="search" size={20} /></span>
+              <span className={styles.actionIc}><HealthCompanionIcon name="search" size={20} /></span>
               <span className={styles.actionLabel}>Add food</span>
             </button>
             <button className={styles.actionCell} onClick={() => setShowDrinks((s) => !s)}>
-              <span className={`${styles.actionIc} ${styles.actionIcIris}`}><VitalityIcon name="coffee" size={20} /></span>
+              <span className={`${styles.actionIc} ${styles.actionIcIris}`}><HealthCompanionIcon name="coffee" size={20} /></span>
               <span className={styles.actionLabel}>Quick drink</span>
             </button>
             <button className={styles.actionCell} onClick={() => setShowScanner(true)}>
-              <span className={`${styles.actionIc} ${styles.actionIcAmber}`}><VitalityIcon name="barcode" size={20} /></span>
+              <span className={`${styles.actionIc} ${styles.actionIcAmber}`}><HealthCompanionIcon name="barcode" size={20} /></span>
               <span className={styles.actionLabel}>Scan</span>
             </button>
           </div>
@@ -286,7 +286,7 @@ export default function Macros({ extraSections, coachSlot, foodStoryDone = false
             onLogWater={() => {
               // Water isn't a drink here — bounce to its own section (·04).
               setShowDrinks(false)
-              window.dispatchEvent(new CustomEvent('vitality:goto-water'))
+              window.dispatchEvent(new CustomEvent('healthcompanion:goto-water'))
             }}
             onLog={(r: DrinkLogResult) => {
               // Every drink logs as a meal — calories, or a 0-kcal entry like
@@ -309,7 +309,7 @@ export default function Macros({ extraSections, coachSlot, foodStoryDone = false
             grouped.map((g) => (
               <div key={g.type} className={styles.group}>
                 <h2 className={styles.groupTitle}>
-        <VitalityIcon name={MEAL_ICON[g.type]} size={14} className={styles.groupTitleIc} />
+        <HealthCompanionIcon name={MEAL_ICON[g.type]} size={14} className={styles.groupTitleIc} />
         {TYPE_LABEL[g.type]}
       </h2>
                 {g.meals.map((meal) =>
@@ -467,7 +467,7 @@ function PastWeekList({ macros }: { macros: ReturnType<typeof useMacros> }) {
   return (
     <div className={styles.pastWeek}>
       <span className={`${styles.recentsLabel} ${styles.iconLabel}`}>
-        <VitalityIcon name="week" size={14} />Past week
+        <HealthCompanionIcon name="week" size={14} />Past week
       </span>
       {days.map((key) => {
         const t = dayTotals(m.meals, key)
@@ -514,7 +514,7 @@ function MacroRow({ kind, label, value, target }: { kind: 'protein' | 'carbs' | 
   const over = target > 0 && value > target
   return (
     <div className={`${styles.mrow} ${styles[kind]}`}>
-      <span className={styles.mIc}><VitalityIcon name={kind} size={20} /></span>
+      <span className={styles.mIc}><HealthCompanionIcon name={kind} size={20} /></span>
       <div className={styles.mMid}>
         <div className={styles.mTop}>
           <span className={styles.mName}>{label}</span>
@@ -749,7 +749,7 @@ function MealCard({
                 {confirmRemoveIdx === i ? (
                   <div className={styles.removeConfirm} role="alertdialog" aria-label={`Delete ${f.name}?`}>
                     <div className={styles.removeConfirmHead}>
-                      <span className={styles.removeConfirmIcon}><VitalityIcon name="trash" size={15} /></span>
+                      <span className={styles.removeConfirmIcon}><HealthCompanionIcon name="trash" size={15} /></span>
                       <div className={styles.removeConfirmText}>
                         <b>Delete “{stripParen(f.name)}”?</b>
                         <span>This takes it off your log. You can’t undo it — you’d have to re-scan or add it back by hand.</span>
@@ -758,7 +758,7 @@ function MealCard({
                     <div className={styles.removeConfirmActions}>
                       <button className={styles.removeKeep} onClick={() => setConfirmRemoveIdx(null)}>Keep it</button>
                       <button className={styles.removeGo} onClick={() => { onRemoveFood(i); setConfirmRemoveIdx(null) }}>
-                        <VitalityIcon name="trash" size={13} /> Delete
+                        <HealthCompanionIcon name="trash" size={13} /> Delete
                       </button>
                     </div>
                   </div>
@@ -807,7 +807,7 @@ function MealCard({
                       aria-label={`Remove ${f.name}`}
                       title={`Remove ${f.name}`}
                     >
-                      <VitalityIcon name="close" size={14} />
+                      <HealthCompanionIcon name="close" size={14} />
                     </button>
                   </div>
                 )}
@@ -832,7 +832,7 @@ function MealCard({
             </div>
           ) : (
             <button className={styles.addMissed} onClick={() => setAddingFood(true)}>
-              <VitalityIcon name="plus" size={14} /> Add a missed food
+              <HealthCompanionIcon name="plus" size={14} /> Add a missed food
             </button>
           )
         )}
@@ -1007,15 +1007,15 @@ function MealCard({
               disabled={isRescanning}
               title="Re-scan this photo with our smartest model"
             >
-              <VitalityIcon name="sparkles" size={14} />
+              <HealthCompanionIcon name="sparkles" size={14} />
               {isRescanning ? 'Looking again…' : 'Redo scan'}
             </button>
           )}
           <button className={`${styles.cardAction} ${styles.cardActionFav}`} onClick={onFavorite}>
-            <VitalityIcon name="star" size={14} /> Favorite
+            <HealthCompanionIcon name="star" size={14} /> Favorite
           </button>
           <button className={`${styles.cardAction} ${styles.cardDelete}`} onClick={onDelete}>
-            <VitalityIcon name="trash" size={14} /> Delete
+            <HealthCompanionIcon name="trash" size={14} /> Delete
           </button>
         </div>
         </div>

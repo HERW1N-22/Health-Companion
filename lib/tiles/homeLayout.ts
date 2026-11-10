@@ -15,10 +15,10 @@ import { DEFAULT_HOME_ORDER, LIBRARY_TILE, FORGE_TILE } from './coreTiles'
  * Supabase swap seam applies later.
  *
  * Key:
- *   vitality:<userId>:home  -> string[]  (all home tile ids, in display order)
+ *   healthcompanion:<userId>:home  -> string[]  (all home tile ids, in display order)
  */
 
-const key = (userId: string) => `vitality:${userId}:home`
+const key = (userId: string) => `healthcompanion:${userId}:home`
 const hasStorage = () => typeof window !== 'undefined' && !!window.localStorage
 
 function readRaw(userId: string): string[] | null {

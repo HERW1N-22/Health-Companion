@@ -93,11 +93,11 @@ export default async function DayLogPage({ params, searchParams }: DayPageProps)
   // The user's local date for "today". `getLocalDateKey()` on the server
   // returns Vercel's date (UTC), which silently rolls over for non-UTC users.
   // <LocalDateSync /> (mounted in app/app/layout.tsx) writes the browser's
-  // real local date to the `vitality_local_date` cookie; read it here so
+  // real local date to the `healthcompanion_local_date` cookie; read it here so
   // every workouts read + write keys against the user's actual day.
   // First-visit fallback (no cookie yet) uses server-local — LocalDateSync
   // refreshes the page once the cookie is set if it diverges.
-  const cookieDate = cookies().get('vitality_local_date')?.value
+  const cookieDate = cookies().get('healthcompanion_local_date')?.value
   const actualToday = cookieDate && /^\d{4}-\d{2}-\d{2}$/.test(cookieDate)
     ? cookieDate
     : getLocalDateKey()

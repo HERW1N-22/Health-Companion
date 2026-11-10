@@ -1,5 +1,5 @@
 /**
- * The "Vitality noticed" cooldown ledger — gating the §01 cross-domain card so a
+ * The "HealthCompanion noticed" cooldown ledger — gating the §01 cross-domain card so a
  * found insight lands like a gift, never a feed of repeats.
  *
  * Modeled 1:1 on the drift cooldown (lib/goals/drift.ts): a pure read-side that,

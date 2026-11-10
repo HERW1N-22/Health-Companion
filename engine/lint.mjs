@@ -1,8 +1,8 @@
 #!/usr/bin/env node
-// The Vitality tile self-check — a runnable port of the app's canonical linter
+// The HealthCompanion tile self-check — a runnable port of the app's canonical linter
 // (mcp/src/tiles/lintTile.ts). Pure, no dependencies. Checks that a generated tile
-// meets Vitality's hard floor before it ships. Errors ARE the floor (a tile that
-// trips one is not Vitality-grade); warnings are quality nudges.
+// meets HealthCompanion's hard floor before it ships. Errors ARE the floor (a tile that
+// trips one is not HealthCompanion-grade); warnings are quality nudges.
 //
 //   node lint.mjs yourtile.html          # lint one file
 //   node lint.mjs a.html b.html          # lint several
@@ -209,15 +209,15 @@ export function lintTile(html) {
   }
 
   // --- Report contract (warnings) ---
-  const reportCount = (html.match(/Vitality\.report\s*\(/g) || []).length;
+  const reportCount = (html.match(/HealthCompanion\.report\s*\(/g) || []).length;
   if (reportCount > 1) {
-    add('report-multiple', 'warn', 'more than one Vitality.report() call; a tile reports at most one stream', 'Report a single number.');
+    add('report-multiple', 'warn', 'more than one HealthCompanion.report() call; a tile reports at most one stream', 'Report a single number.');
   }
   if (reportCount >= 1) {
-    const args = firstCallArgs(html, html.search(/Vitality\.report\s*\(/));
+    const args = firstCallArgs(html, html.search(/HealthCompanion\.report\s*\(/));
     const missing = ['key', 'value', 'date', 'kind'].filter((k) => !new RegExp('\\b' + k + '\\s*:').test(args));
     if (missing.length) {
-      add('report-shape', 'warn', 'a Vitality.report() call is missing required fields (' + missing.join(', ') + ')', 'Report {key, label, value, date, kind}.');
+      add('report-shape', 'warn', 'a HealthCompanion.report() call is missing required fields (' + missing.join(', ') + ')', 'Report {key, label, value, date, kind}.');
     }
   }
 

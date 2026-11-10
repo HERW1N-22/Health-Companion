@@ -1,3 +1,3 @@
-# Health Companion
+# Health Companion development
 
-See README.md for setup and SECURITY-REVIEW.md for findings. API keys are not configured. Full internal branding changes are pending; existing storage and database namespaces are unchanged.
+See README.md for setup and SECURITY-REVIEW.md for review findings. API credentials remain unconfigured. Use a fresh development database for this initial renamed version; internal table, storage and integration namespaces have changed.

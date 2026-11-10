@@ -12,7 +12,7 @@
 
 import { useEffect, useState } from 'react'
 
-const BRAND_LS_KEY = 'vitality_brand_v1'
+const BRAND_LS_KEY = 'healthcompanion_brand_v1'
 
 export interface PostingDeadline {
   /** Schedule id (stable key). */

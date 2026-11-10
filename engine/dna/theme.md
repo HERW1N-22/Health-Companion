@@ -1,14 +1,14 @@
-# Vitality Theme + Tokens (tile DNA)
+# Health Companion Theme + Tokens (tile DNA)
 
-How a sealed-HTML tile looks and feels like Vitality. Everything here is inline-able into one self-contained `.html` file: plain CSS, vanilla JS, inline SVG. No libraries, no build step, no frameworks.
+How a sealed-HTML tile looks and feels like Health Companion. Everything here is inline-able into one self-contained `.html` file: plain CSS, vanilla JS, inline SVG. No libraries, no build step, no frameworks.
 
-A tile is hosted inside the Vitality shell, so the tile itself sets a transparent background and lets the host paint pure black behind it. Copy the base shell at the bottom and build on top of it.
+A tile is hosted inside the Health Companion shell, so the tile itself sets a transparent background and lets the host paint pure black behind it. Copy the base shell at the bottom and build on top of it.
 
 ---
 
 ## 1. Color tokens (exact)
 
-Drop these into `:root`. These are the real Vitality values.
+Drop these into `:root`. These are the real Health Companion values.
 
 ```css
 :root {
@@ -172,7 +172,7 @@ Keep real content at `z-index: 2` so it sits above glow (0) and grain (1).
 
 ## 5. How a tile sets its background (IMPORTANT)
 
-A tile is embedded in the Vitality shell. The tile must NOT paint its own black, or it will double up and may clip. Set the body transparent and let the host black show through. Atmosphere (glow + grain) is optional and goes on an inner wrapper, not the body.
+A tile is embedded in the Health Companion shell. The tile must NOT paint its own black, or it will double up and may clip. Set the body transparent and let the host black show through. Atmosphere (glow + grain) is optional and goes on an inner wrapper, not the body.
 
 ```css
 html, body { height: 100%; }
@@ -202,7 +202,7 @@ A complete, sealed, on-brand starting point. Self-contained, no external files e
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Vitality Tile</title>
+<title>Health Companion Tile</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">

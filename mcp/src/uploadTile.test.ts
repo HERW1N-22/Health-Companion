@@ -116,20 +116,20 @@ test('upload_tile with package_only returns the envelope and never touches getVd
   assert.notEqual(res.isError, true);
 });
 
-test('vitality_add_tile is registered as a WRITE tool (the automatic build->dashboard path)', async () => {
+test('healthcompanion_add_tile is registered as a WRITE tool (the automatic build->dashboard path)', async () => {
   const { server, tools } = fakeServer();
   let vdbAsked = false;
   registerTools(server, async () => {
     vdbAsked = true; // a write tool MUST resolve the caller's RLS-scoped client
     throw new Error('no db in test');
   });
-  assert.ok(tools['vitality_add_tile'], 'vitality_add_tile is registered');
+  assert.ok(tools['healthcompanion_add_tile'], 'healthcompanion_add_tile is registered');
   // This proves only that the handler resolves the authed client (unlike the pure
   // builder tools, which never call getVdb) and that errors are sanitized. The actual
   // gated-write behaviour (requireWrite, owner stamping, the inserted row) is covered
   // directly in addTile.test.ts.
-  const res = await tools['vitality_add_tile'].handler({ goal: 'track my water' });
+  const res = await tools['healthcompanion_add_tile'].handler({ goal: 'track my water' });
   assert.equal(vdbAsked, true, 'add_tile must resolve the authed client (it is a write)');
   assert.equal(res.isError, true);
-  assert.match(res.content[0].text, /Vitality error/);
+  assert.match(res.content[0].text, /HealthCompanion error/);
 });

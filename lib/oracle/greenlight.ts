@@ -1,5 +1,5 @@
 /**
- * The convergence brain behind "Vitality noticed".
+ * The convergence brain behind "HealthCompanion noticed".
  *
  * Pure, no I/O, no clock beyond what the caller passes — the same pure-core
  * shape as lib/goals/drift.ts and mcp/src/insights.ts. The gather

@@ -345,7 +345,7 @@ input:focus,select:focus,textarea:focus{outline:none;}
 .disclaimer{font-size:11.5px;color:var(--muted);line-height:1.5;text-align:center;padding:0 10px;font-family:var(--font-mono);letter-spacing:.02em;}
 .disclaimer b{color:var(--muted-strong);}
 
-/* ── quiz — ported 1:1 from the Vitality quiz engine (flourishes mode) ── */
+/* ── quiz — ported 1:1 from the HealthCompanion quiz engine (flourishes mode) ── */
 .pqOverlay{position:fixed;inset:0;z-index:200;background:rgba(4,6,10,.55);backdrop-filter:blur(22px) saturate(140%);-webkit-backdrop-filter:blur(22px) saturate(140%);display:flex;align-items:center;justify-content:center;padding:var(--space-4);overflow-y:auto;animation:pqOin .24s var(--ease-premium);}
 @keyframes pqOin{from{opacity:0;}to{opacity:1;}}
 .pqDialog{position:relative;width:100%;max-width:760px;min-height:min(82vh,480px);background:radial-gradient(120% 60% at 50% 0%,rgba(110,231,183,.08),transparent 55%),var(--bg-elevated);border:1px solid var(--border-strong);border-radius:24px;box-shadow:0 32px 100px rgba(0,0,0,.75),0 0 0 1px rgba(110,231,183,.08),0 0 80px -20px rgba(110,231,183,.18);animation:pqDin .38s var(--ease-premium);overflow:hidden;isolation:isolate;display:flex;flex-direction:column;}
@@ -561,7 +561,7 @@ const CAT_IC={stim:'kStim',adhd:'kAdhd',anti:'kAnti',nic:'kNic',other:''};
 const CAT_NAME={stim:'Stimulant',adhd:'ADHD med',anti:'Antidepressant',nic:'Nicotine',other:'Other'};
 
 /* ───────── state ───────── */
-const LS='vitality_peakstack_v2';
+const LS='healthcompanion_peakstack_v2';
 function load(){try{const v=JSON.parse(localStorage.getItem(LS));if(v)return v;}catch(e){}return null;}
 let state=load()||{
   profile:{weightKg:78,age:24,sex:'male',heightCm:180,wake:7,bed:23},
@@ -927,7 +927,7 @@ function renderCheckin(){
   hr.innerHTML=`<div class="ciLbl">Resting HR</div><div class="ciCtrl"><div class="step"><button class="stepBtn" data-d="-1">−</button><div class="stepVal">${ci.restingHR}<small>bpm</small></div><button class="stepBtn" data-d="1">+</button></div></div>`;
   hr.querySelectorAll('.stepBtn').forEach(b=>b.onclick=()=>{ci.restingHR=clamp(ci.restingHR+(+b.dataset.d),35,120);save();renderAll();});
   mount.appendChild(hr);
-  mount.appendChild(el('div','ciRow','<div class="ciNote">Feeds the recommendation above — in Vitality this auto-fills from WHOOP / your check-in.</div>'));
+  mount.appendChild(el('div','ciRow','<div class="ciNote">Feeds the recommendation above — in HealthCompanion this auto-fills from WHOOP / your check-in.</div>'));
 }
 function segRow(label,opts,val,on){
   const r=el('div','ciRow'),seg=el('div','seg');
@@ -1022,7 +1022,7 @@ function openProfile(){
   const p=state.profile,m=el('div','scrim');
   const hm2=h=>`${String(Math.floor(h)).padStart(2,'0')}:${String(Math.round((h%1)*60)).padStart(2,'0')}`;
   m.innerHTML=`<div class="modal"><div class="mHead"><div class="mTitle">Your body</div><button class="mClose">×</button></div>
-    <div class="mBody"><div class="detLine" style="color:var(--muted)">In Vitality these pull from your profile + weigh-ins. They drive every half-life below.</div>
+    <div class="mBody"><div class="detLine" style="color:var(--muted)">In HealthCompanion these pull from your profile + weigh-ins. They drive every half-life below.</div>
       <div class="fRow"><div class="fGroup"><label class="fLbl">Weight (kg)</label><input class="fInput" id="pW" type="number" value="${p.weightKg}"/></div><div class="fGroup"><label class="fLbl">Height (cm)</label><input class="fInput" id="pH" type="number" value="${p.heightCm}"/></div></div>
       <div class="fRow"><div class="fGroup"><label class="fLbl">Age</label><input class="fInput" id="pA" type="number" value="${p.age}"/></div><div class="fGroup"><label class="fLbl">Sex</label><div class="fSeg" id="pSex"><button data-v="male" class="${p.sex==='male'?'fSegOn':''}">Male</button><button data-v="female" class="${p.sex==='female'?'fSegOn':''}">Female</button></div></div></div>
       <div class="fRow"><div class="fGroup"><label class="fLbl">Wake</label><input class="fInput" id="pWake" type="time" value="${hm2(p.wake)}"/></div><div class="fGroup"><label class="fLbl">Bedtime</label><input class="fInput" id="pBed" type="time" value="${hm2(p.bed)}"/></div></div>
@@ -1034,7 +1034,7 @@ function openProfile(){
   $('#modalMount').appendChild(m);
 }
 
-/* ───────── QUIZ (ported from the Vitality quiz engine, flourishes mode) ───────── */
+/* ───────── QUIZ (ported from the HealthCompanion quiz engine, flourishes mode) ───────── */
 const QUIZ_CHAPTERS=['your stack','your body','guardrails'];
 const QUIZ=[
  {ch:0,id:'takes',kind:'multi',prompt:'what do you take?',hint:"pick all that apply — i'll set up your hot bar.",
@@ -1173,7 +1173,7 @@ function finishQuiz(){
 /* ───────── health watch ─────────
    Notices over-logging + bad-vitals combinations, then surfaces the short- &
    long-term effects in red. Vitals (resting HR, sleep) come from the check-in —
-   in Vitality that's the live WHOOP feed. */
+   in HealthCompanion that's the live WHOOP feed. */
 function buildHealth(){
   const log=todayLog(),p=state.profile,ci=state.checkin;
   const catOf=id=>(DB_BY_ID[id]||{}).cat;
@@ -1225,7 +1225,7 @@ function renderHealth(){
   const title=h.sev===2?`That's <em>a lot</em> for one day.`:h.sev===1?`Heads up — <em>ease off a little</em>.`:`You're in a <em>healthy range</em>.`;
   const sub=h.sev===0?`Nothing flagged. We're watching your load and your vitals as you log.`:`${h.signals.length} thing${h.signals.length>1?'s':''} worth noticing today.`;
   const debt=h.sleepDebt.toFixed(1);
-  const vhook=`<div class="vHook"><span class="dot"></span>VITALS · resting HR <b>${h.ci.restingHR}</b> · sleep <b>${h.ci.sleepH}h</b> · debt <b>${debt}h</b> · <span style="color:var(--mint)">live WHOOP feed in Vitality</span></div>`;
+  const vhook=`<div class="vHook"><span class="dot"></span>VITALS · resting HR <b>${h.ci.restingHR}</b> · sleep <b>${h.ci.sleepH}h</b> · debt <b>${debt}h</b> · <span style="color:var(--mint)">live WHOOP feed in HealthCompanion</span></div>`;
   let middle='';
   if(h.sev===0){
     const pct=clamp(Math.round(h.caffMg/400*100),0,100);const col=h.caffMg>400?'var(--amber)':'var(--mint)';
@@ -1240,7 +1240,7 @@ function renderHealth(){
   }
   card.innerHTML=`<div class="healthTop"><div class="healthIc">${ic}</div><div><div class="healthTitle">${title}</div><div class="healthSub">${sub}</div></div></div>
     ${vhook}${middle}
-    <div class="healthFoot">Watching: caffeine total, stimulant stacking, late doses, tolerance &amp; your vitals. In Vitality this reads your real WHOOP HR &amp; sleep — and logs to your health record.</div>`;
+    <div class="healthFoot">Watching: caffeine total, stimulant stacking, late doses, tolerance &amp; your vitals. In HealthCompanion this reads your real WHOOP HR &amp; sleep — and logs to your health record.</div>`;
   mount.appendChild(card);
 }
 

@@ -1,8 +1,8 @@
 /**
  * THE METRIC REGISTRY (TRAIN 5) - the one typed source of truth for every
- * drawable series a Vitality user owns.
+ * drawable series a HealthCompanion user owns.
  *
- * The law: adding a metric to Vitality is ONE entry in METRIC_REGISTRY. The
+ * The law: adding a metric to HealthCompanion is ONE entry in METRIC_REGISTRY. The
  * Room (/app/room) is generated from this array at render, the binding picker
  * lists it, strongestBinding words come from it, and docs/VEE-LIBRARY.md is
  * its narrative twin. Nothing here is guessed: every entry is transcribed from
@@ -51,7 +51,7 @@ export type MetricLoader =
   | 'wearable_data'
   | 'notes'
   | 'user_facts'
-  | 'vitality_goals'
+  | 'healthcompanion_goals'
   | 'finance_net_worth_history'
   | 'finance_subscriptions'
   | 'finance_orders'
@@ -331,7 +331,7 @@ export const METRIC_REGISTRY: MetricEntry[] = [
     words: ['goal', 'goals', 'streak', 'habit'],
     href: '/app/mentor',
     source: { kind: 'module', name: 'mentor' },
-    loader: 'vitality_goals',
+    loader: 'healthcompanion_goals',
   },
 
   // ---------------------------------------------------------- MONEY (4)
@@ -424,8 +424,8 @@ export const METRIC_REGISTRY: MetricEntry[] = [
 
   // --------------------------------- CUSTOM TILE STREAMS (7, the open end)
   // One dynamic family per report kind (lib/tiles/reportContract.ts
-  // REPORT_KINDS). Any life-stream Vitality does not natively track - career,
-  // craft, people included - becomes readable here through Vitality.report().
+  // REPORT_KINDS). Any life-stream HealthCompanion does not natively track - career,
+  // craft, people included - becomes readable here through HealthCompanion.report().
   {
     id: 'tile_intake',
     category: 'general',

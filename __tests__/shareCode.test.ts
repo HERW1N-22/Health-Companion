@@ -60,11 +60,11 @@ describe('tile share code (Arts District v1)', () => {
     expect(isTileCode('nope')).toBe(false)
     expect(parseTileCode('hello')).toBeNull()
     expect(parseTileCode('{"name":"x","html":"y"}')).toBeNull() // raw JSON is not a code
-    expect(parseTileCode('vitality:tile:!!! not base64 !!!')).toBeNull()
+    expect(parseTileCode('healthcompanion:tile:!!! not base64 !!!')).toBeNull()
   })
 
   test('rejects a code missing name or html', () => {
-    const bad = 'vitality:tile:' + Buffer.from(JSON.stringify({ name: '', html: '' })).toString('base64url')
+    const bad = 'healthcompanion:tile:' + Buffer.from(JSON.stringify({ name: '', html: '' })).toString('base64url')
     expect(parseTileCode(bad)).toBeNull()
   })
 })

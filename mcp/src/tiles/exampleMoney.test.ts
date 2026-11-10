@@ -204,12 +204,12 @@ input,select{font-family:inherit;color:inherit}
     </div>
   </main>
   <script>
-  var Vitality={_w:{},
-    save:function(d){parent.postMessage({source:'vitality-tile',type:'save',data:d},'*')},
-    load:function(){return new Promise(function(res){var id=Math.random().toString(36).slice(2);Vitality._w[id]=res;parent.postMessage({source:'vitality-tile',type:'load',id:id},'*')})},
-    report:function(s){parent.postMessage({source:'vitality-tile',type:'report',stream:s},'*')}
+  var HealthCompanion={_w:{},
+    save:function(d){parent.postMessage({source:'healthcompanion-tile',type:'save',data:d},'*')},
+    load:function(){return new Promise(function(res){var id=Math.random().toString(36).slice(2);HealthCompanion._w[id]=res;parent.postMessage({source:'healthcompanion-tile',type:'load',id:id},'*')})},
+    report:function(s){parent.postMessage({source:'healthcompanion-tile',type:'report',stream:s},'*')}
   };
-  window.addEventListener('message',function(e){var m=e.data;if(m&&m.source==='vitality-host'&&m.type==='load:result'&&Vitality._w[m.id]){Vitality._w[m.id](m.data);delete Vitality._w[m.id]}});
+  window.addEventListener('message',function(e){var m=e.data;if(m&&m.source==='healthcompanion-host'&&m.type==='load:result'&&HealthCompanion._w[m.id]){HealthCompanion._w[m.id](m.data);delete HealthCompanion._w[m.id]}});
   (function(){
     var DOW=['Su','Mo','Tu','We','Th','Fr','Sa'];
     var SYM='$';
@@ -223,7 +223,7 @@ input,select{font-family:inherit;color:inherit}
     function money(n){var v=round2(n);return SYM+(v%1===0?String(v):v.toFixed(2))}
     function moneyBare(n){var v=round2(n);return v%1===0?String(v):v.toFixed(2)}
 
-    function writeStore(){Vitality.save(mem);}
+    function writeStore(){HealthCompanion.save(mem);}
 
     function get(k){return mem.days[k]||0}
 
@@ -276,7 +276,7 @@ input,select{font-family:inherit;color:inherit}
     }
 
     function report(v){
-      if(v>0){Vitality.report({key:'daily spend',label:'Daily spend',value:round2(v),date:today(),kind:'money',goalDirection:'down'});}
+      if(v>0){HealthCompanion.report({key:'daily spend',label:'Daily spend',value:round2(v),date:today(),kind:'money',goalDirection:'down'});}
     }
 
     function add(){
@@ -301,7 +301,7 @@ input,select{font-family:inherit;color:inherit}
     }
 
     function load(){
-      Vitality.load().then(function(s){
+      HealthCompanion.load().then(function(s){
         if(s&&typeof s==='object'){
           mem.days=s.days||{};if(typeof s.goal==='number')mem.goal=s.goal;
           if(s.last&&typeof s.last==='object'){mem.last=s.last;lastDay=s.last.day||''}
@@ -329,7 +329,7 @@ input,select{font-family:inherit;color:inherit}
 </body>
 </html>`;
 
-test('money example: the tile is Vitality-grade (0 errors, 0 warnings)', () => {
+test('money example: the tile is HealthCompanion-grade (0 errors, 0 warnings)', () => {
   const result = lintTile(HTML);
   if (!result.ok || result.warnings > 0) {
     console.log('\n' + result.findings.map((f) => `  [${f.severity}] ${f.rule}: ${f.message}`).join('\n') + '\n');
@@ -347,7 +347,7 @@ test('money example: it clears the richness gate as Fuel-grade rich', () => {
 
 test('money example: it reports exactly one valid money stream', () => {
   // exactly one report() call, and it is a money stream
-  const reports = HTML.match(/Vitality\.report\s*\(/g) || [];
+  const reports = HTML.match(/HealthCompanion\.report\s*\(/g) || [];
   assert.equal(reports.length, 1, 'a money tile reports exactly one stream');
   assert.match(HTML, /kind:\s*'money'/, 'reports a money stream');
   assert.match(HTML, /goalDirection:\s*'down'/, 'spending less is a down goal');
@@ -380,9 +380,9 @@ test('money example behaves: renders and the today-total moves by the exact amou
 });
 
 // FIXED (finding #4): the reference bridge was reconciled to the templates' async no-arg
-// contract. The tile now carries the real bridge inside the sealed doc (Vitality.save(d)
-// single-arg postMessage, Vitality.load() no-arg Promise resolved by the host's
-// load:result, Vitality.report(stream)), so against the real host it persists and reports
+// contract. The tile now carries the real bridge inside the sealed doc (HealthCompanion.save(d)
+// single-arg postMessage, HealthCompanion.load() no-arg Promise resolved by the host's
+// load:result, HealthCompanion.report(stream)), so against the real host it persists and reports
 // exactly like a template-built tile. This test proves it end to end.
 test('money example behaves: reports through the host bridge and survives reopen', async () => {
   const now = new Date('2026-07-03T10:00:00');

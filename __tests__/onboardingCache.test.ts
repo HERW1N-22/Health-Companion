@@ -1,4 +1,4 @@
-import { loadOnboardingCache, saveOnboardingCache, clearOnboardingCache } from '@/lib/vitality/onboardingCache'
+import { loadOnboardingCache, saveOnboardingCache, clearOnboardingCache } from '@/lib/healthcompanion/onboardingCache'
 
 // localStorage doesn't exist in Node — provide a minimal in-memory mock
 const store: Record<string, string> = {}
@@ -81,7 +81,7 @@ describe('loadOnboardingCache — cross-user isolation', () => {
 describe('saveOnboardingCache', () => {
   it('stores userId alongside form state', () => {
     saveOnboardingCache(USER_A, sampleState)
-    const raw = JSON.parse(localStorageMock.getItem('vitality_onboarding_v1') as string)
+    const raw = JSON.parse(localStorageMock.getItem('healthcompanion_onboarding_v1') as string)
     expect(raw.userId).toBe(USER_A)
   })
 

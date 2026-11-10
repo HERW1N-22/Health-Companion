@@ -19,8 +19,8 @@
         window.ClaudeConnect = {
           name: 'Sleep Tracker',      // shown in the file and button. Defaults to the page title.
           accent: '#6BE3A4',          // button glow color. Defaults to mint.
-          prefix: 'vitality_',        // only export keys starting with this. Defaults to all data.
-          // keys: ['vitality_sleep_v1'], // or pick exact keys to export.
+          prefix: 'healthcompanion_',        // only export keys starting with this. Defaults to all data.
+          // keys: ['healthcompanion_sleep_v1'], // or pick exact keys to export.
         };
       </script>
 

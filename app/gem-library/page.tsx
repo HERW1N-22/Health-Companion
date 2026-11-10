@@ -2,8 +2,8 @@ import type { Metadata } from 'next'
 import GemLibrary from './GemLibrary'
 
 export const metadata: Metadata = {
-  title: 'Gem Library v2 · Vitality',
-  description: 'Internal design lab for the canonical Vitality gem and its signature animations.',
+  title: 'Gem Library v2 · Health Companion',
+  description: 'Internal design lab for the canonical HealthCompanion gem and its signature animations.',
 }
 
 // Public route (not under /app, /account, or /welcome — see middleware), so

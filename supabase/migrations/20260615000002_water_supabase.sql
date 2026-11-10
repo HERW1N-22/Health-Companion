@@ -1,9 +1,9 @@
 -- ============================================================================
 -- Water → Supabase (the localStorage→Supabase migration, water module)
 --
--- The live water tracker stored everything in localStorage (`vitality_water_v1`):
+-- The live water tracker stored everything in localStorage (`healthcompanion_water_v1`):
 -- per-day serving COUNT + per-user settings. This makes it durable, cross-device,
--- and readable by the Vitality MCP. Modelled on the BUILD13 finance migration.
+-- and readable by the HealthCompanion MCP. Modelled on the BUILD13 finance migration.
 --
 -- Two tables (the existing `water_log` table stores ml-per-drink, which does NOT
 -- match the live module's serving-count model, so it stays dormant — repurpose

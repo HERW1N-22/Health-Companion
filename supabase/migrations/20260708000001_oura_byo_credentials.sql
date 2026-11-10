@@ -6,7 +6,7 @@
 -- (env OURA_CLIENT_ID/SECRET) we let each user bring their own. A user creates
 -- a free Oura developer app (its owner can always authorize their own Oura
 -- account without Oura's review) and pastes its client_id + client_secret into
--- Vitality.
+-- HealthCompanion.
 --
 -- Stored per-user on the existing wearable_connections row (already RLS-scoped
 -- to the owner; secrets never leave the server). This reuses the SAME provider-

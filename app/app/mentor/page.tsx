@@ -14,7 +14,7 @@ export const metadata = { title: 'Vee' }
 /**
  * /app/mentor-next - the new, launch-grade Vee: one vertical scroll. The Echo
  * gem (Vee's face) with the run-stats proof strip, the fused FULL goals engine
- * (authoring + per-goal live steering), the gamified "Vitality Noticed" card,
+ * (authoring + per-goal live steering), the gamified "HealthCompanion Noticed" card,
  * and the feed-Vee flywheel. A safe preview beside the untouched live /app/mentor.
  *
  * Gated server component: auth first, then load the same real engine data the

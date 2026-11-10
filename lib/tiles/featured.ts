@@ -16,7 +16,7 @@ export interface FeaturedTile {
   id: string
   /** One-line pitch shown on the card. */
   tagline: string
-  /** Who made it. 'Vitality' for first-party drops. */
+  /** Who made it. 'Health Companion' for first-party drops. */
   author: string
   /** Card accent hex. Mint by default; gold / iris give a tile its own character. */
   accent: string
@@ -411,7 +411,7 @@ export const DEFS: Def[] = [
 export const FEATURED_TILES: FeaturedTile[] = DEFS.map((d) => ({
   id: d.id,
   tagline: d.tagline,
-  author: 'Vitality',
+  author: 'Health Companion',
   accent: d.accent,
   fresh: d.fresh,
   preview: d.preview,

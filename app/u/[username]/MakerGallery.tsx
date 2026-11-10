@@ -8,7 +8,7 @@
  * by the tile's saved accent). Every poster has a one-tap Add that reuses the
  * ONE LOCKED install socket, exactly like the Arts District:
  *   - signed in  -> tileStore.importTile + pushTile('hub'), lands in the Library
- *   - signed out -> stash {t:'published',id} at 'vitality:pending-tile', then
+ *   - signed out -> stash {t:'published',id} at 'healthcompanion:pending-tile', then
  *                   /signup?next=/app so the tile is claimed right after signup
  *
  * A "Share this maker" button copies the page URL (navigator.clipboard) with a
@@ -73,7 +73,7 @@ export default function MakerGallery({ tiles, makerName, isSignedIn, shareUrl }:
     if (!isSignedIn) {
       try {
         window.localStorage.setItem(
-          'vitality:pending-tile',
+          'healthcompanion:pending-tile',
           JSON.stringify({ t: 'published', id: t.id }),
         )
       } catch {
@@ -101,7 +101,7 @@ export default function MakerGallery({ tiles, makerName, isSignedIn, shareUrl }:
           // Session lapsed between render and click - fall back to the stash path.
           try {
             window.localStorage.setItem(
-              'vitality:pending-tile',
+              'healthcompanion:pending-tile',
               JSON.stringify({ t: 'published', id: t.id }),
             )
           } catch { /* ignore */ }

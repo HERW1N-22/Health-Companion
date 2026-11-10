@@ -4,7 +4,7 @@
 // single foods carry almost none. One source of truth for both the UI (label,
 // icon, info note) and the model-facing hint sentence the API forwards.
 
-import type { IconName } from '@/components/VitalityIcon'
+import type { IconName } from '@/components/HealthCompanionIcon'
 
 export type FoodSource = 'homemade' | 'restaurant' | 'hall' | 'whole'
 

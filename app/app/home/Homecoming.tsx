@@ -13,7 +13,7 @@ import HomeActGym from './acts/HomeActGym'
 import styles from './homecoming.module.css'
 
 /**
- * "Vitality, I'm home" - the daily ritual stage machine.
+ * "HealthCompanion, I'm home" - the daily ritual stage machine.
  *
  * Tap the dashboard gem: the world fades to the signature backdrop, the gem
  * (DashboardHeaderGem, the proven wrapper that sizes HeroCrystal correctly)
@@ -62,7 +62,7 @@ interface ImHomeState {
 
 function saveImHome(userId: string | null, patch: Partial<ImHomeState>) {
   try {
-    const key = `vitality:${userId ?? 'anon'}:imhome`
+    const key = `healthcompanion:${userId ?? 'anon'}:imhome`
     const prev = JSON.parse(window.localStorage.getItem(key) ?? '{}') as Partial<ImHomeState>
     window.localStorage.setItem(key, JSON.stringify({ ...prev, ...patch }))
   } catch {
@@ -322,7 +322,7 @@ export default function Homecoming({
   })()
 
   return (
-    <div className={styles.stage} role="dialog" aria-modal="true" aria-label="Vitality, I'm home">
+    <div className={styles.stage} role="dialog" aria-modal="true" aria-label="HealthCompanion, I'm home">
       <WelcomeBackdrop />
       <div className={styles.scrim} />
       {settling && <div className={styles.settleFlash} aria-hidden />}

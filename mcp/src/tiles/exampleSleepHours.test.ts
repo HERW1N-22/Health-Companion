@@ -25,7 +25,7 @@ test('sleep-hours variant: it infers an hours-mode duration timer', () => {
   assert.equal(SLEEP.meta.unit, 'h', 'the unit is hours, not minutes');
 });
 
-test('sleep-hours variant: it is Vitality-grade (0 errors, 0 warnings)', () => {
+test('sleep-hours variant: it is HealthCompanion-grade (0 errors, 0 warnings)', () => {
   const r = lintTile(SLEEP.html);
   if (!r.ok || r.warnings > 0) {
     console.log('\n' + r.findings.map((f) => `  [${f.severity}] ${f.rule}: ${f.message}`).join('\n') + '\n');
@@ -52,7 +52,7 @@ test('sleep-hours variant: it renders the HOURS mode, not the minutes stepper', 
 });
 
 test('sleep-hours variant: it reports exactly one valid duration stream', () => {
-  const reports = SLEEP.html.match(/Vitality\.report\s*\(/g) || [];
+  const reports = SLEEP.html.match(/HealthCompanion\.report\s*\(/g) || [];
   assert.equal(reports.length, 1, 'an hours timer reports exactly one stream');
   const v = validateReport({ key: 'sleep', label: 'Sleep', value: 7.5, date: '2026-07-02', kind: 'duration' });
   assert.equal(v.ok, true, 'a fractional-hours value validates against the contract');

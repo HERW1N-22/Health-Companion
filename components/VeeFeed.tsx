@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import styles from './veeFeed.module.css'
 
-/* Vee's read on your life — the feed-first Vee surface (Vitality Noticed).
+/* Vee's read on your life — the feed-first Vee surface (HealthCompanion Noticed).
  * Ported 1:1 from public/vee-showcase.html. Iris/purple + mint + amber palette,
  * a rarity collection grid, a rarity-graded insight feed with a detailed/simple
  * toggle, the climb signal graph, and the engine ladder.
@@ -215,7 +215,7 @@ export default function VeeFeed() {
         <div className={styles.bar}>
           <span className={styles.brand}>
             <span className={styles.mark}><Ic name="echo" sw={2.2} /></span>
-            <span className={styles.nm}>Vitality <span>&middot; Vee</span></span>
+            <span className={styles.nm}>HealthCompanion <span>&middot; Vee</span></span>
           </span>
           <span className={styles.who}>signed in &middot; you</span>
           <span className={styles.barSpacer} />
@@ -287,7 +287,7 @@ export default function VeeFeed() {
                   <div className={styles.rarityEdge} />
                   <div className={styles.vtTop}>
                     <div className={styles.vtEcho}><Ic name="echo" sw={2.2} /></div>
-                    <div className={styles.vtTag}>Vitality noticed</div>
+                    <div className={styles.vtTag}>HealthCompanion noticed</div>
                     <button className={styles.rbadge}><span className={styles.gem} />{c.rarity}</button>
                     <div className={styles.vtSpacer} />
                     <div className={styles.vtWatched}><Ic name="clock" />watched &middot; {c.watched} &middot; {c.timeframe}</div>
@@ -374,7 +374,7 @@ export default function VeeFeed() {
         {/* ============ closer ============ */}
         <div className={styles.closer}>
           <p className={styles.big}>Your life, held all at once. <span className={styles.glow}>Now it talks back.</span></p>
-          <p className={styles.small}>This is what Vitality is for. The engine is real; the numbers shown are a realistic example, not live data. The hunt never ends, and that is the point.</p>
+          <p className={styles.small}>This is what HealthCompanion is for. The engine is real; the numbers shown are a realistic example, not live data. The hunt never ends, and that is the point.</p>
         </div>
 
       </div>

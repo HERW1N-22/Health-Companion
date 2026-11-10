@@ -74,14 +74,14 @@ async function loadProfile(rawUsername: string): Promise<CreatorProfile | null> 
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const profile = await loadProfile(params.username)
-  if (!profile) return { title: 'Maker not found · Vitality' }
+  if (!profile) return { title: 'Maker not found · Health Companion' }
 
   const name = profile.display_name?.trim() || `@${profile.username}`
-  const description = profile.bio?.trim() || `${name} on Vitality. Building tiles for getting your life in order.`
+  const description = profile.bio?.trim() || `${name} on HealthCompanion. Building tiles for getting your life in order.`
   return {
-    title: `${name} (@${profile.username}) · Vitality`,
+    title: `${name} (@${profile.username}) · HealthCompanion`,
     description,
-    openGraph: { title: `${name} · Vitality`, description, type: 'profile' },
+    openGraph: { title: `${name} · HealthCompanion`, description, type: 'profile' },
   }
 }
 
@@ -136,7 +136,7 @@ export default async function MakerProfilePage({ params }: Props) {
       <div className={styles.glow} aria-hidden />
 
       <div className={styles.bar}>
-        <Link href="/" className={styles.mark} aria-label="Vitality">V</Link>
+        <Link href="/" className={styles.mark} aria-label="Health Companion">V</Link>
         <span className={styles.barSpacer} />
         {isOwner ? (
           <Link href="/account" className={styles.barCta}>Edit profile</Link>
@@ -158,7 +158,7 @@ export default async function MakerProfilePage({ params }: Props) {
         </div>
         <div className={styles.name}>
           {name}
-          <span className={styles.vf} title="Vitality maker">
+          <span className={styles.vf} title="HealthCompanion maker">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round">
               <path d="m5 13 4 4L19 7" />
             </svg>
@@ -222,7 +222,7 @@ export default async function MakerProfilePage({ params }: Props) {
       </div>
 
       <div className={styles.footer}>
-        Made with <Link href="/">Vitality</Link>. Build your own dashboard.
+        Made with <Link href="/">Health Companion</Link>. Build your own dashboard.
       </div>
     </div>
   )

@@ -2,7 +2,7 @@
 //
 // The whole reason the deterministic path (scaffold_tile: infer() + renderTile()) exists
 // is COST. It returns a finished, pre-built ~5K-token tile with ZERO model generation and
-// ZERO kit reading. The generative path (vitality_tile_kit -> Claude hand-writes the HTML)
+// ZERO kit reading. The generative path (healthcompanion_tile_kit -> Claude hand-writes the HTML)
 // costs the kit bundle the model must READ (a domain bundle is tens of thousands of
 // tokens; the full pack ~120K) PLUS the tokens it then generates. This meter measures both
 // so a receipt can prove, in numbers, how much the deterministic path saves — and, as a
@@ -126,7 +126,7 @@ export function formatReceipt(r: TokenReport = computeTokenReport()): string {
   lines.push(`   ${pad('avg scaffold', 22)}          ~${String(r.avgScaffoldTokens).padStart(5)} tok`);
   lines.push(`   ${pad('worst scaffold', 22)}          ~${String(r.worstScaffold.tokens).padStart(5)} tok  (${r.worstScaffold.name})`);
   lines.push('');
-  lines.push(' BEFORE — generative path (vitality_tile_kit): what the model must');
+  lines.push(' BEFORE — generative path (healthcompanion_tile_kit): what the model must');
   lines.push('          READ before it even starts hand-writing the HTML:');
   lines.push(`   ${pad('domain bundle (food)', 22)}          ~${String(r.domainBundleTokens).padStart(5)} tok  (${r.domainVsAvg}x avg scaffold)`);
   lines.push(`   ${pad('domain bundles range', 22)}   ${String(range.minTokens).padStart(6)}..${range.maxTokens} tok over ${range.count} domains`);

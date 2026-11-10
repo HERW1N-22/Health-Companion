@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 /**
- * Idempotent bootstrap for Vitality's Stripe Product + Price.
+ * Idempotent bootstrap for HealthCompanion's Stripe Product + Price.
  *
- * Looks for an existing product tagged `metadata.vitality_id=pro_monthly`.
+ * Looks for an existing product tagged `metadata.healthcompanion_id=pro_monthly`.
  * If found, prints its active monthly price id. If not, creates the
  * product + a recurring $15/month USD price and prints the new id.
  *
@@ -36,8 +36,8 @@ async function loadEnv(file) {
   return out
 }
 
-const VITALITY_ID = 'pro_monthly'
-const PRODUCT_NAME = 'Vitality Pro'
+const HEALTH_COMPANION_ID = 'pro_monthly'
+const PRODUCT_NAME = 'HealthCompanion Pro'
 const PRODUCT_DESCRIPTION =
   'The dashboard. Your workouts, your data, every month.'
 const UNIT_AMOUNT_CENTS = 1500 // $15.00 USD
@@ -56,7 +56,7 @@ async function main() {
     process.exit(1)
   }
   const mode = secret.startsWith('sk_live_') ? 'LIVE' : 'TEST'
-  console.log(`Bootstrapping Vitality Pro in ${mode} mode…`)
+  console.log(`Bootstrapping HealthCompanion Pro in ${mode} mode…`)
 
   const stripe = new Stripe(secret, { apiVersion: '2026-04-22.dahlia' })
 
@@ -66,7 +66,7 @@ async function main() {
   // this is fine.
   let existingProduct = null
   for await (const p of stripe.products.list({ active: true, limit: 100 })) {
-    if (p.metadata?.vitality_id === VITALITY_ID) {
+    if (p.metadata?.healthcompanion_id === HEALTH_COMPANION_ID) {
       existingProduct = p
       break
     }
@@ -80,7 +80,7 @@ async function main() {
     product = await stripe.products.create({
       name: PRODUCT_NAME,
       description: PRODUCT_DESCRIPTION,
-      metadata: { vitality_id: VITALITY_ID },
+      metadata: { healthcompanion_id: HEALTH_COMPANION_ID },
     })
     console.log(`Created product ${product.id}`)
   }

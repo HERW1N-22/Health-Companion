@@ -1,6 +1,6 @@
 # Onboarding / Quiz DNA (sealed-HTML recipes)
 
-The Vitality intake quiz: one question per screen, a cozy springy entrance, one
+The Health Companion intake quiz: one question per screen, a cozy springy entrance, one
 bespoke widget per question, a named-section progress stepper, and a celebration
 done-screen. Below are copy-paste pieces for a single sealed HTML tile. Plain
 HTML/CSS/vanilla-JS/inline-SVG only. No libraries.

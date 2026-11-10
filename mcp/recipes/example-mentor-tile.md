@@ -9,7 +9,7 @@ The one move that makes a chat tile both safe and floor-clean: render every mess
 ## What makes it ceiling-grade
 
 - **A real chat surface.** Iris-tinted Vee bubbles, mint-tinted user bubbles, a three-dot thinking indicator, an auto-growing ask bar (Enter sends, Shift+Enter newlines), the whole conversation persisted so it survives a reload.
-- **The capability, done right.** A settings gear stores the user's own `sk-ant-...` key and model choice in the tile's saved data; the request goes browser-direct to Anthropic with that key; no Vitality key ever touches a tile. Sold on privacy, not cost.
+- **The capability, done right.** A settings gear stores the user's own `sk-ant-...` key and model choice in the tile's saved data; the request goes browser-direct to Anthropic with that key; no Health Companion key ever touches a tile. Sold on privacy, not cost.
 - **Honest, warm states.** No key shows a calm doorway, not a dead input. A rejected key or a network hiccup shows one soft line, never a red stack trace. The mentor never shames.
 - **The bug-lessons baked in.** Model output rendered via `textContent` (XSS-safe, floor-clean), host-bridge persistence with a standalone localStorage fallback in try/catch, saves held behind a loaded flag, transform/opacity-only motion with a reduced-motion escape hatch, mint `::selection`, inline-SVG glyphs. It reports nothing: a mentor has no single meaningful number, so it simply never calls `report()`, and nothing breaks.
 
@@ -155,7 +155,7 @@ textarea,input,select{caret-color:var(--mint);user-select:text;-webkit-user-sele
       <option value="claude-haiku-4-5">Haiku 4.5, the cheapest and fast</option>
     </select>
     <button class="savek" id="saveKey" type="button">save key</button>
-    <p>Your mentor talks straight to Claude with your own key, so your conversations stay yours alone and never pass through Vitality. It costs only fractions of a cent a message.</p>
+    <p>Your mentor talks straight to Claude with your own key, so your conversations stay yours alone and never pass through Health Companion. It costs only fractions of a cent a message.</p>
     <ol>
       <li>Go to console.anthropic.com and sign in.</li>
       <li>Open Settings, then API Keys, then Create Key. Copy the sk-ant key.</li>
@@ -176,24 +176,24 @@ textarea,input,select{caret-color:var(--mint);user-select:text;-webkit-user-sele
 
 <script>
 /* ---- host bridge: save/load, with a standalone fallback (report unused here) ---- */
-var Vitality = (function () {
-  var waiters = {}, LS = 'vitality-mentor-tile';
+var Health Companion = (function () {
+  var waiters = {}, LS = 'healthcompanion-mentor-tile';
   function lsGet(){ try { return JSON.parse(localStorage.getItem(LS) || 'null'); } catch (e) { return null; } }
   function lsSet(d){ try { localStorage.setItem(LS, JSON.stringify(d)); } catch (e) {} }
   window.addEventListener('message', function (e) {
     var m = e.data;
-    if (m && m.source === 'vitality-host' && m.type === 'load:result' && waiters[m.id]) {
+    if (m && m.source === 'healthcompanion-host' && m.type === 'load:result' && waiters[m.id]) {
       waiters[m.id](m.data); delete waiters[m.id];
     }
   });
   return {
-    save: function (d) { lsSet(d); try { parent.postMessage({ source:'vitality-tile', type:'save', data:d }, '*'); } catch (e) {} },
+    save: function (d) { lsSet(d); try { parent.postMessage({ source:'healthcompanion-tile', type:'save', data:d }, '*'); } catch (e) {} },
     load: function () {
       return new Promise(function (res) {
         if (window.parent === window) { res(lsGet()); return; }
         var id = Math.random().toString(36).slice(2);
         waiters[id] = res;
-        try { parent.postMessage({ source:'vitality-tile', type:'load', id:id }, '*'); } catch (e) {}
+        try { parent.postMessage({ source:'healthcompanion-tile', type:'load', id:id }, '*'); } catch (e) {}
         setTimeout(function () { if (waiters[id]) { delete waiters[id]; res(lsGet()); } }, 1200);
       });
     }
@@ -202,7 +202,7 @@ var Vitality = (function () {
 
 /* ---- the mentor's voice, distilled from Vee ---- */
 var MENTOR_SYSTEM = [
-  "You are Vee, a warm, grounded mentor living inside the user's Vitality dashboard.",
+  "You are Vee, a warm, grounded mentor living inside the user's Health Companion dashboard.",
   "You are a caring character, not a chatbot. Listen first, then say the one true thing that helps.",
   "Be concrete and kind. Keep replies short and human, plain words, no clinical tone, no bullet lists unless asked.",
   "Celebrate real wins out loud. Never shame a slip; offer one small next step instead.",
@@ -238,7 +238,7 @@ function render(){
   if (!hasKey()) {
     var gate = document.createElement('div');
     gate.className = 'gate';
-    gate.innerHTML = '<b>Add your key to wake me up.</b><br>Your chats stay yours, straight to Claude, never through Vitality.';
+    gate.innerHTML = '<b>Add your key to wake me up.</b><br>Your chats stay yours, straight to Claude, never through Health Companion.';
     var btn = document.createElement('button');
     btn.className = 'gatebtn'; btn.type = 'button'; btn.textContent = 'connect your key';
     btn.onclick = openSettings;
@@ -329,7 +329,7 @@ el('input').addEventListener('keydown', function (e) {
 });
 
 /* ---- hydrate once, then allow saves ---- */
-Vitality.load().then(function (saved) {
+Health Companion.load().then(function (saved) {
   if (saved && typeof saved === 'object') {
     state.apiKey = saved.apiKey || '';
     state.model = saved.model || 'claude-opus-4-8';
@@ -340,7 +340,7 @@ Vitality.load().then(function (saved) {
   loaded = true;
   render();
 });
-function persist(){ if (loaded) Vitality.save({ apiKey:state.apiKey, model:state.model, history:state.history }); }
+function persist(){ if (loaded) Health Companion.save({ apiKey:state.apiKey, model:state.model, history:state.history }); }
 </script>
 </body>
 </html>
@@ -352,10 +352,10 @@ function persist(){ if (loaded) Vitality.save({ apiKey:state.apiKey, model:state
 
 **Render with `textContent`, always.** `bubble()` sets `b.textContent = contentText`, so the model's reply and the user's message are inserted as text, not parsed as HTML. This is the single most important rule for any tile that displays text it did not write: it makes the tile XSS-proof against a poisoned reply AND keeps the static document the linter checks perfectly balanced. Never build a bubble by concatenating a message into an HTML string.
 
-**The key is the user's, the call is browser-direct.** The gear stores `sk-ant-...` and the model choice in the tile's own saved data via `Vitality.save`. `askClaude` calls the Messages API with `fetch`, carrying `x-api-key` and the `anthropic-dangerous-direct-browser-access` header that lets the request run from a browser at all. Do NOT send `temperature`, `top_p`, or `top_k`; current Claude models reject them. The seal holds: the tile loads no external code, it only sends messages to Anthropic with the user's own key, so the conversation and the cost both stay with the user. Sell that as privacy.
+**The key is the user's, the call is browser-direct.** The gear stores `sk-ant-...` and the model choice in the tile's own saved data via `Health Companion.save`. `askClaude` calls the Messages API with `fetch`, carrying `x-api-key` and the `anthropic-dangerous-direct-browser-access` header that lets the request run from a browser at all. Do NOT send `temperature`, `top_p`, or `top_k`; current Claude models reject them. The seal holds: the tile loads no external code, it only sends messages to Anthropic with the user's own key, so the conversation and the cost both stay with the user. Sell that as privacy.
 
 **Fail warm, never red.** A rejected key, a rate limit, or a network blip throws a calm sentence through `flash(..., true)`; the unanswered user turn is popped so the thread never ends on a dangling message. The no-key state is a gentle doorway with one button to the gear, not a broken input. Amber is the strongest colour used here; red is reserved for genuine destruction, which a mentor never does.
 
-**It reports nothing, and that is correct.** A mentor has no single meaningful number to feed the dashboard, so the tile simply never calls `Vitality.report()`. That is the honest choice for a chat tile; do not invent a stream just to have one.
+**It reports nothing, and that is correct.** A mentor has no single meaningful number to feed the dashboard, so the tile simply never calls `Health Companion.report()`. That is the honest choice for a chat tile; do not invent a stream just to have one.
 
-Swap the system prompt and the title and this same shell is any coach: a nutrition coach, a writing partner, a study tutor. Keep the `textContent` rendering, the BYO-key gear, the warm no-key gate, and the browser-direct call, and the tile clears the Vitality bar by default. Run `check_tile` on your result; it should read PASS, zero errors, zero warnings, exactly as this one does.
+Swap the system prompt and the title and this same shell is any coach: a nutrition coach, a writing partner, a study tutor. Keep the `textContent` rendering, the BYO-key gear, the warm no-key gate, and the browser-direct call, and the tile clears the Health Companion bar by default. Run `check_tile` on your result; it should read PASS, zero errors, zero warnings, exactly as this one does.

@@ -13,7 +13,7 @@ const localStorageMock = {
 Object.defineProperty(global, 'window', { value: { localStorage: localStorageMock }, writable: true })
 
 const A = 'user-a'
-const homeKey = (userId: string) => `vitality:${userId}:home`
+const homeKey = (userId: string) => `healthcompanion:${userId}:home`
 beforeEach(() => localStorageMock.clear())
 
 describe('homeLayout: the locked Create tile is always present (Library twin)', () => {

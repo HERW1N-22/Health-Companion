@@ -4,7 +4,7 @@
  * Profile fields (weight / age / sex / units) are owned by the canonical
  * user_profile row in Supabase — see actions.ts and page.tsx. Everything
  * else (display unit, bottle/glass size, activity hours, caffeine, added
- * substances, daily logs) lives in localStorage under `vitality_water_v1`.
+ * substances, daily logs) lives in localStorage under `healthcompanion_water_v1`.
  * Logs migrate to Supabase in a later BUILD.
  *
  * All volumes are stored in ml regardless of what the user sees on screen.

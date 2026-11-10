@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { getLocalDateKey } from '@/lib/dates'
 
 // The one water tracker (/app/fuel/water) persists here.
-const WATER_LS_KEY = 'vitality_water_v1'
+const WATER_LS_KEY = 'healthcompanion_water_v1'
 
 /**
  * Today's water-serving count, read from the single water tracker's

@@ -7,12 +7,12 @@
  * crash on the Vee surface.
  *
  * It reuses the MCP read layer by wrapping the app's RLS-scoped server client as
- * a VitalityDb (the same {db, userId} contract the MCP tools use), so there is
+ * a HealthCompanionDb (the same {db, userId} contract the MCP tools use), so there is
  * one query layer, not two.
  */
 
 import type { SupabaseClient } from '@supabase/supabase-js'
-import type { VitalityDb } from '@/mcp/src/supabase'
+import type { HealthCompanionDb } from '@/mcp/src/supabase'
 import { getLiftProgression, getWeights, getMoodDaily, getSleep } from '@/mcp/src/queries'
 import { getBigGoals } from '@/lib/goals/repo'
 import {
@@ -49,8 +49,8 @@ export async function gatherGreenLight(
   // The app and the mcp package each install @supabase/supabase-js, so their
   // SupabaseClient types are nominally distinct copies of the same class. Cast
   // across that duplicate-package boundary; it is the same client at runtime.
-  const v: VitalityDb = {
-    db: supabase as unknown as VitalityDb['db'],
+  const v: HealthCompanionDb = {
+    db: supabase as unknown as HealthCompanionDb['db'],
     userId,
     mode: 'user',
     scopes: ['mcp:read'],
@@ -67,7 +67,7 @@ export async function gatherGreenLight(
     const goals: ActiveGoal[] = bigGoals
       .filter((g) => g.status === 'active')
       .map((g) => ({
-        id: g.id, // real vitality_goals row id — ready for the cooldown ledger
+        id: g.id, // real healthcompanion_goals row id — ready for the cooldown ledger
         title: g.cleanTitle ?? g.title, // tidied title matches lifts more cleanly
         push: mapPush(g.push),
       }))

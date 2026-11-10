@@ -39,15 +39,15 @@ describe('BUILD_PROMPT bridge honesty', () => {
 
   it('a late load:result with saved data reloads the tile before a save can overwrite it', () => {
     // the fallback waiter stays registered and guards stored history
-    expect(BUILD_PROMPT).toContain('if(d!=null&&!Vitality._sv)location.reload()')
+    expect(BUILD_PROMPT).toContain('if(d!=null&&!HealthCompanion._sv)location.reload()')
     // save marks the tile dirty so a late reply never stomps fresh input
-    expect(BUILD_PROMPT).toContain('save:function(d){Vitality._sv=true;')
+    expect(BUILD_PROMPT).toContain('save:function(d){HealthCompanion._sv=true;')
   })
 
   it('keeps the sealed-tile contract wording intact (bridge verbs + report shape)', () => {
     for (const piece of [
       "type:'save'", "type:'load'", "type:'report'",
-      'Vitality.save(data)', 'Vitality.load()', 'Vitality.report(stream)',
+      'HealthCompanion.save(data)', 'HealthCompanion.load()', 'HealthCompanion.report(stream)',
       'intake, count, duration, rating, measure, money, done',
     ]) expect(BUILD_PROMPT).toContain(piece)
   })

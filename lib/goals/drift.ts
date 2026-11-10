@@ -3,7 +3,7 @@
  *
  * Pure + IO-free (unit-tested). Given a snapshot of the user's recent behaviour
  * + the nudge cooldown ledger, it returns AT MOST ONE warm nudge, or null. The
- * whole point: Vitality notices you fading before you do, and reaches out first
+ * whole point: HealthCompanion notices you fading before you do, and reaches out first
  * warmly. So the rules are deliberately conservative:
  *   - Only nudge someone who WAS active (you can't "slip" from a thing you never
  *     did) — never guilt a non-lifter for not lifting.

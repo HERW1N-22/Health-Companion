@@ -242,7 +242,7 @@ export default function MentorModule({ firstName, initialNotes, moodHistory, vee
           </Link>
           <div className={styles.greetWrap}>
             <div className={styles.greetText}>
-              <span className={styles.greetLabel}>VITALITY · VEE</span>
+              <span className={styles.greetLabel}>HEALTH_COMPANION · VEE</span>
               <span className={styles.greetLine} suppressHydrationWarning>
                 {greeting}{firstName ? `, ${firstName}` : ''}.
               </span>
@@ -251,7 +251,7 @@ export default function MentorModule({ firstName, initialNotes, moodHistory, vee
           </div>
         </header>
 
-        {/* 2 · the one "Vitality noticed" card */}
+        {/* 2 · the one "HealthCompanion noticed" card */}
         <NoticedCard feed={veeNoticed.feed} onDeeper={toChat} />
 
         {/* 3 · chat, the visual center */}
@@ -398,7 +398,7 @@ export default function MentorModule({ firstName, initialNotes, moodHistory, vee
 interface Particle { left: number; top: number; size: number; dur: number; delay: number; dx: number; dy: number }
 
 /* ================================================================
-   The "Vitality noticed" card — feed[0] with a "show me another" cycle,
+   The "HealthCompanion noticed" card — feed[0] with a "show me another" cycle,
    the one-shot mint bloom, and the whisper-rarity marker.
    ================================================================ */
 function NoticedCard({ feed, onDeeper }: { feed: FeedNotice[]; onDeeper: () => void }) {
@@ -417,13 +417,13 @@ function NoticedCard({ feed, onDeeper }: { feed: FeedNotice[]; onDeeper: () => v
   const dotTone = notice.impact === 'dn' ? styles.warn : styles.good
 
   return (
-    <section className={styles.noticed} aria-label="Vitality noticed">
+    <section className={styles.noticed} aria-label="HealthCompanion noticed">
       {/* absolutely-positioned + clipped by overflow:hidden so it never inflates the card */}
       <div className={styles.bloom} key={`bloom-${idx}`} aria-hidden />
 
       <div className={styles.noticedLabel}>
         <svg viewBox="0 0 24 24"><path d="M12 2l2.4 6.6L21 11l-6.6 2.4L12 20l-2.4-6.6L3 11l6.6-2.4z" /></svg>
-        VITALITY NOTICED
+        HEALTH_COMPANION NOTICED
         {whisper && <span className={styles.rarityWhisper}>{whisper}</span>}
       </div>
 

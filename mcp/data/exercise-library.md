@@ -1,9 +1,9 @@
-# Vitality Exercise / Lift Library (for workout tiles)
+# Health Companion Exercise / Lift Library (for workout tiles)
 
-The canonical lift library Vitality's own logger uses. 58 lifts, each with a name,
+The canonical lift library Health Companion's own logger uses. 58 lifts, each with a name,
 tier, primary muscle, equipment, a one-line form tip, plus optional distilled
 gist / steps / cues, and two weight-matched swap suggestions. Inline the sample
-JSON below into a sealed workout tile so it speaks the same language as Vitality.
+JSON below into a sealed workout tile so it speaks the same language as Health Companion.
 
 ## Where the full set lives
 

@@ -94,7 +94,7 @@ async function main() {
   const created = await stripe.webhookEndpoints.create({
     url: PROD_URL,
     enabled_events: EVENTS,
-    description: 'Vitality production billing webhook (created by stripe-webhook-bootstrap.mjs)',
+    description: 'HealthCompanion production billing webhook (created by stripe-webhook-bootstrap.mjs)',
   })
 
   console.log(`Created ${created.id}`)

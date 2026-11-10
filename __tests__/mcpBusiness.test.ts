@@ -1,5 +1,5 @@
 import { getBusiness } from '@/mcp/src/queries'
-import type { VitalityDb } from '@/mcp/src/supabase'
+import type { HealthCompanionDb } from '@/mcp/src/supabase'
 
 // Read layer for the business-overview MCP tool. getBusiness reads the SAME
 // `brand_state` jsonb blob the client mirrors (per-brand Business view is the
@@ -9,8 +9,8 @@ import type { VitalityDb } from '@/mcp/src/supabase'
 const DAY = 86_400_000
 const iso = (daysAgo: number) => new Date(Date.now() - daysAgo * DAY).toISOString()
 
-/** A VitalityDb whose `brand_state` read yields `blob` (or null = no row). */
-function vdbWithBrandBlob(blob: unknown): VitalityDb {
+/** A HealthCompanionDb whose `brand_state` read yields `blob` (or null = no row). */
+function vdbWithBrandBlob(blob: unknown): HealthCompanionDb {
   const builder: Record<string, unknown> = {}
   builder.select = () => builder
   builder.eq = () => builder
@@ -20,7 +20,7 @@ function vdbWithBrandBlob(blob: unknown): VitalityDb {
     userId: 'u1',
     mode: 'user',
     scopes: ['mcp:read'],
-  } as unknown as VitalityDb
+  } as unknown as HealthCompanionDb
 }
 
 describe('getBusiness', () => {

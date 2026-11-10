@@ -43,8 +43,8 @@ body{background:transparent;color:#fff;font-family:-apple-system,BlinkMacSystemF
   </div>
 </div>
 <script>
-var Vitality={_w:{},save:function(d){parent.postMessage({source:'vitality-tile',type:'save',data:d},'*')},load:function(){return new Promise(function(res){var id=Math.random().toString(36).slice(2);Vitality._w[id]=res;parent.postMessage({source:'vitality-tile',type:'load',id:id},'*')})}};
-window.addEventListener('message',function(e){var m=e.data;if(m&&m.source==='vitality-host'&&m.type==='load:result'&&Vitality._w[m.id]){Vitality._w[m.id](m.data);delete Vitality._w[m.id]}});
+var HealthCompanion={_w:{},save:function(d){parent.postMessage({source:'healthcompanion-tile',type:'save',data:d},'*')},load:function(){return new Promise(function(res){var id=Math.random().toString(36).slice(2);HealthCompanion._w[id]=res;parent.postMessage({source:'healthcompanion-tile',type:'load',id:id},'*')})}};
+window.addEventListener('message',function(e){var m=e.data;if(m&&m.source==='healthcompanion-host'&&m.type==='load:result'&&HealthCompanion._w[m.id]){HealthCompanion._w[m.id](m.data);delete HealthCompanion._w[m.id]}});
 
 function dateKey(d){d=d||new Date();var y=d.getFullYear(),m=('0'+(d.getMonth()+1)).slice(-2),day=('0'+d.getDate()).slice(-2);return y+'-'+m+'-'+day}
 function yesterdayKey(){var d=new Date();d.setDate(d.getDate()-1);return dateKey(d)}
@@ -94,23 +94,23 @@ function markDone(){
   else{state.streak=1;}
   state.lastDone=dateKey();
   if(state.streak>state.best)state.best=state.streak;
-  Vitality.save(state);
+  HealthCompanion.save(state);
   render();
   numEl.classList.remove('pop');void numEl.offsetWidth;numEl.classList.add('pop');
 }
 
 habitEl.addEventListener('input',function(){
   state.name=habitEl.value.slice(0,40);
-  Vitality.save(state);
+  HealthCompanion.save(state);
 });
 habitEl.addEventListener('blur',function(){
-  if(!state.name.trim()){state.name=DEFAULTS.name;habitEl.value=state.name;Vitality.save(state);}
+  if(!state.name.trim()){state.name=DEFAULTS.name;habitEl.value=state.name;HealthCompanion.save(state);}
 });
 habitEl.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();habitEl.blur();}});
 
-Vitality.load().then(function(d){
+HealthCompanion.load().then(function(d){
   state=sanitize(d);
-  Vitality.save(state);
+  HealthCompanion.save(state);
   render();
 }).catch(function(){state=Object.assign({},DEFAULTS);render();});
 </script>

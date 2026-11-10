@@ -21,7 +21,7 @@ import { VeeAsk, VeeKeep } from './vee/VeeBottomStrip'
 import styles from './veeNoticed.module.css'
 
 /* VeeNoticed - the launch Vee. Three things: the Echo gem (Vee's face), the ONE
- * gamified "Vitality Noticed" card (the WATCHED mono chip carries what Vee
+ * gamified "HealthCompanion Noticed" card (the WATCHED mono chip carries what Vee
  * connected), and the slim "feed Vee" strip (mood + a note) that gives Vee more
  * of your life to connect. Standard backdrop + glass. Conversation lives in
  * Claude. Rarity = depth; the card explains itself and stays near-empty. */
@@ -82,7 +82,7 @@ const RARITY_MEANING: Record<Rarity, string> = {
 }
 
 function claudeHref(notice: FeedNotice): string {
-  const q = `Vee noticed this in my Vitality data: "${notice.lead}" Help me understand what is driving it and what to do next.`
+  const q = `Vee noticed this in my HealthCompanion data: "${notice.lead}" Help me understand what is driving it and what to do next.`
   return `https://claude.ai/new?q=${encodeURIComponent(q)}`
 }
 
@@ -186,14 +186,14 @@ function NoticedCard({ feed, readOnly = false }: { feed: FeedNotice[]; readOnly?
   }
 
   return (
-    <section className={`${styles.noticed} ${RARITY_CLASS[rarity]}`} aria-label="Vitality noticed" key={`card-${idx}`}>
+    <section className={`${styles.noticed} ${RARITY_CLASS[rarity]}`} aria-label="HealthCompanion noticed" key={`card-${idx}`}>
       <span className={styles.rarityEdge} aria-hidden />
       <div className={styles.bloom} key={`bloom-${idx}`} aria-hidden />
 
       {/* showcase head: V badge + label + rarity pill left, the watched chip right */}
       <div className={styles.noticedHead}>
         <VMark />
-        <span className={styles.noticedLabel}>VITALITY NOTICED</span>
+        <span className={styles.noticedLabel}>HEALTH_COMPANION NOTICED</span>
         <button
           type="button"
           className={styles.rbadge}
@@ -299,7 +299,7 @@ const CLIMB_LINE = <>Every tile you log feeds Vee. <b>The more of your life it c
 
 /* The one honest cold-start line inside the card: plain words, no promises the
    engine has not earned. Alex tweaks the wording live. */
-const COLD_LINE = 'use Vitality a little each day. your first find comes from what you log.'
+const COLD_LINE = 'use HealthCompanion a little each day. your first find comes from what you log.'
 
 /* The one calm degraded line (loadNoticed.degraded): a failed read must never
    impersonate a cold start, so a daily logger is never told they have not logged. */
@@ -307,7 +307,7 @@ const DEGRADED_LINE = 'some of your data could not be read just now. everything 
 
 /* The one-sentence explainer that fully tells a confused user what Vee is for.
    Tops the Climb in the intro overlay and the "how Vee works" tab (Alex tweaks live). */
-const VEE_EXPLAINER = 'Vee reads everything you log across Vitality and shows you the one pattern that is quietly helping or hurting your goals. The rarer the find, the deeper the connection.'
+const VEE_EXPLAINER = 'Vee reads everything you log across HealthCompanion and shows you the one pattern that is quietly helping or hurting your goals. The rarer the find, the deeper the connection.'
 
 /* localStorage flag: the Climb intro plays once, on the FIRST-EVER click on Vee. */
 function climbSeenKey(userId: string): string {
@@ -464,7 +464,7 @@ export default function VeeNoticed({ firstName, feed, userId, stats, goals, habi
           {/* the Echo gem - Vee's face */}
           <section className={styles.hero} aria-label="Vee">
             <div className={styles.gemStage}><CoachGem preset="echo" /></div>
-            <span className={styles.label}>VITALITY · VEE</span>
+            <span className={styles.label}>HEALTH_COMPANION · VEE</span>
             <h1 className={styles.greet} suppressHydrationWarning>
               {greeting}{firstName ? <>, <em>{firstName}</em></> : ''}.
             </h1>
@@ -476,9 +476,9 @@ export default function VeeNoticed({ firstName, feed, userId, stats, goals, habi
             {degraded && hasFeed && <p className={styles.degradedLine} role="status">{DEGRADED_LINE}</p>}
           </section>
 
-          {/* ·01 the one gamified "Vitality noticed" card, or the calm cold start */}
-          <section className={`${styles.pageSection} ${styles.heroCard}`} aria-label="Vitality noticed">
-            <SecHead num="·01" label="Vitality noticed" />
+          {/* ·01 the one gamified "HealthCompanion noticed" card, or the calm cold start */}
+          <section className={`${styles.pageSection} ${styles.heroCard}`} aria-label="HealthCompanion noticed">
+            <SecHead num="·01" label="HealthCompanion noticed" />
             <p className={styles.secLede}>the rarer the find, the deeper it reached into your life.</p>
             {hasFeed ? (
               <NoticedCard feed={feed} readOnly={readOnly} />

@@ -1,5 +1,5 @@
 /* Vee - the launch surface, stripped to its two things: the Echo gem (Vee's face)
-   and the one "Vitality Noticed" card. Backdrop + glass are the real Vitality
+   and the one "HealthCompanion Noticed" card. Backdrop + glass are the real HealthCompanion
    standard, harvested 1:1 from the mentor surface (aurora, mountains, drifting
    particles, grain, mint-bordered glass). Iris is Echo's own gem tint; the surface
    chrome stays mint per the app standard. No walls, no stacked sections. */
@@ -126,7 +126,7 @@
 .status { display: inline-flex; align-items: center; gap: 8px; margin-top: 14px; font-family: var(--mono); font-size: 8.5px; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase; color: var(--tx-faint); }
 .status .sd { width: 5px; height: 5px; border-radius: 50%; background: var(--iris); box-shadow: 0 0 8px var(--iris); animation: pulseDot 2.8s ease-in-out infinite; }
 
-/* ---------------------------------------------------- 2 · the one "Vitality Noticed" card */
+/* ---------------------------------------------------- 2 · the one "HealthCompanion Noticed" card */
 .noticed {
   position: relative; overflow: hidden;
   border: 1px solid rgba(110, 231, 183, 0.5); border-radius: 20px;

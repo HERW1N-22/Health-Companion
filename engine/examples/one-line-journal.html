@@ -63,8 +63,8 @@ body{background:transparent;color:#fff;font-family:-apple-system,BlinkMacSystemF
 </div>
 
 <script>
-var Vitality={_w:{},save:function(d){parent.postMessage({source:'vitality-tile',type:'save',data:d},'*')},load:function(){return new Promise(function(res){var id=Math.random().toString(36).slice(2);Vitality._w[id]=res;parent.postMessage({source:'vitality-tile',type:'load',id:id},'*')})}};
-window.addEventListener('message',function(e){var m=e.data;if(m&&m.source==='vitality-host'&&m.type==='load:result'&&Vitality._w[m.id]){Vitality._w[m.id](m.data);delete Vitality._w[m.id]}});
+var HealthCompanion={_w:{},save:function(d){parent.postMessage({source:'healthcompanion-tile',type:'save',data:d},'*')},load:function(){return new Promise(function(res){var id=Math.random().toString(36).slice(2);HealthCompanion._w[id]=res;parent.postMessage({source:'healthcompanion-tile',type:'load',id:id},'*')})}};
+window.addEventListener('message',function(e){var m=e.data;if(m&&m.source==='healthcompanion-host'&&m.type==='load:result'&&HealthCompanion._w[m.id]){HealthCompanion._w[m.id](m.data);delete HealthCompanion._w[m.id]}});
 
 var MAX=160;
 var entries=[];
@@ -107,7 +107,7 @@ function sanitize(raw){
   return dedup;
 }
 
-function persist(){Vitality.save({entries:entries})}
+function persist(){HealthCompanion.save({entries:entries})}
 
 function todayEntry(){var t=todayKey();for(var i=0;i<entries.length;i++){if(entries[i].date===t)return entries[i]}return null}
 
@@ -178,7 +178,7 @@ input.addEventListener('input',updateCount);
 input.addEventListener('keydown',function(ev){if(ev.key==='Enter'){ev.preventDefault();doSave()}});
 save.addEventListener('click',doSave);
 
-Vitality.load().then(function(d){
+HealthCompanion.load().then(function(d){
   entries=sanitize(d);
   render();
   syncCompose();

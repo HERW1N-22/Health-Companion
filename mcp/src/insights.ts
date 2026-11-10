@@ -1,4 +1,4 @@
-// Pure derivation layer for the Vitality MCP — the "insight" math.
+// Pure derivation layer for the HealthCompanion MCP — the "insight" math.
 //
 // Everything here is a pure function: shaped data in, a derived read out. No DB,
 // no env, no clock dependence beyond a caller-supplied `todayKey`. This is what

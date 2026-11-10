@@ -4,8 +4,8 @@
 -- The first-impression problem: the original onboarding's last
 -- question was "What's your goal?" with options like cut/recomp/bulk —
 -- pure body composition language. New users saw that as the WHOLE
--- product and walked away thinking Vitality was a fitness app.
--- Vitality is actually a life-dashboard with brand, finance, peak,
+-- product and walked away thinking HealthCompanion was a fitness app.
+-- HealthCompanion is actually a life-dashboard with brand, finance, peak,
 -- mentor, goals modules in addition to fitness.
 --
 -- New question covers all module clusters: body, mind, performance,

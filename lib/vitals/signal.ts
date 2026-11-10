@@ -1,7 +1,7 @@
 /**
  * Vitals Signal engine (pure, no IO). The daily fused, personal read.
  *
- * WHOOP knows your recovery. Only Vitality also knows your training load, your
+ * WHOOP knows your recovery. Only HealthCompanion also knows your training load, your
  * fuel, your goal, and what you told Vee. This engine fuses those into ONE call
  * for the day: push, steady, or recover. It is a total function — any input maps
  * to a valid Signal (or null when there is genuinely nothing to read), and it

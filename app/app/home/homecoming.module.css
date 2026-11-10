@@ -1,4 +1,4 @@
-/* "Vitality, I'm home" - the ritual stage.
+/* "HealthCompanion, I'm home" - the ritual stage.
    Full screen, never scrolls, on the signature world. The shell owns this
    file: gem travel, scrim, settle flash, act frame, skip, questions, close.
    Acts bring their own .module.css and render inside .actStage. */

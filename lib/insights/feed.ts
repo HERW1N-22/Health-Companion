@@ -1,5 +1,5 @@
 /**
- * The §01 "Vitality noticed" cycling feed: the unified, flippable list behind
+ * The §01 "HealthCompanion noticed" cycling feed: the unified, flippable list behind
  * "show me another".
  *
  * It blends the synthesis's sources into one honest, ranked list:

@@ -9,22 +9,22 @@ import type { PeakState, PeakWindow, ScheduledEvent, ScoreTier, WhoopSignal } fr
  * Cross-module read of the Peak tracker. We avoid instantiating Peak's
  * useState hook here — that would create a second React store divorced
  * from the user's actual Peak data. Instead we read the persisted
- * `vitality_peak_v1` and `vitality_whoop_v1` blobs directly and let the
+ * `healthcompanion_peak_v1` and `healthcompanion_whoop_v1` blobs directly and let the
  * pure functions in peak/curve.ts + peak/schedule.ts do the math.
  *
  * Returned data is reactive to `storage` events, so when the user edits
  * Peak in another tab, Goals' suggestions stay current.
  */
 
-const PEAK_LS = 'vitality_peak_v1'
-const WHOOP_LS = 'vitality_whoop_v1'
+const PEAK_LS = 'healthcompanion_peak_v1'
+const WHOOP_LS = 'healthcompanion_whoop_v1'
 
 export interface PeakSnapshot {
   /** True only after first client read — guards SSR + initial paint. */
   ready: boolean
   /** Hourly score (length 24, 0-100). Empty array when Peak hasn't loaded. */
   curve: number[]
-  /** Current 0-100 score (Vitality Score for the day). */
+  /** Current 0-100 score (HealthCompanion Score for the day). */
   score: number
   /** Tier label. */
   tier: ScoreTier

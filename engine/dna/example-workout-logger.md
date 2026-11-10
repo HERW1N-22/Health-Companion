@@ -1,6 +1,6 @@
 # Gold example: the Workout Logger (the standard for a rich tile)
 
-This is the bar. A great Vitality tile is not a form. It is a small, living
+This is the bar. A great Health Companion tile is not a form. It is a small, living
 instrument: every action lands with color and motion that carry meaning, every
 number is your real history, and finishing feels like an event. The logger is
 the reference. Below is its anatomy, translated into patterns a single sealed
@@ -67,7 +67,7 @@ peak, twilight blue = rest. Red is reserved for genuinely destructive actions
 5. **Capstone**: an "after the lifts" section (cardio) + a **Finish** action
    that triggers a celebration and a calm auto-return.
 
-Everything saves continuously via `Vitality.save` on every discrete action (never
+Everything saves continuously via `Health Companion.save` on every discrete action (never
 "save at the end"); `localStorage` is only a standalone fallback, wrapped in
 try/catch. On finish, if the tile has one meaningful stream, it may `report()` a
 summary to the dashboard, as a comparable stream.
@@ -451,7 +451,7 @@ present); a tile without such a stream never calls it and nothing breaks.
       stats row, an editable + deletable (with confirm) log.
 - [ ] Rest/off days are honored, never punished (off the progress line, calm
       twilight blue).
-- [ ] Save continuously via `Vitality.save` on every discrete action; no "save
+- [ ] Save continuously via `Health Companion.save` on every discrete action; no "save
       at the end". `localStorage` only as a standalone fallback (try/catch).
 - [ ] A capstone moment on finish: a celebration and a calm return. (Optional:
       if the tile has one meaningful stream, `report()` it to the dashboard as a

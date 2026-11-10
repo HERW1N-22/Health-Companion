@@ -1,8 +1,8 @@
 # Food Library (the overpowered ingredient for any macro or food tile)
 
-Vitality ships a curated, USDA-consistent food catalog. A sealed tile cannot import it,
+Health Companion ships a curated, USDA-consistent food catalog. A sealed tile cannot import it,
 so inline a sample of it (below) and fall back to the USDA API for everything else
-(see the api recipe). This is what makes a food tile feel instantly "Vitality grade":
+(see the api recipe). This is what makes a food tile feel instantly "Health Companion grade":
 type "bana" and get a real banana with real macros, no network, no flicker.
 
 ## The data shape
@@ -51,7 +51,7 @@ copying that array verbatim. For most tiles the 12-food sample below plus USDA i
 
 ## Ready-to-inline JSON sample (12 representative foods, real macros)
 
-Drop this straight into a `<script>` block. Real Vitality values, one per archetype.
+Drop this straight into a `<script>` block. Real Health Companion values, one per archetype.
 
 ```js
 const FOODS = [
@@ -72,7 +72,7 @@ const FOODS = [
 
 ## Macro math (how grams scale to kcal, protein, carbs, fat)
 
-Everything is linear off the per-100g base. These are the exact Vitality functions,
+Everything is linear off the per-100g base. These are the exact Health Companion functions,
 in plain JS.
 
 ```js
@@ -105,7 +105,7 @@ Sanity checks for any tile that derives kcal: fat is 9 kcal per gram, protein an
 carbs are 4 kcal per gram each. So `kcal approx protein*4 + carbs*4 + fat*9`. The
 catalog values are pre-balanced to this, do not recompute and overwrite them.
 
-Unit-to-grams presets Vitality uses (cup is deliberately omitted, it varies by food):
+Unit-to-grams presets Health Companion uses (cup is deliberately omitted, it varies by food):
 `g`=1, `oz`=28.3495, `egg`=50, `tbsp`=15, `tsp`=5, `ml`=1. So
 `grams = value * preset`.
 
@@ -114,7 +114,7 @@ protein, 0 g carbs, 5.4 g fat. Round only for display.
 
 ## Typo-tolerant search (the funnel that feels magic)
 
-Vitality scores the query against each food's `name` plus its `aliases`, so "chiken",
+Health Companion scores the query against each food's `name` plus its `aliases`, so "chiken",
 "bana", and "pb" all resolve. A compact version a tile can inline:
 
 ```js

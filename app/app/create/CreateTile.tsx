@@ -16,12 +16,12 @@ import styles from './create.module.css'
  * Build a tile (the in-app twin of the approved demo, public/build-lab.html).
  *
  * The tile host (client). Renders a sealed tile in a sandboxed iframe and
- * speaks the Vitality bridge over postMessage:
+ * speaks the HealthCompanion bridge over postMessage:
  *
- *   tile  to host : { source:'vitality-tile', type:'save', data }
- *   tile  to host : { source:'vitality-tile', type:'load', id }
- *   tile  to host : { source:'vitality-tile', type:'report', stream }
- *   host  to tile : { source:'vitality-host', type:'load:result', id, data }
+ *   tile  to host : { source:'healthcompanion-tile', type:'save', data }
+ *   tile  to host : { source:'healthcompanion-tile', type:'load', id }
+ *   tile  to host : { source:'healthcompanion-tile', type:'report', stream }
+ *   host  to tile : { source:'healthcompanion-host', type:'load:result', id, data }
  *
  * save/load are the tile's OWN data. report is the one numeric life-stream into
  * Vee (the noticed brain): the host forwards it to the reportStream server
@@ -68,21 +68,21 @@ li:hover .del{opacity:1}.del:hover{color:#fff}
 <ul id="list"></ul>
 <script>
 var CHECK='<svg width="11" height="11" viewBox="0 0 12 12" fill="none"><path d="M2.5 6.2 5 8.6 9.5 3.4" stroke="#042a1c" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-var Vitality={_w:{},_sv:false,save:function(d){Vitality._sv=true;parent.postMessage({source:'vitality-tile',type:'save',data:d},'*')},load:function(){return new Promise(function(res){var id=Math.random().toString(36).slice(2);var ask=function(){parent.postMessage({source:'vitality-tile',type:'load',id:id},'*')};var n=0;var t=setInterval(function(){n++;if(n===1){ask();return}clearInterval(t);if(Vitality._w[id]){Vitality._w[id]=function(d){if(d!=null&&!Vitality._sv)location.reload()};res(null)}},3000);Vitality._w[id]=function(d){clearInterval(t);res(d)};ask()})},report:function(s){parent.postMessage({source:'vitality-tile',type:'report',stream:s},'*')}};
+var HealthCompanion={_w:{},_sv:false,save:function(d){HealthCompanion._sv=true;parent.postMessage({source:'healthcompanion-tile',type:'save',data:d},'*')},load:function(){return new Promise(function(res){var id=Math.random().toString(36).slice(2);var ask=function(){parent.postMessage({source:'healthcompanion-tile',type:'load',id:id},'*')};var n=0;var t=setInterval(function(){n++;if(n===1){ask();return}clearInterval(t);if(HealthCompanion._w[id]){HealthCompanion._w[id]=function(d){if(d!=null&&!HealthCompanion._sv)location.reload()};res(null)}},3000);HealthCompanion._w[id]=function(d){clearInterval(t);res(d)};ask()})},report:function(s){parent.postMessage({source:'healthcompanion-tile',type:'report',stream:s},'*')}};
 function vNote(t){var n=document.getElementById('v-note');if(!n){n=document.createElement('div');n.id='v-note';n.style.cssText='margin-top:10px;font-size:12px;color:#F59E0B;text-align:center';document.body.appendChild(n)}n.textContent=t}
-window.addEventListener('message',function(e){var m=e.data;if(!m||m.source!=='vitality-host')return;if(m.type==='load:result'&&Vitality._w[m.id]){Vitality._w[m.id](m.data);delete Vitality._w[m.id];return}if(m.type==='save:error'){vNote('That save did not stick. Try again in a moment.')}else if(m.type==='report:error'){vNote('That log did not land, so it does not count yet. Try again in a moment.')}});
+window.addEventListener('message',function(e){var m=e.data;if(!m||m.source!=='healthcompanion-host')return;if(m.type==='load:result'&&HealthCompanion._w[m.id]){HealthCompanion._w[m.id](m.data);delete HealthCompanion._w[m.id];return}if(m.type==='save:error'){vNote('That save did not stick. Try again in a moment.')}else if(m.type==='report:error'){vNote('That log did not land, so it does not count yet. Try again in a moment.')}});
 var todos=[];var list=document.getElementById('list');var input=document.getElementById('t');
 function render(){if(!todos.length){list.innerHTML='<div class="empty">Nothing yet. Add your first task.</div>';return}list.innerHTML='';todos.forEach(function(t,i){var li=document.createElement('li');if(t.done)li.className='done';li.innerHTML='<div class="box'+(t.done?' on':'')+'">'+CHECK+'</div><span class="txt"></span><button class="del">&times;</button>';li.querySelector('.txt').textContent=t.text;li.querySelector('.box').onclick=function(){todos[i].done=!todos[i].done;commit()};li.querySelector('.del').onclick=function(){todos.splice(i,1);commit()};list.appendChild(li)})}
-function commit(){render();Vitality.save(todos)}
+function commit(){render();HealthCompanion.save(todos)}
 function add(){var v=input.value.trim();if(!v)return;todos.push({text:v,done:false});input.value='';commit();input.focus()}
 document.getElementById('a').onclick=add;input.addEventListener('keydown',function(e){if(e.key==='Enter')add()});
-Vitality.load().then(function(d){todos=Array.isArray(d)&&d.length?d:[{text:'Drink a glass of water',done:true},{text:'10 minute walk',done:false},{text:'Plan tomorrow',done:false}];render()});
+HealthCompanion.load().then(function(d){todos=Array.isArray(d)&&d.length?d:[{text:'Drink a glass of water',done:true},{text:'10 minute walk',done:false},{text:'Plan tomorrow',done:false}];render()});
 <\/script></body></html>`
 
 /**
  * The build prompt a user pastes into Claude Code (VS Code) or claude.ai to
- * get a tile that plugs straight into Vitality. It teaches the FULL bridge,
- * including Vitality.report(), so a tile built outside auto-connects to Vee:
+ * get a tile that plugs straight into HealthCompanion. It teaches the FULL bridge,
+ * including HealthCompanion.report(), so a tile built outside auto-connects to Vee:
  * its stream lands in Supabase (tile_streams / tile_reports) and the score,
  * the drift watch, and the cross-life connections pick it up with zero setup.
  * Kept as one copyable constant so the contract can never drift from the UI.
@@ -97,21 +97,21 @@ Vitality.load().then(function(d){todos=Array.isArray(d)&&d.length?d:[{text:'Drin
  * celebrate a write that never landed.
  * Exported for the contract-pinning test (createBridge.test.ts).
  */
-export const BUILD_PROMPT = `Build me a Vitality tile: ONE self-contained HTML file (inline CSS + JS, no external requests, no libraries, no localStorage). It runs sealed in a sandboxed iframe on my dashboard.
+export const BUILD_PROMPT = `Build me a HealthCompanion tile: ONE self-contained HTML file (inline CSS + JS, no external requests, no libraries, no localStorage). It runs sealed in a sandboxed iframe on my dashboard.
 
 Look: transparent background (the dashboard is pure black), white text, mint #6EE7B7 accents, system/Inter font, SVG icons only, no emoji.
 
-Talk to Vitality ONLY through this bridge. Paste it verbatim at the top of the script:
+Talk to HealthCompanion ONLY through this bridge. Paste it verbatim at the top of the script:
 
-var Vitality={_w:{},_sv:false,save:function(d){Vitality._sv=true;parent.postMessage({source:'vitality-tile',type:'save',data:d},'*')},load:function(){return new Promise(function(res){var id=Math.random().toString(36).slice(2);var ask=function(){parent.postMessage({source:'vitality-tile',type:'load',id:id},'*')};var n=0;var t=setInterval(function(){n++;if(n===1){ask();return}clearInterval(t);if(Vitality._w[id]){Vitality._w[id]=function(d){if(d!=null&&!Vitality._sv)location.reload()};res(null)}},3000);Vitality._w[id]=function(d){clearInterval(t);res(d)};ask()})},report:function(s){parent.postMessage({source:'vitality-tile',type:'report',stream:s},'*')}};
+var HealthCompanion={_w:{},_sv:false,save:function(d){HealthCompanion._sv=true;parent.postMessage({source:'healthcompanion-tile',type:'save',data:d},'*')},load:function(){return new Promise(function(res){var id=Math.random().toString(36).slice(2);var ask=function(){parent.postMessage({source:'healthcompanion-tile',type:'load',id:id},'*')};var n=0;var t=setInterval(function(){n++;if(n===1){ask();return}clearInterval(t);if(HealthCompanion._w[id]){HealthCompanion._w[id]=function(d){if(d!=null&&!HealthCompanion._sv)location.reload()};res(null)}},3000);HealthCompanion._w[id]=function(d){clearInterval(t);res(d)};ask()})},report:function(s){parent.postMessage({source:'healthcompanion-tile',type:'report',stream:s},'*')}};
 function vNote(t){var n=document.getElementById('v-note');if(!n){n=document.createElement('div');n.id='v-note';n.style.cssText='margin-top:10px;font-size:12px;color:#F59E0B;text-align:center';document.body.appendChild(n)}n.textContent=t}
-window.addEventListener('message',function(e){var m=e.data;if(!m||m.source!=='vitality-host')return;if(m.type==='load:result'&&Vitality._w[m.id]){Vitality._w[m.id](m.data);delete Vitality._w[m.id];return}if(m.type==='save:error'){vNote('That save did not stick. Try again in a moment.')}else if(m.type==='report:error'){vNote('That log did not land, so it does not count yet. Try again in a moment.')}});
+window.addEventListener('message',function(e){var m=e.data;if(!m||m.source!=='healthcompanion-host')return;if(m.type==='load:result'&&HealthCompanion._w[m.id]){HealthCompanion._w[m.id](m.data);delete HealthCompanion._w[m.id];return}if(m.type==='save:error'){vNote('That save did not stick. Try again in a moment.')}else if(m.type==='report:error'){vNote('That log did not land, so it does not count yet. Try again in a moment.')}});
 function todayKey(){var d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
 
 The rules:
-1. Vitality.save(data) persists this tile's own data (any small JSON). Vitality.load() returns it as a Promise on startup; it resolves null when nothing is saved yet or the dashboard did not answer in time (the bridge retries once, and if the real answer lands late with saved data before you save, it reloads the tile so stored history is never overwritten by an empty boot), so always fall back to your empty state. Save after every change.
-2. Vitality.report(stream) feeds Vee, the dashboard's brain. Report the tile's ONE main number every time the user logs it, right next to the save:
-   Vitality.report({ key:'beer', label:'Beer', value:2, date:todayKey(), kind:'intake', goalDirection:'down' })
+1. HealthCompanion.save(data) persists this tile's own data (any small JSON). HealthCompanion.load() returns it as a Promise on startup; it resolves null when nothing is saved yet or the dashboard did not answer in time (the bridge retries once, and if the real answer lands late with saved data before you save, it reloads the tile so stored history is never overwritten by an empty boot), so always fall back to your empty state. Save after every change.
+2. HealthCompanion.report(stream) feeds Vee, the dashboard's brain. Report the tile's ONE main number every time the user logs it, right next to the save:
+   HealthCompanion.report({ key:'beer', label:'Beer', value:2, date:todayKey(), kind:'intake', goalDirection:'down' })
    - key: a short id for the stream, like beer, reading, meditate
    - label: the display name
    - value: the number for this log
@@ -176,7 +176,7 @@ type RunMsg = { kind: 'warn' | 'ok'; text: string } | null
 function asEnvelope(raw: string): TileEnvelope | null {
   const text = raw.trim()
   if (!text) return null
-  // A friend's shared tile arrives as a `vitality:tile:` code; unpack it first.
+  // A friend's shared tile arrives as a `healthcompanion:tile:` code; unpack it first.
   const code = parseTileCode(text)
   if (code) return code
   let parsed: unknown = null
@@ -392,7 +392,7 @@ export default function CreateTile({
     // THE GATE, before anything persists. Pasted html and pasted envelopes are
     // untrusted (a hand-crafted envelope could smuggle an off-brand or unsealed
     // tile past the old shape check - the white-tile bug). The server runs the
-    // same floor vitality_add_tile enforces; on refusal the fix note (written
+    // same floor healthcompanion_add_tile enforces; on refusal the fix note (written
     // for the user's AI) goes to the clipboard so the round-trip is one paste.
     // Fail CLOSED on network trouble: an unjudged tile never installs.
     setRunMsg({ kind: 'ok', text: 'Checking your tile at the gate.' })

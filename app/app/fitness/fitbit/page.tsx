@@ -13,7 +13,7 @@ export const dynamic = 'force-dynamic'
  *   · 7-day recovery trend
  *   · personal HRV / RHR / sleep-efficiency baselines (last 14 valid days)
  *   · 7-night sleep debt vs 8h target
- *   · Vitality Score using the SKILL.md formula
+ *   · HealthCompanion Score using the SKILL.md formula
  *
  * Everything below this server boundary is real user data — no SAMPLE
  * constants, no fake numbers. When the user has zero rows we render
@@ -22,7 +22,7 @@ export const dynamic = 'force-dynamic'
 
 const SLEEP_TARGET = 8
 
-// ─── Vitality Score components (per SKILL.md) ─────────────────────────
+// ─── HealthCompanion Score components (per SKILL.md) ─────────────────────────
 
 function hrvComponent(hrv: number | null, baseline: number | null): number {
   if (hrv == null || baseline == null || baseline <= 0) return 50
@@ -66,7 +66,7 @@ function strainBalance(strain: number | null, recovery: number | null): number {
   return 30
 }
 
-function computeVitalityScore(args: {
+function computeHealthCompanionScore(args: {
   recovery: number | null
   sleepPerf: number | null
   sleepHours: number | null
@@ -94,7 +94,7 @@ function computeVitalityScore(args: {
   )
 }
 
-function vitalityTier(score: number | null): string {
+function healthcompanionTier(score: number | null): string {
   if (score == null) return '—'
   if (score >= 80) return 'Peak'
   if (score >= 65) return 'Solid'
@@ -187,7 +187,7 @@ export default async function FitbitPage() {
     const todayHrv = latest.hrv != null ? Number(latest.hrv) : null
     const hrvAnomalous = todayHrv != null && !VALID_HRV(todayHrv)
 
-    const vitalityScore = computeVitalityScore({
+    const healthcompanionScore = computeHealthCompanionScore({
       recovery: latest.recovery != null ? Number(latest.recovery) : null,
       sleepPerf: latest.sleep_perf != null ? Number(latest.sleep_perf) : null,
       sleepHours: latest.sleep_hours != null ? Number(latest.sleep_hours) : null,
@@ -222,8 +222,8 @@ export default async function FitbitPage() {
       recoveryTrend,
       sleepDebt7d,
       sleepTargetHours: SLEEP_TARGET,
-      vitalityScore,
-      vitalityTier: vitalityTier(vitalityScore),
+      healthcompanionScore,
+      healthcompanionTier: healthcompanionTier(healthcompanionScore),
       lastSyncedMinutes,
       daysAvailable: list.length,
     }

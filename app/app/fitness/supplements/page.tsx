@@ -5,7 +5,7 @@ export const dynamic = 'force-dynamic'
 /**
  * Supplements tracking moved into the Fuel page as a section (/app/fuel). This
  * route forwards there so old links/bookmarks keep working. The stack + taken
- * state still live in localStorage (`vitality_supplements_v1`), shared by both.
+ * state still live in localStorage (`healthcompanion_supplements_v1`), shared by both.
  *
  * The interface below is retained because the (now-unmounted) SupplementsModule
  * still imports it for its server-prop type; the AI recommender it powers will

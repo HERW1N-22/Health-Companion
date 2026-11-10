@@ -182,12 +182,12 @@ input,select{font-family:inherit;color:inherit}
     </div>
   </main>
   <script>
-  var Vitality={_w:{},
-    save:function(d){parent.postMessage({source:'vitality-tile',type:'save',data:d},'*')},
-    load:function(){return new Promise(function(res){var id=Math.random().toString(36).slice(2);Vitality._w[id]=res;parent.postMessage({source:'vitality-tile',type:'load',id:id},'*')})},
-    report:function(s){parent.postMessage({source:'vitality-tile',type:'report',stream:s},'*')}
+  var HealthCompanion={_w:{},
+    save:function(d){parent.postMessage({source:'healthcompanion-tile',type:'save',data:d},'*')},
+    load:function(){return new Promise(function(res){var id=Math.random().toString(36).slice(2);HealthCompanion._w[id]=res;parent.postMessage({source:'healthcompanion-tile',type:'load',id:id},'*')})},
+    report:function(s){parent.postMessage({source:'healthcompanion-tile',type:'report',stream:s},'*')}
   };
-  window.addEventListener('message',function(e){var m=e.data;if(m&&m.source==='vitality-host'&&m.type==='load:result'&&Vitality._w[m.id]){Vitality._w[m.id](m.data);delete Vitality._w[m.id]}});
+  window.addEventListener('message',function(e){var m=e.data;if(m&&m.source==='healthcompanion-host'&&m.type==='load:result'&&HealthCompanion._w[m.id]){HealthCompanion._w[m.id](m.data);delete HealthCompanion._w[m.id]}});
   (function(){
     var DOW=['Su','Mo','Tu','We','Th','Fr','Sa'];
     var GOAL=8, GD='up', loaded=false, pending=8;
@@ -198,7 +198,7 @@ input,select{font-family:inherit;color:inherit}
     function today(){return key(new Date())}
     function round1(n){return Math.round(n*10)/10}
 
-    function writeStore(){Vitality.save(mem);}
+    function writeStore(){HealthCompanion.save(mem);}
 
     function get(k){return mem.days[k]||0}
     function set(k,v){mem.days[k]=v}
@@ -248,7 +248,7 @@ input,select{font-family:inherit;color:inherit}
     }
 
     function report(v){
-      if(v>0){Vitality.report({key:'sleep',label:'Sleep hours',value:round1(v),date:today(),kind:'duration',goalDirection:'up'});}
+      if(v>0){HealthCompanion.report({key:'sleep',label:'Sleep hours',value:round1(v),date:today(),kind:'duration',goalDirection:'up'});}
     }
 
     function commit(){
@@ -258,7 +258,7 @@ input,select{font-family:inherit;color:inherit}
     }
 
     function load(){
-      Vitality.load().then(function(s){
+      HealthCompanion.load().then(function(s){
         if(s&&typeof s==='object'){mem.days=s.days||{};if(typeof s.goal==='number')mem.goal=s.goal}
         GOAL=mem.goal||8;pending=get(today())||GOAL;
         document.getElementById('goal').value=mem.goal||'';
@@ -281,7 +281,7 @@ input,select{font-family:inherit;color:inherit}
 </body>
 </html>`;
 
-test('sleep example: the tile is Vitality-grade (0 errors, 0 warnings)', () => {
+test('sleep example: the tile is HealthCompanion-grade (0 errors, 0 warnings)', () => {
   const result = lintTile(HTML);
   if (!result.ok || result.warnings > 0) {
     console.log('\n' + result.findings.map((f) => `  [${f.severity}] ${f.rule}: ${f.message}`).join('\n') + '\n');
@@ -299,7 +299,7 @@ test('sleep example: it clears the richness gate as Fuel-grade rich', () => {
 
 test('sleep example: it reports exactly one valid duration stream', () => {
   // exactly one report() call, and it is a duration stream
-  const reports = HTML.match(/Vitality\.report\s*\(/g) || [];
+  const reports = HTML.match(/HealthCompanion\.report\s*\(/g) || [];
   assert.equal(reports.length, 1, 'a sleep tile reports exactly one stream');
   assert.match(HTML, /kind:\s*'duration'/, 'reports a duration stream');
   assert.match(HTML, /goalDirection:\s*'up'/, 'sleep is an up goal');

@@ -1,4 +1,4 @@
-# Vee and the "Vitality noticed" insight card
+# Vee and the "Health Companion noticed" insight card
 
 The voice and the one card that carries it. Vee is the companion who holds your whole
 life at once and surfaces the single thing that matters. This is the heart of the OPTIONAL
@@ -10,7 +10,7 @@ All of this inlines into a sealed HTML tile: plain CSS, vanilla JS, inline SVG. 
 
 ## 1. The tokens (paste into `:root`)
 
-Vee runs an iris-accented variant of the Vitality palette. Iris is Vee's signature.
+Vee runs an iris-accented variant of the Health Companion palette. Iris is Vee's signature.
 Mint stays the "good / on track" color, amber the "gentle caution". Never red.
 
 ```css
@@ -48,10 +48,10 @@ Typography roles:
 
 ## 2. The card anatomy (top to bottom)
 
-The "Vitality noticed" card has a fixed skeleton. Pour real data into the slots, never a paragraph.
+The "Health Companion noticed" card has a fixed skeleton. Pour real data into the slots, never a paragraph.
 
 1. **Header row** `.vt-top`: a small iris glyph badge `.vt-echo` (the Vee mark, a checkmark/V),
-   then the mono tag `.vt-tag` reading "Vitality noticed", then on the right a pill
+   then the mono tag `.vt-tag` reading "Health Companion noticed", then on the right a pill
    `.vt-watched` showing what it looked at and over how long ("watched . money + training + mood . 6wk").
 2. **The lead** `.vt-lead`: ONE plain-English sentence. This is the insight. Inside it, key facts
    are colored and the single takeaway phrase is underlined (the "sauce"/`.key` treatment).
@@ -224,7 +224,7 @@ the user can dismiss without doing anything. Never trap them in a to-do.
     <div class="vt-echo">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 7l7 11 7-11"/></svg>
     </div>
-    <div class="vt-tag">Vitality noticed</div>
+    <div class="vt-tag">Health Companion noticed</div>
     <div class="vt-spacer"></div>
     <div class="vt-watched">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 2"/></svg>
@@ -274,7 +274,7 @@ The rest wait behind a quiet, warm "show me another". Never dump a list. Never a
 
 - Show a single card. Below it, a tiny pager (dots) and a soft "show me another" pill.
 - When the user taps, swap the card content and re-run a randomized entrance (see below).
-- Below everything, a dashed reassurance: "Vitality is holding more for you. one at a time,
+- Below everything, a dashed reassurance: "Health Companion is holding more for you. one at a time,
   never a wall."
 
 ```html
@@ -287,7 +287,7 @@ The rest wait behind a quiet, warm "show me another". Never dump a list. Never a
 </div>
 <div class="quiet">
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 7l7 11 7-11"/></svg>
-  <span>Vitality is holding <b>more</b> for you. one at a time, never a wall.</span>
+  <span>Health Companion is holding <b>more</b> for you. one at a time, never a wall.</span>
 </div>
 ```
 
@@ -412,7 +412,7 @@ body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;opac
 
 The eyebrow + serif title pattern that opens a Vee surface:
 ```html
-<div class="eyebrow-top"><span class="dot"></span>Vitality &middot; Vee</div>
+<div class="eyebrow-top"><span class="dot"></span>Health Companion &middot; Vee</div>
 <h1 class="title">Howdy, Alex.</h1>
 ```
 ```css

@@ -19,10 +19,10 @@ import { MODULE_MIRRORS } from './syncAllModules'
 
 /** key → table for the four blob-backed modules (water is relational, skipped). */
 export const WATCHED_TABLES: Record<string, string> = {
-  vitality_brand_v1: 'brand_state',
-  vitality_goals_v1: 'goals_state',
-  vitality_peak_v1: 'peak_state',
-  vitality_supplements_v1: 'supplements_state',
+  healthcompanion_brand_v1: 'brand_state',
+  healthcompanion_goals_v1: 'goals_state',
+  healthcompanion_peak_v1: 'peak_state',
+  healthcompanion_supplements_v1: 'supplements_state',
 }
 
 export type StampMap = Record<string, string | null>

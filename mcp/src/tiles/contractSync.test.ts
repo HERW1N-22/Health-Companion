@@ -1,13 +1,13 @@
 // THE SMOKE ALARM for the tile report contract.
 //
-// In plain words: a tile hands its data to Vitality on one fixed "form"
+// In plain words: a tile hands its data to HealthCompanion on one fixed "form"
 // (key, label, value, date, kind). That form is written down in TWO files:
 //   1. the real one, in the dashboard:  lib/tiles/reportContract.ts
 //   2. a copy here, in the MCP:          mcp/src/tiles/reportContract.ts (the mirror)
 // The MCP copy is what teaches a user's Claude how to build their tile. If the
 // two ever stop matching (someone edits one and forgets the other), a user's
 // tile would send data in a shape the dashboard cannot read, and their data
-// would land wrong when they export the tile into Vitality. These tests are the
+// would land wrong when they export the tile into HealthCompanion. These tests are the
 // alarm that beeps the moment the two copies drift apart, so we catch it before
 // any user is bitten.
 //

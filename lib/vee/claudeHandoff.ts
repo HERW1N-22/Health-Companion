@@ -30,7 +30,7 @@ export interface ClaudeHandoffContext {
   noticeLead: string | null
   /** The honest live-stat chips (label + value), e.g. train 3.7x/wk. */
   lifeChips: { label: string; value: string }[]
-  /** Which Vitality modules actually have data (loadNoticed activeModules). */
+  /** Which HealthCompanion modules actually have data (loadNoticed activeModules). */
   activeModules: string[]
 }
 
@@ -101,7 +101,7 @@ export function contextBlock(ctx: ClaudeHandoffContext | null | undefined): stri
   }
   if (ctx.activeModules.length > 0) lines.push(`I track: ${ctx.activeModules.join(', ')}.`)
   if (lines.length === 0) return ''
-  return `Context from my Vitality dashboard (all real logged data):\n${lines.map(l => `- ${l}`).join('\n')}`
+  return `Context from my HealthCompanion dashboard (all real logged data):\n${lines.map(l => `- ${l}`).join('\n')}`
 }
 
 /** Question + context, ready for the q= prefill. Falls back to the bare question. */

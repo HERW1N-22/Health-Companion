@@ -1,11 +1,11 @@
 -- ============================================================================
--- daily_ritual - "Vitality, I'm home" gate + preferences
--- (docs/ideas/VITALITY-IM-HOME-PLAN.md, Phase 5 state)
+-- daily_ritual - "HealthCompanion, I'm home" gate + preferences
+-- (docs/ideas/HEALTH_COMPANION-IM-HOME-PLAN.md, Phase 5 state)
 --
 -- One row per user: when the ritual last ran (the once-a-day gate), which acts
 -- completed, and the two end-question answers (null = not asked yet), plus the
 -- voice toggle for the ElevenLabs layer (Phase 7). The ritual currently keeps
--- this in localStorage (key vitality:<userId>:imhome); this table is its
+-- this in localStorage (key healthcompanion:<userId>:imhome); this table is its
 -- durable cross-device home - the app wires to it in a later pass.
 --
 -- Additive + idempotent: safe to run anytime, before or after the app deploy.

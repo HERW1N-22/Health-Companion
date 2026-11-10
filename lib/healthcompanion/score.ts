@@ -1,13 +1,13 @@
 /**
- * Vitality Score engine — the daily 0-100 "did I take care of myself today"
+ * HealthCompanion Score engine — the daily 0-100 "did I take care of myself today"
  * number behind the Vee dashboard tile. A consistency/showing-up score graded
  * against the user's OWN committed routine (never on a module they didn't set
  * up). Compute-on-read: no new tables. Each module plugs in as one isolated
  * `Contributor`; the engine knows nothing about a module's internals, only the
  * `ContributorResult` shape. Every contributor is wrapped in a safety net in
- * computeVitalityScore (Task 4) so a failing/empty module just drops its slice.
+ * computeHealthCompanionScore (Task 4) so a failing/empty module just drops its slice.
  *
- * Design spec: docs/superpowers/specs/2026-06-13-vitality-score-design.md
+ * Design spec: docs/superpowers/specs/2026-06-13-healthcompanion-score-design.md
  */
 import type { SupabaseClient } from '@supabase/supabase-js'
 
@@ -39,7 +39,7 @@ export interface Driver {
   trend: 'up' | 'flat' | 'down'
 }
 
-export interface VitalityScore {
+export interface HealthCompanionScore {
   score: number | null
   drivers: Driver[]
   state: ScoreState
@@ -90,7 +90,7 @@ function trendOf(blended: number, last7Avg: number): Driver['trend'] {
  * Caller passes only contributors that are active AND evaluated successfully.
  * `todayKey` is the local midnight date key for today (for first-day detection).
  */
-export function combineResults(results: ContributorResult[], todayKey: string): VitalityScore {
+export function combineResults(results: ContributorResult[], todayKey: string): HealthCompanionScore {
   if (results.length === 0) {
     return { score: null, drivers: [], state: 'no-routine' }
   }
@@ -128,7 +128,7 @@ export async function runContributors(
   ctx: ScoreContext,
   contributors: Contributor[],
   todayKey: string,
-): Promise<VitalityScore> {
+): Promise<HealthCompanionScore> {
   // Sequential so each contributor's failure stays isolated. Fine at v1's two
   // contributors; revisit with Promise.allSettled (which keeps per-item failure
   // isolation) if the registry grows past ~5 and the round-trips add up.
@@ -137,7 +137,7 @@ export async function runContributors(
     try {
       if (await c.isActive(ctx)) active.push(c)
     } catch (err) {
-      console.error(`[vitality-score] isActive failed for ${c.key}`, err)
+      console.error(`[healthcompanion-score] isActive failed for ${c.key}`, err)
     }
   }
   if (active.length === 0) return { score: null, drivers: [], state: 'no-routine' }
@@ -147,7 +147,7 @@ export async function runContributors(
     try {
       results.push(await c.evaluate(ctx))
     } catch (err) {
-      console.error(`[vitality-score] evaluate failed for ${c.key}`, err)
+      console.error(`[healthcompanion-score] evaluate failed for ${c.key}`, err)
     }
   }
 

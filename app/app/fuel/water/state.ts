@@ -11,7 +11,7 @@ import type {
   WaterUnit,
 } from './types'
 
-const LS_KEY = 'vitality_water_v1'
+const LS_KEY = 'healthcompanion_water_v1'
 
 const DEFAULT_STATE: WaterState = {
   version: 2,
@@ -233,7 +233,7 @@ export function useWaterState(
     }
   }, [state, ready])
 
-  // Mirror to Supabase (durable + cross-device + readable by the Vitality MCP).
+  // Mirror to Supabase (durable + cross-device + readable by the HealthCompanion MCP).
   // Debounced + best-effort; localStorage above stays the primary client store,
   // so a failed mirror never affects the UI. See ./sync.ts.
   useEffect(() => {

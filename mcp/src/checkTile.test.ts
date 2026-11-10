@@ -9,8 +9,8 @@ body{background:transparent;color:#fff}
 @media (prefers-reduced-motion: reduce){*{transition:none !important}}
 </style></head><body><div class="v">0</div><script>
 function today(){var d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
-var Vitality={report:function(s){parent.postMessage({source:'vitality-tile',type:'report',stream:s},'*')}};
-Vitality.report({key:'x',label:'X',value:1,date:today(),kind:'count'});
+var HealthCompanion={report:function(s){parent.postMessage({source:'healthcompanion-tile',type:'report',stream:s},'*')}};
+HealthCompanion.report({key:'x',label:'X',value:1,date:today(),kind:'count'});
 </script></body></html>`;
 
 test('checkTile passes a clean tile and reports a grade', () => {

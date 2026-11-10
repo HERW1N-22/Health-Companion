@@ -1,4 +1,4 @@
-// Environment loading + validation for the Vitality MCP.
+// Environment loading + validation for the HealthCompanion MCP.
 //
 // No dotenv dependency: we parse a local `.env` ourselves (KEY=VALUE lines) so
 // the server runs the same whether launched by Claude, a cron, or the CLI.
@@ -45,7 +45,7 @@ function loadDotenv(): void {
         if (process.env[k] === undefined) process.env[k] = v;
       }
     } catch (err) {
-      console.error(`[vitality-mcp] failed to read ${candidate}:`, err);
+      console.error(`[healthcompanion-mcp] failed to read ${candidate}:`, err);
     }
   }
 }
@@ -54,7 +54,7 @@ loadDotenv();
 
 export type AuthMode = 'user' | 'service';
 
-export interface VitalityEnv {
+export interface HealthCompanionEnv {
   supabaseUrl: string;
   anonKey: string;
   authMode: AuthMode;
@@ -71,25 +71,25 @@ export interface VitalityEnv {
 function required(name: string): string {
   const v = process.env[name];
   if (!v) {
-    console.error(`[vitality-mcp] missing required env var: ${name}`);
-    console.error('[vitality-mcp] copy mcp/.env.example to mcp/.env and fill it in.');
+    console.error(`[healthcompanion-mcp] missing required env var: ${name}`);
+    console.error('[healthcompanion-mcp] copy mcp/.env.example to mcp/.env and fill it in.');
     process.exit(1);
   }
   return v;
 }
 
-let cached: VitalityEnv | null = null;
+let cached: HealthCompanionEnv | null = null;
 
-export function getEnv(): VitalityEnv {
+export function getEnv(): HealthCompanionEnv {
   if (cached) return cached;
 
-  const supabaseUrl = required('VITALITY_SUPABASE_URL');
-  const anonKey = required('VITALITY_SUPABASE_ANON_KEY');
+  const supabaseUrl = required('HEALTH_COMPANION_SUPABASE_URL');
+  const anonKey = required('HEALTH_COMPANION_SUPABASE_ANON_KEY');
 
-  const serviceRoleKey = process.env.VITALITY_SUPABASE_SERVICE_ROLE_KEY;
-  const userId = process.env.VITALITY_USER_ID;
-  const userEmail = process.env.VITALITY_USER_EMAIL;
-  const userPassword = process.env.VITALITY_USER_PASSWORD;
+  const serviceRoleKey = process.env.HEALTH_COMPANION_SUPABASE_SERVICE_ROLE_KEY;
+  const userId = process.env.HEALTH_COMPANION_USER_ID;
+  const userEmail = process.env.HEALTH_COMPANION_USER_EMAIL;
+  const userPassword = process.env.HEALTH_COMPANION_USER_PASSWORD;
 
   // Service mode is opt-in and only when both the key and an explicit user id
   // are present. Otherwise we default to the RLS-respecting user session.
@@ -99,15 +99,15 @@ export function getEnv(): VitalityEnv {
   if (wantsService) {
     authMode = 'service';
     console.error(
-      '[vitality-mcp] ⚠ running in SERVICE-ROLE mode — this key bypasses RLS. ' +
+      '[healthcompanion-mcp] ⚠ running in SERVICE-ROLE mode — this key bypasses RLS. ' +
         'Local/personal use only; never expose this process to a client or shared host.',
     );
   } else {
     authMode = 'user';
     if (!userEmail || !userPassword) {
       console.error(
-        '[vitality-mcp] no auth configured. Set VITALITY_USER_EMAIL + VITALITY_USER_PASSWORD ' +
-          '(recommended), or VITALITY_SUPABASE_SERVICE_ROLE_KEY + VITALITY_USER_ID (opt-in).',
+        '[healthcompanion-mcp] no auth configured. Set HEALTH_COMPANION_USER_EMAIL + HEALTH_COMPANION_USER_PASSWORD ' +
+          '(recommended), or HEALTH_COMPANION_SUPABASE_SERVICE_ROLE_KEY + HEALTH_COMPANION_USER_ID (opt-in).',
       );
       process.exit(1);
     }
@@ -121,7 +121,7 @@ export function getEnv(): VitalityEnv {
     userPassword,
     serviceRoleKey,
     userId,
-    timezone: process.env.VITALITY_TIMEZONE,
+    timezone: process.env.HEALTH_COMPANION_TIMEZONE,
   };
   return cached;
 }

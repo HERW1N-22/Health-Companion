@@ -17,7 +17,7 @@ import { CATEGORY_WORD } from '@/lib/goals/categories'
  *   1. YOUR GOALS — big personal aspirations you author ("hit 1,000 subs"),
  *      each with a deadline, a priority, and a per-goal choice of how hard Vee
  *      pushes. Authoring one is the flagship loop and persists to Supabase.
- *   2. THIS WEEK — the small Vitality goals. Manual ones you tap; auto ones name
+ *   2. THIS WEEK — the small HealthCompanion goals. Manual ones you tap; auto ones name
  *      what they'll track (live counts arrive in Phase 5). Add from suggestions.
  *
  * The Vee gem is the REAL CoachGem 'echo' (iris dodecahedron + V), driven via
@@ -400,7 +400,7 @@ export default function VeeGoals({ initial, suggestionEvidence }: {
         {mode === 'main' ? (
           <div className={styles.view}>
             <header className={styles.header}>
-              <div className={styles.eyebrowTop}>Vitality · Vee</div>
+              <div className={styles.eyebrowTop}>HealthCompanion · Vee</div>
               <div className={styles.titleRow}>
                 <h1 className={styles.title}>Your <span className={styles.accent}>goals</span></h1>
                 <span className={styles.watchPill}><span className={styles.dot} />Vee&rsquo;s with you</span>
@@ -487,7 +487,7 @@ export default function VeeGoals({ initial, suggestionEvidence }: {
             })}
             {CreateBlock}
 
-            <div className={styles.eyebrow}><span className={styles.eyebrowNum}>·02</span><span className={styles.eyebrowLbl}>This week with Vitality</span><span className={styles.eyebrowRule} /></div>
+            <div className={styles.eyebrow}><span className={styles.eyebrowNum}>·02</span><span className={styles.eyebrowLbl}>This week with HealthCompanion</span><span className={styles.eyebrowRule} /></div>
             <p className={styles.tierIntro}>The small wins that keep you moving. I track what I can see. You tap the rest.</p>
 
             <div className={styles.habits}>
@@ -526,7 +526,7 @@ export default function VeeGoals({ initial, suggestionEvidence }: {
         ) : (
           <div className={styles.view}>
             <header className={styles.header}>
-              <div className={styles.eyebrowTop}>Vitality · Vee</div>
+              <div className={styles.eyebrowTop}>HealthCompanion · Vee</div>
               <div className={styles.titleRow}>
                 <h1 className={styles.title}>Your <span className={styles.accent}>goals</span></h1>
               </div>
@@ -546,7 +546,7 @@ export default function VeeGoals({ initial, suggestionEvidence }: {
             {evidencedSuggestions.length > 0 && (
               <>
                 <div className={styles.eyebrow}><span className={styles.eyebrowNum}>·01</span><span className={styles.eyebrowLbl}>Already in motion</span><span className={styles.eyebrowRule} /></div>
-                <p className={styles.tierIntro}>The small Vitality wins I can keep an eye on for you. Tap one and I&rsquo;ll start tracking it.</p>
+                <p className={styles.tierIntro}>The small HealthCompanion wins I can keep an eye on for you. Tap one and I&rsquo;ll start tracking it.</p>
 
                 <div className={styles.habits}>
                   {openSuggestions.length > 0

@@ -20,7 +20,7 @@ test('sanitizeError leaves a friendly message intact', () => {
 });
 
 test('sanitizeError does not strip a friendly https link or mangle "password:" prose', () => {
-  const link = 'Add a card at https://vitality.app/billing to continue.';
+  const link = 'Add a card at https://example.test/billing to continue.';
   assert.equal(sanitizeError(link), link, 'a normal https page is not a secret');
   const prose = 'Your password: choose at least 8 characters.';
   assert.equal(sanitizeError(prose), prose, 'prose with a colon is not a credential assignment');

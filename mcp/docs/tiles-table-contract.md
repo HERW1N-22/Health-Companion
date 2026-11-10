@@ -12,7 +12,7 @@ This complements `docs/tile-upload-contract.md` (the upload ENVELOPE the MCP alr
 
 ## The table (proposed schema)
 
-Mirrors the dashboard's `Tile` type (`lib/tiles/types.ts`: `{id, name, html, createdAt, updatedAt}`) and carries the MCP envelope's identity (`stream`, `category`, `color`). Runtime data stays in a separate row so a growing `Vitality.save()` payload never rewrites the html, exactly as tileStore splits it today.
+Mirrors the dashboard's `Tile` type (`lib/tiles/types.ts`: `{id, name, html, createdAt, updatedAt}`) and carries the MCP envelope's identity (`stream`, `category`, `color`). Runtime data stays in a separate row so a growing `Health Companion.save()` payload never rewrites the html, exactly as tileStore splits it today.
 
 ```sql
 -- Personal tile registry: each user's built tiles, server-side. Replaces the
@@ -34,7 +34,7 @@ create policy "tiles owner rw" on public.tiles
   for all using (auth.uid() = user_id) with check (auth.uid() = user_id);
 create index if not exists tiles_user_idx on public.tiles(user_id, updated_at desc);
 
--- Runtime data a tile persists via Vitality.save(), kept separate from the html.
+-- Runtime data a tile persists via Health Companion.save(), kept separate from the html.
 create table if not exists public.tile_data (
   user_id    uuid not null references auth.users(id) on delete cascade,
   tile_id    uuid not null references public.tiles(id) on delete cascade,
@@ -61,8 +61,8 @@ RLS via `auth.uid()` works for the MCP's user-session mode (the normal case) and
    - Keep the localStorage `importTile` paste path working as a fallback / for `source:'paste'`.
 
 2. **MCP window** (this repo, owns the writer):
-   - Add a gated write tool `vitality_add_tile` (name TBD) that takes a built tile (the `upload_tile` envelope: `html`, `name`, `stream`, `category`, `color`) and inserts a row into `tiles` for the calling user (gated on `mcp:write`, RLS-scoped, exactly like `vitality_log_meal`). Returns the new tile id.
-   - `upload_tile` keeps returning the envelope for the manual paste path; `vitality_add_tile` is the automatic path that lands it straight on the dashboard.
+   - Add a gated write tool `healthcompanion_add_tile` (name TBD) that takes a built tile (the `upload_tile` envelope: `html`, `name`, `stream`, `category`, `color`) and inserts a row into `tiles` for the calling user (gated on `mcp:write`, RLS-scoped, exactly like `healthcompanion_log_meal`). Returns the new tile id.
+   - `upload_tile` keeps returning the envelope for the manual paste path; `healthcompanion_add_tile` is the automatic path that lands it straight on the dashboard.
 
 3. **Alex** greenlights the one irreversible step: applying the `tiles` (+ `published_tiles`) tables to the live DB.
 
@@ -70,4 +70,4 @@ RLS via `auth.uid()` works for the MCP's user-session mode (the normal case) and
 
 ## The closed loop, end to end
 
-`scaffold_tile` / `upload_tile` build a sealed, floor-clean tile -> `vitality_add_tile` inserts it into `tiles` -> the dashboard Library (reading `tiles`) shows it on the next load, on any device -> the user can then hit Publish to share it to the community shop (`published_tiles`, the dashboard's separate flow). Build in Claude Code, watch it appear on your dashboard. That is the platform.
+`scaffold_tile` / `upload_tile` build a sealed, floor-clean tile -> `healthcompanion_add_tile` inserts it into `tiles` -> the dashboard Library (reading `tiles`) shows it on the next load, on any device -> the user can then hit Publish to share it to the community shop (`published_tiles`, the dashboard's separate flow). Build in Claude Code, watch it appear on your dashboard. That is the platform.

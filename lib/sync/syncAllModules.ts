@@ -35,18 +35,18 @@ const arr = (v: unknown): unknown[] => (Array.isArray(v) ? v : [])
 // localStorage survives sign-out, so on a shared device User B (after A signs
 // out) would otherwise see A's data AND the push below would write it into B's
 // server row. We stamp localStorage with the signed-in user's id; if on load the
-// stamp belongs to a DIFFERENT user, we wipe every `vitality_*` key before any
+// stamp belongs to a DIFFERENT user, we wipe every `healthcompanion_*` key before any
 // hydrate/push, so B starts clean and then hydrates their OWN data.
 //
 // CRITICAL safety: an ABSENT stamp means the data predates this feature — almost
 // certainly the CURRENT user's own data — so we must NEVER wipe it (that would
 // delete every existing user's local state on the first load after this ships).
 // We wipe ONLY on a confirmed different prior owner (stamp present AND != current).
-export const OWNER_KEY = 'vitality_sync_owner'
+export const OWNER_KEY = 'healthcompanion_sync_owner'
 
-/** All `vitality_*` localStorage keys except the owner stamp itself. */
+/** All `healthcompanion_*` localStorage keys except the owner stamp itself. */
 export function keysToPurge(allKeys: string[]): string[] {
-  return allKeys.filter((k) => k.startsWith('vitality_') && k !== OWNER_KEY)
+  return allKeys.filter((k) => k.startsWith('healthcompanion_') && k !== OWNER_KEY)
 }
 
 export interface OwnerAction {
@@ -70,7 +70,7 @@ export function ownerAction(currentUserId: string | null, storedOwner: string | 
 
 /**
  * Apply the owner reconcile for the signed-in user: wipe a prior different
- * user's `vitality_*` data, then stamp this device as theirs. Best-effort; MUST
+ * user's `healthcompanion_*` data, then stamp this device as theirs. Best-effort; MUST
  * run BEFORE hydrate/push so the wipe can't race them.
  */
 export async function reconcileOwner(): Promise<void> {
@@ -111,27 +111,27 @@ export interface ModuleMirror {
 }
 
 export const MODULE_MIRRORS: ModuleMirror[] = [
-  { key: 'vitality_brand_v1', hasData: (s) => arr(s.brands).length > 0, mirror: (s) => mirrorBrandToSupabase(s as unknown as BrandState) },
+  { key: 'healthcompanion_brand_v1', hasData: (s) => arr(s.brands).length > 0, mirror: (s) => mirrorBrandToSupabase(s as unknown as BrandState) },
   {
     // goals OR a streak history (dayLogs) OR a planned-tomorrow queue — a user
     // with a long streak but no open goals still has data worth syncing.
-    key: 'vitality_goals_v1',
+    key: 'healthcompanion_goals_v1',
     hasData: (s) => arr(s.goals).length > 0 || arr(s.dayLogs).length > 0 || arr(s.tomorrow).length > 0,
     mirror: (s) => mirrorGoalsToSupabase(s as unknown as GoalsPersistedState),
   },
   {
-    key: 'vitality_peak_v1',
+    key: 'healthcompanion_peak_v1',
     hasData: (s) =>
       arr(s.substances).length + arr(s.events).length + arr(s.tasks).length + arr(s.taps).length > 0 || s.hardestTask != null,
     mirror: (s) => mirrorPeakToSupabase(s as unknown as PeakState),
   },
-  { key: 'vitality_supplements_v1', hasData: (s) => arr(s.items).length > 0, mirror: (s) => mirrorSupplementsToSupabase(s as unknown as SupplementsState) },
+  { key: 'healthcompanion_supplements_v1', hasData: (s) => arr(s.items).length > 0, mirror: (s) => mirrorSupplementsToSupabase(s as unknown as SupplementsState) },
   {
     // Water's mirror upserts the WHOLE prefs row (incl. caffeine/activity used by
     // the hydration target), so gate on setupComplete — never push default prefs
     // over a user's configured ones just because a stray log exists. Logs without
     // completed setup are low-value and safer left for the in-module mirror.
-    key: 'vitality_water_v1',
+    key: 'healthcompanion_water_v1',
     hasData: (s) => s.setupComplete === true,
     mirror: (s) => mirrorWaterToSupabase(s as unknown as WaterState),
   },
@@ -173,10 +173,10 @@ export function mirrorTargets(read: (key: string) => string | null): MirrorTarge
  * blob, so reconstructing its localStorage shape is a separate piece.
  */
 const PULLABLE_TABLES: Record<string, string> = {
-  vitality_brand_v1: 'brand_state',
-  vitality_goals_v1: 'goals_state',
-  vitality_peak_v1: 'peak_state',
-  vitality_supplements_v1: 'supplements_state',
+  healthcompanion_brand_v1: 'brand_state',
+  healthcompanion_goals_v1: 'goals_state',
+  healthcompanion_peak_v1: 'peak_state',
+  healthcompanion_supplements_v1: 'supplements_state',
 }
 
 /**

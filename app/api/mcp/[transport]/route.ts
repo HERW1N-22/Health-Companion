@@ -4,7 +4,7 @@ import { createMcpHandler } from 'mcp-handler'
 
 import { registerTools } from '@/mcp/src/tools'
 import { registerResources } from '@/mcp/src/resources'
-import type { VitalityDb } from '@/mcp/src/supabase'
+import type { HealthCompanionDb } from '@/mcp/src/supabase'
 
 import { authenticateMcpRequest } from '../auth'
 
@@ -25,20 +25,20 @@ export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
 export const maxDuration = 60 // Vercel Pro (brand/insight + nutrition/parse-meal already use 60)
 
-const vdbStore = new AsyncLocalStorage<VitalityDb>()
+const vdbStore = new AsyncLocalStorage<HealthCompanionDb>()
 
 const mcpHandler = createMcpHandler(
   (server) => {
     registerTools(server, async () => {
       const vdb = vdbStore.getStore()
-      if (!vdb) throw new Error('No Vitality session in request context')
+      if (!vdb) throw new Error('No HealthCompanion session in request context')
       return vdb
     })
     // Ambient tile-engine context (design DNA + domain kits). Identity-free and
     // read-only, so it registers once per request-scoped server like the tools.
     registerResources(server)
   },
-  { serverInfo: { name: 'vitality', version: '0.1.0' } },
+  { serverInfo: { name: 'healthcompanion', version: '0.1.0' } },
   {
     basePath: '/api/mcp', // → streamable endpoint at /api/mcp/mcp
     maxDuration: 60,

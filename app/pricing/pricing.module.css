@@ -609,11 +609,11 @@
 
 /* ───────── Section: Your Claude, with a memory (zone 1.5) ───────── */
 /* Minimal + visual: one line, a phone playing a scripted Claude exchange
-   (ConnectorDemo) where Vitality's connectors surface the hidden thing,
+   (ConnectorDemo) where HealthCompanion's connectors surface the hidden thing,
    then small chips of what it quietly catches. */
 .claude {
   /* Iris is the Claude / AI accent (from the Vee card system) — distinct
-     from Vitality's mint. Mint = your data going in; iris = Claude.
+     from HealthCompanion's mint. Mint = your data going in; iris = Claude.
      Amber = a heads-up (used inside the Vee notice). */
   --iris: #a78bfa;
   --iris-hi: #c4b5fd;
@@ -769,7 +769,7 @@
   gap: clamp(16px, 2.5vh, 24px);
 }
 
-/* The Vitality AI avatar (gem) watching a live, auto-cycling app screen. */
+/* The HealthCompanion AI avatar (gem) watching a live, auto-cycling app screen. */
 .aiShowcase {
   display: flex;
   align-items: center;
@@ -1511,7 +1511,7 @@
   padding: 6px 9px;
 }
 
-/* "what Vitality noticed" — the iris insight card */
+/* "what HealthCompanion noticed" — the iris insight card */
 .vnNotice {
   border: 1px solid rgba(167, 139, 250, 0.28);
   border-radius: 16px;

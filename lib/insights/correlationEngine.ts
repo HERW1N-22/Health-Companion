@@ -1,5 +1,5 @@
 /**
- * The correlation engine — Stage 4 of the "Vitality noticed" feature. This is the
+ * The correlation engine — Stage 4 of the "HealthCompanion noticed" feature. This is the
  * part that turns a pile of true cross-domain findings into the SINGLE insight Vee
  * shows. It grows over time (a registry of domain pairings, receipt derivation,
  * goal-linking); this first piece is the selection brain.

@@ -150,7 +150,7 @@ export function recommend(
 // Returns sensible defaults if water hasn't been visited yet.
 // -----------------------------------------------------------------------------
 
-const WATER_LS_KEY = 'vitality_water_v1'
+const WATER_LS_KEY = 'healthcompanion_water_v1'
 
 interface WaterSnapshot {
   caffeineMgPerDay: number
@@ -198,12 +198,12 @@ function readWaterSnapshot(): WaterSnapshot {
 // -----------------------------------------------------------------------------
 // Client-side bridge to the WHOOP module's localStorage.
 //
-// WhoopModule writes its currently-displayed figures to `vitality_whoop_v1`
+// WhoopModule writes its currently-displayed figures to `healthcompanion_whoop_v1`
 // on mount; we read them here. Same read-only pattern as useWaterSnapshot —
 // avoids dragging the WHOOP module's full state hook into this module's bundle.
 // -----------------------------------------------------------------------------
 
-const WHOOP_LS_KEY = 'vitality_whoop_v1'
+const WHOOP_LS_KEY = 'healthcompanion_whoop_v1'
 
 export interface WhoopSnapshot {
   recovery: number | null

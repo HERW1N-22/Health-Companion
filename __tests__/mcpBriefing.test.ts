@@ -200,16 +200,16 @@ describe('business / brand nudges', () => {
         brand: brand({
           hasData: true,
           brandCount: 1,
-          names: ['Vitality'],
+          names: ['Health Companion'],
           totalFollowers: 17000,
           followerDelta7: 500,
           kpis: [
-            { brand: 'Vitality', label: 'MRR', value: 1200, unit: '$', target: 5000, delta7: 100, delta30: 400, pctToTarget: 24 },
+            { brand: 'Health Companion', label: 'MRR', value: 1200, unit: '$', target: 5000, delta7: 100, delta30: 400, pctToTarget: 24 },
           ],
           goals: [
-            { brand: 'Vitality', title: 'Ship new site', due: '2026-06-14', daysLeft: -3, done: false, completedRecently: false },
-            { brand: 'Vitality', title: 'Hit $2k MRR', due: '2026-06-19', daysLeft: 2, done: false, completedRecently: false },
-            { brand: 'Vitality', title: 'First 10 subs', due: null, daysLeft: null, done: true, completedRecently: true },
+            { brand: 'Health Companion', title: 'Ship new site', due: '2026-06-14', daysLeft: -3, done: false, completedRecently: false },
+            { brand: 'Health Companion', title: 'Hit $2k MRR', due: '2026-06-19', daysLeft: 2, done: false, completedRecently: false },
+            { brand: 'Health Companion', title: 'First 10 subs', due: null, daysLeft: null, done: true, completedRecently: true },
           ],
           openGoals: 2,
           overdueGoals: 1,
@@ -241,8 +241,8 @@ describe('business / brand nudges', () => {
         brand: brand({
           hasData: true,
           brandCount: 1,
-          names: ['Vitality'],
-          shipCadence: { brand: 'Vitality', remaining: 1, streak: 6 },
+          names: ['Health Companion'],
+          shipCadence: { brand: 'Health Companion', remaining: 1, streak: 6 },
         }),
       }),
     )
@@ -340,7 +340,7 @@ describe('renderBriefing', () => {
       }),
     )
     const text = renderBriefing({ generatedAt: '2026-06-17T07:00:00Z', dayKey: TODAY, greetingName: 'Alex', nudges: ns })
-    expect(text).toContain('Vitality briefing — 2026-06-17 for Alex')
+    expect(text).toContain('HealthCompanion briefing — 2026-06-17 for Alex')
     expect(text).toMatch(/[🔴🟡·] \[/)
   })
 })

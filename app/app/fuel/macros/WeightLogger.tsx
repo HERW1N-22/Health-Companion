@@ -8,7 +8,7 @@ import { kgToDisplay, displayToKg, unitLabel, type Units } from '@/lib/units'
 import { getLocalDateKey } from '@/lib/dates'
 import { saveWeight, listProgressPhotos, saveProgressPhoto, deleteProgressPhoto, updateProgressPhotoNote, type ProgressPhotoRow } from './actions'
 import { makeProgressPhoto } from './image'
-import VitalityIcon from '@/components/VitalityIcon'
+import HealthCompanionIcon from '@/components/HealthCompanionIcon'
 import type { WeightEntry } from './serialize'
 import WeightImportSheet from './WeightImportSheet'
 import styles from '../fuelSections.module.css'
@@ -294,8 +294,8 @@ export default function WeightLogger({ initialWeights, units }: Props) {
   beginLogRef.current = beginLog
   useEffect(() => {
     const open = () => beginLogRef.current()
-    window.addEventListener('vitality:log-weight', open)
-    return () => window.removeEventListener('vitality:log-weight', open)
+    window.addEventListener('healthcompanion:log-weight', open)
+    return () => window.removeEventListener('healthcompanion:log-weight', open)
   }, [])
 
   function save() {
@@ -537,7 +537,7 @@ export default function WeightLogger({ initialWeights, units }: Props) {
         <div className={styles.wlPhotoHead}>
           <div className={styles.wlPhotoHeadLeft}>
             <span className={styles.wlPhotoChip} aria-hidden>
-              <VitalityIcon name="camera" size={19} />
+              <HealthCompanionIcon name="camera" size={19} />
             </span>
             <div className={styles.wlPhotoTitle}>
               <span className={styles.wlPhotoLabel}>Progress photos</span>
@@ -546,7 +546,7 @@ export default function WeightLogger({ initialWeights, units }: Props) {
           </div>
           <input ref={photoInput} type="file" accept="image/*" hidden onChange={onPickPhoto} />
           <button className={styles.wlPhotoAdd} onClick={() => photoInput.current?.click()} disabled={uploading}>
-            <VitalityIcon name={uploading ? 'sparkles' : 'camera'} size={15} />
+            <HealthCompanionIcon name={uploading ? 'sparkles' : 'camera'} size={15} />
             {uploading ? 'Adding…' : 'Add photo'}
           </button>
         </div>
@@ -572,7 +572,7 @@ export default function WeightLogger({ initialWeights, units }: Props) {
           </div>
         ) : (
           <button className={styles.wlPhotoEmpty} onClick={() => photoInput.current?.click()} disabled={uploading}>
-            <VitalityIcon name="camera" size={20} />
+            <HealthCompanionIcon name="camera" size={20} />
             <span>{uploading ? 'Adding your photo…' : 'Add your first progress photo'}</span>
           </button>
         )}
@@ -600,7 +600,7 @@ export default function WeightLogger({ initialWeights, units }: Props) {
               />
               <div className={styles.wlViewerActions}>
                 <button className={styles.wlViewerDel} onClick={() => removePhoto(viewer.id)}>
-                  <VitalityIcon name="trash" size={15} /> Delete
+                  <HealthCompanionIcon name="trash" size={15} /> Delete
                 </button>
                 <button
                   className={styles.wlNoteSave}
@@ -612,7 +612,7 @@ export default function WeightLogger({ initialWeights, units }: Props) {
               </div>
             </div>
             <button className={styles.wlViewerClose} onClick={() => setViewer(null)} aria-label="Close">
-              <VitalityIcon name="close" size={18} />
+              <HealthCompanionIcon name="close" size={18} />
             </button>
           </div>
         </div>

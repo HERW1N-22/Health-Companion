@@ -187,21 +187,21 @@ export function streakToRow(s: GoalStreak, userId: string) {
 // gatherGreenLight) keep their calm blank-slate fallback.
 export async function getBigGoals(supabase: SupabaseClient, userId: string): Promise<BigGoal[]> {
   const { data, error } = await supabase
-    .from('vitality_goals')
+    .from('healthcompanion_goals')
     .select('*')
     .eq('user_id', userId)
     .order('created_at', { ascending: false })
-  if (error) throw new Error(`vitality_goals read failed: ${error.message}`)
+  if (error) throw new Error(`healthcompanion_goals read failed: ${error.message}`)
   return (data ?? []).map(r => rowToBigGoal(r as BigGoalRow))
 }
 
 export async function getHabitGoals(supabase: SupabaseClient, userId: string): Promise<HabitGoal[]> {
   const { data, error } = await supabase
-    .from('vitality_habit_goals')
+    .from('healthcompanion_habit_goals')
     .select('*')
     .eq('user_id', userId)
     .order('created_at', { ascending: false })
-  if (error) throw new Error(`vitality_habit_goals read failed: ${error.message}`)
+  if (error) throw new Error(`healthcompanion_habit_goals read failed: ${error.message}`)
   return (data ?? []).map(r => rowToHabitGoal(r as HabitGoalRow))
 }
 

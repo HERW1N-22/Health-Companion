@@ -2,9 +2,9 @@ import styles from './pricing.module.css'
 
 /**
  * ConnectorPanel — a mock of Claude's "Connectors" settings panel with
- * Vitality shown live and Connected. The single job of this element is to
- * plant "Vitality is a Claude connector" in the visitor's head: it's the
- * cloud-connector section they already know from Claude, with Vitality the
+ * HealthCompanion shown live and Connected. The single job of this element is to
+ * plant "HealthCompanion is a Claude connector" in the visitor's head: it's the
+ * cloud-connector section they already know from Claude, with HealthCompanion the
  * one that's switched on. Presentational only.
  */
 export default function ConnectorPanel() {
@@ -20,7 +20,7 @@ export default function ConnectorPanel() {
       <div className={`${styles.connRow} ${styles.connRowLive}`}>
         <span className={styles.connLogo}>V</span>
         <span className={styles.connMeta}>
-          <span className={styles.connName}>Vitality</span>
+          <span className={styles.connName}>Health Companion</span>
           <span className={styles.connDesc}>Your whole life, in one dashboard</span>
         </span>
         <span className={styles.connBadge}>

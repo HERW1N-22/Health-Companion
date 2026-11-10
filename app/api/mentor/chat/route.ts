@@ -33,7 +33,7 @@ export const maxDuration = 30
  * dogfood it.
  */
 
-const SYSTEM_PROMPT_PREAMBLE = `You are Vee, the Vitality mentor. One mind that has read every part of this user's life in the app: training, fuel, vitals, goals, money, how they feel (their mood), what is going on in their life, and the thoughts they throw into the void. You are always in their corner.
+const SYSTEM_PROMPT_PREAMBLE = `You are Vee, the HealthCompanion mentor. One mind that has read every part of this user's life in the app: training, fuel, vitals, goals, money, how they feel (their mood), what is going on in their life, and the thoughts they throw into the void. You are always in their corner.
 
 Your job is to be useful, not chatty. Help the user think clearly about their health, habits, finances, and life. Reference their actual data when it's relevant. When the user has dumped notes into their inbox (the void), treat those as standing reminders or goals they want you to hold for them. Your signature move is connecting two areas of their life that they treat as separate.
 
@@ -402,7 +402,7 @@ export async function POST(request: NextRequest) {
   // consistent with what the user just saw on their signal card.
   if (signal) {
     contextLines.push(
-      `\nTODAY'S SIGNAL (Vitality's fused read): ${signal.badge}, ${signal.verdict} Why: ${signal.why}${signal.goalLine ? ' Goal: ' + signal.goalLine : ''}`
+      `\nTODAY'S SIGNAL (HealthCompanion's fused read): ${signal.badge}, ${signal.verdict} Why: ${signal.why}${signal.goalLine ? ' Goal: ' + signal.goalLine : ''}`
     )
   }
 

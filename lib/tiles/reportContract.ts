@@ -1,9 +1,9 @@
 /**
  * The tile-to-Vee report contract — the narrow waist every MCP-built (or
- * hand-built) tile uses to feed the "Vitality noticed" engine.
+ * hand-built) tile uses to feed the "HealthCompanion noticed" engine.
  *
- * A sealed tile talks to Vitality through two channels: Vitality.save / load for
- * its OWN private data, and Vitality.report(stream) for ONE numeric life-stream
+ * A sealed tile talks to HealthCompanion through two channels: HealthCompanion.save / load for
+ * its OWN private data, and HealthCompanion.report(stream) for ONE numeric life-stream
  * into Vee. This file is the single source of truth for that stream's shape, so
  * the host (write side) and the noticed engine (read side) can never build
  * mismatched halves. Import it on both sides.
@@ -24,7 +24,7 @@ export type ReportKind = (typeof REPORT_KINDS)[number]
 export const GOAL_DIRECTIONS = ['up', 'down', 'neutral'] as const
 export type GoalDirection = (typeof GOAL_DIRECTIONS)[number]
 
-/** The payload a tile posts via Vitality.report(). The deliberately small,
+/** The payload a tile posts via HealthCompanion.report(). The deliberately small,
  *  deliberately fixed boundary. UIs are free; this is disciplined. */
 export interface ReportedStream {
   key: string

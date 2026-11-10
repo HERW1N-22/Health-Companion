@@ -1,6 +1,6 @@
 import { getPeakStimulants, getStimulantsDaily, getManualSleepDaily } from '@/mcp/src/queries'
 import { getLocalDateKey } from '@/mcp/src/util'
-import type { VitalityDb } from '@/mcp/src/supabase'
+import type { HealthCompanionDb } from '@/mcp/src/supabase'
 
 // Read layer for the peak-stimulants MCP tool. getPeakStimulants reads the
 // `peak_state` jsonb blob the Peak module mirrors (substances enriched with
@@ -13,12 +13,12 @@ const DAY = 86_400_000
 // A fixed clock-free "today" entry: now. (Date.now() is real in jest.)
 const now = () => Date.now()
 
-function vdbWithPeakBlob(blob: unknown): VitalityDb {
+function vdbWithPeakBlob(blob: unknown): HealthCompanionDb {
   const builder: Record<string, unknown> = {}
   builder.select = () => builder
   builder.eq = () => builder
   builder.maybeSingle = async () => ({ data: blob == null ? null : { data: blob }, error: null })
-  return { db: { from: () => builder }, userId: 'u1', mode: 'user', scopes: ['mcp:read'] } as unknown as VitalityDb
+  return { db: { from: () => builder }, userId: 'u1', mode: 'user', scopes: ['mcp:read'] } as unknown as HealthCompanionDb
 }
 
 describe('getPeakStimulants', () => {

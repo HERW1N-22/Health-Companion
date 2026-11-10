@@ -4,7 +4,7 @@ import { createClient } from '@supabase/supabase-js'
 
 import { assertPro } from '@/lib/auth/tier'
 import { readPaywallConfig } from '@/lib/auth/paywall'
-import type { VitalityDb } from '@/mcp/src/supabase'
+import type { HealthCompanionDb } from '@/mcp/src/supabase'
 
 import {
   isMcpToken,
@@ -27,7 +27,7 @@ import { appUrl as oauthAppUrl, mcpResourceUrl, MCP_SCOPE, MCP_SCOPES_GRANTED, o
 // per-request RLS client → strict tier gate. RLS is the only boundary.
 
 export type AuthResult =
-  | { ok: true; vdb: VitalityDb }
+  | { ok: true; vdb: HealthCompanionDb }
   | { ok: false; status: number; error: string }
 
 type McpEnv = {
@@ -91,7 +91,7 @@ async function resolveCredential(bearer: string, env: McpEnv): Promise<Resolved 
 
   // Phase 2: OAuth MCP access token (JWT) → verify HS256 signature + `aud`
   // (RFC 8707). This is the ONLY resolve mechanism Phase 2 adds; everything
-  // below the resolve — buildVitalityDb (which still mints the SEPARATE
+  // below the resolve — buildHealthCompanionDb (which still mints the SEPARATE
   // aud:"authenticated" RLS JWT), strict assertPro, scope — is unchanged. A
   // plain website session JWT has aud:"authenticated", not our resource, so it
   // fails the aud check here and can never be replayed as an MCP bearer.
@@ -111,19 +111,19 @@ async function resolveCredential(bearer: string, env: McpEnv): Promise<Resolved 
 }
 
 /** Build the per-request RLS-scoped client: the minted JWT rides as the Bearer
- *  to Vitality's own Supabase (and nowhere else), so auth.uid() = userId. The
+ *  to HealthCompanion's own Supabase (and nowhere else), so auth.uid() = userId. The
  *  granted scopes travel on the client so write tools can refuse a read-only
  *  credential — RLS already confines rows; scope confines capability. */
-function buildVitalityDb(userId: string, scope: string, env: McpEnv): VitalityDb {
+function buildHealthCompanionDb(userId: string, scope: string, env: McpEnv): HealthCompanionDb {
   const accessToken = signSupabaseJwt(userId, env.jwtSecret, { supabaseUrl: env.supabaseUrl })
   // The web app and the vendored mcp/ package each resolve their own copy of
   // @supabase/supabase-js, so createClient()'s type is nominally (not structurally)
-  // distinct from the one VitalityDb expects. Bridge the duplicate-package boundary
+  // distinct from the one HealthCompanionDb expects. Bridge the duplicate-package boundary
   // with a type-only cast; the runtime object is identical.
   const db = createClient(env.supabaseUrl, env.anonKey, {
     auth: { persistSession: false, autoRefreshToken: false },
     global: { headers: { Authorization: `Bearer ${accessToken}` } },
-  }) as unknown as VitalityDb['db']
+  }) as unknown as HealthCompanionDb['db']
   return { db, userId, mode: 'user', scopes: scope.split(/\s+/).filter(Boolean) }
 }
 
@@ -148,14 +148,14 @@ export async function authenticateMcpRequest(req: Request): Promise<AuthResult> 
   // Global kill-switch: neutralize write capability before the client is built so
   // a single Vercel env flip pauses the whole write surface (read stays). The
   // granted 'mcp:write' is swapped for a paused marker rather than dropped, so
-  // requireWrite can tell "paused by the Vitality team" apart from "never granted"
+  // requireWrite can tell "paused by the HealthCompanion team" apart from "never granted"
   // and give guidance that actually helps (wait vs reconnect). Mirrors
   // WRITE_PAUSED_SCOPE in mcp/src/supabase.ts; keep the literals identical.
   const effectiveScope = writesEnabled()
     ? scope
     : scope.split(/\s+/).map((s) => (s === 'mcp:write' ? 'mcp:write:paused' : s)).join(' ')
 
-  const vdb = buildVitalityDb(userId, effectiveScope, env)
+  const vdb = buildHealthCompanionDb(userId, effectiveScope, env)
 
   // The MCP honors the SAME whole-app paywall master switch as the /app layout
   // (lib/auth/paywall.ts): while PAYWALL_ENABLED !== 'true', every signed-in

@@ -1,11 +1,11 @@
 /* ============================================================
-   Vitality — muscle group glyph library
+   HealthCompanion — muscle group glyph library
    viewBox 0 0 100 100 · stroke #6EE7B7 ~3 · round caps/joins
    .ms = muscle silhouette (mint fill)   .ln = divider (no fill)
    Each glyph is anatomy cropped tight to the muscle belly —
    the shape a trainer sketches on a whiteboard, not a body.
    ============================================================ */
-window.VITALITY_MUSCLES = [
+window.HEALTH_COMPANION_MUSCLES = [
   {
     key: 'chest', name: 'Chest', latin: 'Pectoralis major',
     // two pec fans — broad along the sternum, converging laterally to the shoulder

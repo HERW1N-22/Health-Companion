@@ -17,7 +17,7 @@ export interface WhoopView {
   // The user has saved their own WHOOP app's client_id + client_secret, but
   // may not have completed the OAuth authorize step yet.
   hasCredentials: boolean
-  // Vitality's callback URL — the user registers this in their own WHOOP app.
+  // HealthCompanion's callback URL — the user registers this in their own WHOOP app.
   redirectUri: string
   data: WhoopData | null
 }
@@ -38,8 +38,8 @@ export interface WhoopData {
   recoveryTrend: number[]
   sleepDebt7d: { day: string; hours: number }[]
   sleepTargetHours: number
-  vitalityScore: number | null
-  vitalityTier: string
+  healthcompanionScore: number | null
+  healthcompanionTier: string
   lastSyncedMinutes: number | null
   daysAvailable: number
 }
@@ -110,7 +110,7 @@ export default function WhoopModule({ view }: Props) {
     if (typeof window === 'undefined' || !view.data) return
     try {
       const d = view.data
-      localStorage.setItem('vitality_whoop_v1', JSON.stringify({
+      localStorage.setItem('healthcompanion_whoop_v1', JSON.stringify({
         recovery: d.recovery,
         hrv: d.hrv,
         hrvBaseline: d.hrvBaseline,
@@ -137,7 +137,7 @@ export default function WhoopModule({ view }: Props) {
   }
 
   const onDisconnect = async () => {
-    if (!confirm('Disconnect your Whoop account? Vitality will stop pulling new data.')) return
+    if (!confirm('Disconnect your Whoop account? HealthCompanion will stop pulling new data.')) return
     await fetch('/api/whoop/disconnect', { method: 'POST' })
     router.refresh()
   }
@@ -154,8 +154,8 @@ export default function WhoopModule({ view }: Props) {
               <h1 className={fitnessStyles.title}>Whoop</h1>
               <p className={fitnessStyles.subtitle}>Recovery · sleep · strain · HRV</p>
             </div>
-            {view.connected && view.data && view.data.vitalityScore != null && (
-              <VitalityScoreBadge score={view.data.vitalityScore} tier={view.data.vitalityTier} />
+            {view.connected && view.data && view.data.healthcompanionScore != null && (
+              <HealthCompanionScoreBadge score={view.data.healthcompanionScore} tier={view.data.healthcompanionTier} />
             )}
           </div>
         </div>
@@ -277,7 +277,7 @@ function CredentialsForm({ redirectUri, connectHref }: { redirectUri: string; co
     <section className={styles.connectPanel}>
       <p className={styles.connectIntro}>
         Connect WHOOP with <em>your own</em> developer keys. It takes about two minutes,
-        and your <em>recovery</em>, <em>sleep</em>, and <em>strain</em> flow into Vitality from then on.
+        and your <em>recovery</em>, <em>sleep</em>, and <em>strain</em> flow into HealthCompanion from then on.
       </p>
 
       <ol className={styles.credSteps}>
@@ -363,12 +363,12 @@ function NoDataPanel({
   )
 }
 
-function VitalityScoreBadge({ score, tier }: { score: number; tier: string }) {
+function HealthCompanionScoreBadge({ score, tier }: { score: number; tier: string }) {
   return (
-    <aside className={styles.scoreBadge} aria-label="Vitality Score">
+    <aside className={styles.scoreBadge} aria-label="HealthCompanion Score">
       <div className={styles.scoreNumber}>{score}</div>
       <div className={styles.scoreCol}>
-        <div className={styles.scoreLabel}>Vitality Score</div>
+        <div className={styles.scoreLabel}>HealthCompanion Score</div>
         <div className={styles.scoreTier}>{tier}</div>
       </div>
     </aside>

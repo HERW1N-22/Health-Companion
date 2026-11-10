@@ -47,10 +47,10 @@ describe('Arts District: the featured tile catalog', () => {
       const env = tile.envelope
       expect(env.name.trim().length).toBeGreaterThan(0)
       expect(env.html.length).toBeGreaterThan(400)
-      // the Vitality bridge shim must be present and actually used both ways
-      expect(env.html).toContain("source:'vitality-tile'")
-      expect(env.html).toMatch(/Vitality\.load\s*\(/)
-      expect(env.html).toMatch(/Vitality\.save\s*\(/)
+      // the HealthCompanion bridge shim must be present and actually used both ways
+      expect(env.html).toContain("source:'healthcompanion-tile'")
+      expect(env.html).toMatch(/HealthCompanion\.load\s*\(/)
+      expect(env.html).toMatch(/HealthCompanion\.save\s*\(/)
       // sealed opaque origin: a tile must never touch its own web storage
       expect(env.html).not.toMatch(/localStorage|sessionStorage/)
       // brand law: no emoji (SVG only), no em or en dashes
@@ -62,7 +62,7 @@ describe('Arts District: the featured tile catalog', () => {
   )
 
   // Vee-reporting contract: every featured tile must stream to Vee via the
-  // inlined report shim + a Vitality.report({...,kind:...}) call at its real
+  // inlined report shim + a HealthCompanion.report({...,kind:...}) call at its real
   // logging event. The 5 formerly-silent tiles (water/habit/journal/mood/focus)
   // regressed to no report; this guards all 11 stay wired.
   const VALID_KINDS = ['intake', 'count', 'duration', 'rating', 'measure', 'money', 'done']
@@ -72,8 +72,8 @@ describe('Arts District: the featured tile catalog', () => {
       const html = tile.envelope.html
       // the report shim must be inlined (posts type:'report' to the parent)
       expect(html).toMatch(/type:\s*'report'/)
-      // and there must be at least one live Vitality.report({...}) call
-      const call = html.match(/Vitality\.report\(\{[^}]*\}\)/)
+      // and there must be at least one live HealthCompanion.report({...}) call
+      const call = html.match(/HealthCompanion\.report\(\{[^}]*\}\)/)
       expect(call).toBeTruthy()
       // whose kind is in the valid taxonomy (tiles use single OR double quotes)
       const kind = call![0].match(/kind:\s*['"]([^'"]+)['"]/)
@@ -124,7 +124,7 @@ describe('Arts District: the featured tile catalog', () => {
   test.each(BUILT.map((d) => [d.id, d] as const))(
     '%s report key stays byte-identical to its build recipe (no stream re-key)',
     (id, def) => {
-      const call = HTML_JSON[id].match(/Vitality\.report\(\{[^}]*\}\)/)
+      const call = HTML_JSON[id].match(/HealthCompanion\.report\(\{[^}]*\}\)/)
       expect(call).toBeTruthy()
       const key = call![0].match(/key:\s*['"]([^'"]+)['"]/)
       expect(key).toBeTruthy()

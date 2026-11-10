@@ -1,6 +1,6 @@
 This is the lean motion core. For cozy loaders, tile-art choreography, quiz stagger and scroll reveals, read {section:"motion"}.
 
-# Vitality Motion Core
+# Health Companion Motion Core
 
 The essentials every tile needs. Plain CSS / vanilla JS / inline SVG, ready to paste into a single sealed HTML tile (no React, no libraries, no build step).
 
@@ -20,7 +20,7 @@ The feel in one line: things arrive softly and confidently, settle with a tiny o
 
 ## 2. The motion tokens (paste into :root)
 
-Vitality's exact easing + timing constants. Use the tokens, do not hand-pick random cubic-beziers.
+Health Companion's exact easing + timing constants. Use the tokens, do not hand-pick random cubic-beziers.
 
 ```css
 :root {
@@ -53,7 +53,7 @@ Rule of thumb:
 
 ## 3. The canonical entrance recipe (rise + fade, staggered)
 
-Almost every entrance in Vitality is this: items fade up ~10px on the signature ease, cascading ~55ms apart. The stagger driver is a per-item delay fed through a CSS custom property, NOT `animation-delay` directly. Why: if a later "pick" bounce reuses `animation-delay`, the entrance delay would also delay the bounce and the item would seem to vanish. Keep entrance timing on `--enter-delay`, leave `animation-delay` free for the pick.
+Almost every entrance in Health Companion is this: items fade up ~10px on the signature ease, cascading ~55ms apart. The stagger driver is a per-item delay fed through a CSS custom property, NOT `animation-delay` directly. Why: if a later "pick" bounce reuses `animation-delay`, the entrance delay would also delay the bounce and the item would seem to vanish. Keep entrance timing on `--enter-delay`, leave `animation-delay` free for the pick.
 
 ```css
 .opt {

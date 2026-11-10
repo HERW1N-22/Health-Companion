@@ -6,15 +6,15 @@ import SetupNudge from '@/components/SetupNudge'
 import RemoteUpdateWatcher from '@/components/RemoteUpdateWatcher'
 import type { Units } from '@/lib/units'
 import { getChecklistTasks } from '@/lib/checklistTasks'
-import { computeVitalityScore } from '@/lib/vitality/computeVitalityScore'
-import type { VitalityScore } from '@/lib/vitality/score'
-import { getDashboardTileStats, type DashboardTileStats } from '@/lib/vitality/dashboardStats'
+import { computeHealthCompanionScore } from '@/lib/healthcompanion/computeHealthCompanionScore'
+import type { HealthCompanionScore } from '@/lib/healthcompanion/score'
+import { getDashboardTileStats, type DashboardTileStats } from '@/lib/healthcompanion/dashboardStats'
 import { getAvatarUrl } from '@/lib/profiles/avatar'
 import { isFounderEmail } from '@/lib/founders'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Main Dashboard · Vitality',
+  title: 'Main Dashboard · Health Companion',
 }
 
 export default async function DashboardPage() {
@@ -66,11 +66,11 @@ export default async function DashboardPage() {
   // per-contributor safety nets already handle data-shaped failures internally).
   // The user's local "today" (LocalDateSync cookie) so the Fuel tile counts
   // meals against their timezone, not Vercel's UTC. See getDashboardTileStats.
-  const localDayKey = cookies().get('vitality_local_date')?.value
+  const localDayKey = cookies().get('healthcompanion_local_date')?.value
 
-  const [tasks, vitality, tileStats] = await Promise.all([
+  const [tasks, healthcompanion, tileStats] = await Promise.all([
     getChecklistTasks(supabase, user.id),
-    computeVitalityScore(user.id).catch((): VitalityScore => ({
+    computeHealthCompanionScore(user.id).catch((): HealthCompanionScore => ({
       score: null,
       drivers: [],
       state: 'no-routine',
@@ -97,8 +97,8 @@ export default async function DashboardPage() {
         userId={user.id}
         creatorHandle={creatorHandle}
         avatarUrl={avatarUrl}
-        score={vitality.score}
-        scoreState={vitality.state}
+        score={healthcompanion.score}
+        scoreState={healthcompanion.state}
         tileStats={tileStats}
         isFounder={isFounderEmail(user.email)}
       />

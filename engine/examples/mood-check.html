@@ -33,8 +33,8 @@ body{background:transparent;color:#fff;font-family:-apple-system,BlinkMacSystemF
   </div>
 </div>
 <script>
-var Vitality={_w:{},save:function(d){parent.postMessage({source:'vitality-tile',type:'save',data:d},'*')},load:function(){return new Promise(function(res){var id=Math.random().toString(36).slice(2);Vitality._w[id]=res;parent.postMessage({source:'vitality-tile',type:'load',id:id},'*')})}};
-window.addEventListener('message',function(e){var m=e.data;if(m&&m.source==='vitality-host'&&m.type==='load:result'&&Vitality._w[m.id]){Vitality._w[m.id](m.data);delete Vitality._w[m.id]}});
+var HealthCompanion={_w:{},save:function(d){parent.postMessage({source:'healthcompanion-tile',type:'save',data:d},'*')},load:function(){return new Promise(function(res){var id=Math.random().toString(36).slice(2);HealthCompanion._w[id]=res;parent.postMessage({source:'healthcompanion-tile',type:'load',id:id},'*')})}};
+window.addEventListener('message',function(e){var m=e.data;if(m&&m.source==='healthcompanion-host'&&m.type==='load:result'&&HealthCompanion._w[m.id]){HealthCompanion._w[m.id](m.data);delete HealthCompanion._w[m.id]}});
 
 // warm gradient amber (low) -> mint (great), never red
 var COLORS={1:'#E8964A',2:'#E6B25C',3:'#CFD17A',4:'#A6E08C',5:'#6EE7B7'};
@@ -74,7 +74,7 @@ function setToday(score){
   state.days=state.days.filter(function(x){return x&&typeof x.date==='string'&&x.score>=1&&x.score<=5;});
   if(state.days.length>60)state.days=state.days.slice(state.days.length-60);
   state.today=score;
-  Vitality.save(state);
+  HealthCompanion.save(state);
   render();
 }
 
@@ -129,6 +129,6 @@ function hydrate(d){
   }
 }
 
-Vitality.load().then(function(d){hydrate(d);render();}).catch(function(){hydrate(null);render();});
+HealthCompanion.load().then(function(d){hydrate(d);render();}).catch(function(){hydrate(null);render();});
 </script>
 </body></html>

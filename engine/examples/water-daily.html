@@ -157,8 +157,8 @@
 </div>
 
 <script>
-var Vitality={_w:{},save:function(d){parent.postMessage({source:'vitality-tile',type:'save',data:d},'*')},load:function(){return new Promise(function(res){var id=Math.random().toString(36).slice(2);Vitality._w[id]=res;parent.postMessage({source:'vitality-tile',type:'load',id:id},'*')})}};
-window.addEventListener('message',function(e){var m=e.data;if(m&&m.source==='vitality-host'&&m.type==='load:result'&&Vitality._w[m.id]){Vitality._w[m.id](m.data);delete Vitality._w[m.id]}});
+var HealthCompanion={_w:{},save:function(d){parent.postMessage({source:'healthcompanion-tile',type:'save',data:d},'*')},load:function(){return new Promise(function(res){var id=Math.random().toString(36).slice(2);HealthCompanion._w[id]=res;parent.postMessage({source:'healthcompanion-tile',type:'load',id:id},'*')})}};
+window.addEventListener('message',function(e){var m=e.data;if(m&&m.source==='healthcompanion-host'&&m.type==='load:result'&&HealthCompanion._w[m.id]){HealthCompanion._w[m.id](m.data);delete HealthCompanion._w[m.id]}});
 
 (function(){
   var CIRC=276.46; // 2*pi*44
@@ -232,7 +232,7 @@ window.addEventListener('message',function(e){var m=e.data;if(m&&m.source==='vit
   }
 
   function persist(){
-    Vitality.save({date:state.date,count:state.count,goal:state.goal});
+    HealthCompanion.save({date:state.date,count:state.count,goal:state.goal});
   }
 
   plus.addEventListener('click',function(){
@@ -250,7 +250,7 @@ window.addEventListener('message',function(e){var m=e.data;if(m&&m.source==='vit
   // initial paint with defaults so it never looks blank, then hydrate
   render(false);
 
-  Vitality.load().then(function(d){
+  HealthCompanion.load().then(function(d){
     var loaded=sanitize(d);
     var rolled=(d&&d.date&&d.date!==todayKey()); // crossed into a new day
     state=loaded;

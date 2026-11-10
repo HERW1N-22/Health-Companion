@@ -1,7 +1,7 @@
 import { shapeGoals, type BigGoal } from '@/mcp/src/queries'
 
 // Pure mapping layer for the MCP goals tool (BUILD50): turns the three
-// authoritative tables (vitality_goals / vitality_habit_goals / goals_streak)
+// authoritative tables (healthcompanion_goals / healthcompanion_habit_goals / goals_streak)
 // into GoalsData. This is the bug-prone part — getGoals is a thin DB wrapper
 // around it. completed_at fixtures use timezone-naive local datetimes so the
 // local-date-key derivation is deterministic regardless of the CI timezone.

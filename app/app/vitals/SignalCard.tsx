@@ -2,7 +2,7 @@
 
 /**
  * The Vitals Signal hero — today's fused, personal read (·01 on the readings
- * page). WHOOP knows your recovery; only Vitality also knows your training load,
+ * page). WHOOP knows your recovery; only HealthCompanion also knows your training load,
  * your fuel, your goal, and what you told Vee. This card shows that one fused
  * call (push / steady / recover) with the transparent signals that fed it.
  *

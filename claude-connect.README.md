@@ -30,8 +30,8 @@ Set this **before** the script tag. All fields are optional.
   window.ClaudeConnect = {
     name: 'Sleep Tracker',   // shown in the button and file. Defaults to the page title.
     accent: '#6BE3A4',       // button glow color. Defaults to mint.
-    prefix: 'vitality_',     // only export keys that start with this. Defaults to all data.
-    // keys: ['vitality_sleep_v1'],  // or list exact keys to export.
+    prefix: 'healthcompanion_',     // only export keys that start with this. Defaults to all data.
+    // keys: ['healthcompanion_sleep_v1'],  // or list exact keys to export.
   };
 </script>
 <script src="claude-connect.js"></script>

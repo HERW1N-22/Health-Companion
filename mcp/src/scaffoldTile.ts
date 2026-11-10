@@ -1,4 +1,4 @@
-// scaffold_tile's pure core: a plain-English goal in, one finished Vitality tile out.
+// scaffold_tile's pure core: a plain-English goal in, one finished HealthCompanion tile out.
 // Deterministic (no LLM, no IO). Infers the tile's identity, renders the matching
 // themed template, and packages it with a short header naming the inferred fields.
 
@@ -16,7 +16,7 @@ export type ScaffoldInput = InferInput;
  * instructions can never drift apart. ("Upload a tile" no longer exists in the app.)
  */
 export const PASTE_INSTRUCTIONS =
-  'To add it: copy everything below the dashed line, press "Add a tile" on your Vitality dashboard, paste it in, press "Run it", then "Keep".';
+  'To add it: copy everything below the dashed line, press "Add a tile" on your HealthCompanion dashboard, paste it in, press "Run it", then "Keep".';
 
 export interface ScaffoldResult {
   /** The finished, self-contained sealed-HTML tile. */

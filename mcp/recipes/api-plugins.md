@@ -1,8 +1,8 @@
 # API plugins for tiles (bring your own key)
 
-A sealed tile is one HTML file with no backend of its own, but it CAN reach out to the open internet with `fetch()`. That is the doorway to real power: a food tile that pulls true USDA macros, a weather tile, an FX tile, a sports tile. The only rule is the seal: a tile never holds one of Vitality's keys. It holds the USER'S key, which the user pasted in, which lives in the tile's own saved data, and which spends the user's own free quota. Cost and trust stay with the person who built the tile. Encourage this. A tile that talks to a real API feels alive in a way a counter never will.
+A sealed tile is one HTML file with no backend of its own, but it CAN reach out to the open internet with `fetch()`. That is the doorway to real power: a food tile that pulls true USDA macros, a weather tile, an FX tile, a sports tile. The only rule is the seal: a tile never holds one of Health Companion's keys. It holds the USER'S key, which the user pasted in, which lives in the tile's own saved data, and which spends the user's own free quota. Cost and trust stay with the person who built the tile. Encourage this. A tile that talks to a real API feels alive in a way a counter never will.
 
-This file gives you (1) the general BYO-key pattern, (2) a concrete, copy-paste USDA FoodData Central recipe grounded in Vitality's own working integration, and (3) a short note on the seal and which APIs pair with which tile kinds.
+This file gives you (1) the general BYO-key pattern, (2) a concrete, copy-paste USDA FoodData Central recipe grounded in Health Companion's own working integration, and (3) a short note on the seal and which APIs pair with which tile kinds.
 
 ---
 
@@ -11,17 +11,17 @@ This file gives you (1) the general BYO-key pattern, (2) a concrete, copy-paste 
 Four moves, every time:
 
 1. The user pastes their own API key into a small settings field in the tile.
-2. The tile stores that key inside its saved data via `Vitality.save`, so it survives reloads. It is the user's key in the user's tile.
-3. The tile calls the third-party API directly with `fetch()`. The request leaves the user's browser, not a Vitality server.
+2. The tile stores that key inside its saved data via `Health Companion.save`, so it survives reloads. It is the user's key in the user's tile.
+3. The tile calls the third-party API directly with `fetch()`. The request leaves the user's browser, not a Health Companion server.
 4. If there is no key yet, the tile shows a friendly "paste your free key" prompt instead of failing silently.
 
-Never hardcode a key into the HTML. Never use a Vitality-owned key. The whole arrangement only works because the key belongs to the user.
+Never hardcode a key into the HTML. Never use a Health Companion-owned key. The whole arrangement only works because the key belongs to the user.
 
 The tile bridge gives you exactly two persistence calls (see the report contract in the DNA pack):
 
 ```js
-Vitality.save(obj);                 // fire and forget, persists obj as the tile's data
-Vitality.load().then(function (d) { /* d is the last saved obj, or null */ });
+Health Companion.save(obj);                 // fire and forget, persists obj as the tile's data
+Health Companion.load().then(function (d) { /* d is the last saved obj, or null */ });
 ```
 
 So the key lives right next to the tile's normal state:
@@ -29,13 +29,13 @@ So the key lives right next to the tile's normal state:
 ```js
 var state = { apiKey: '', entries: [] };
 
-Vitality.load().then(function (saved) {
+Health Companion.load().then(function (saved) {
   if (saved) state = saved;
   render();
 });
 
 function persist() {
-  Vitality.save(state);             // saves entries AND the key together
+  Health Companion.save(state);             // saves entries AND the key together
 }
 
 // settings field
@@ -82,11 +82,11 @@ async function apiCall(url, opts) {
 
 ## 2. USDA FoodData Central (free key)
 
-This is Vitality's own real integration, distilled to what a sealed tile needs. The free key is issued instantly at `https://fdc.nal.usda.gov/api-key-signup.html`. One key, generous quota, no card. Perfect for a food or macro tile.
+This is Health Companion's own real integration, distilled to what a sealed tile needs. The free key is issued instantly at `https://fdc.nal.usda.gov/api-key-signup.html`. One key, generous quota, no card. Perfect for a food or macro tile.
 
 ### The search call
 
-Vitality uses a POST with a JSON body as the primary, because the GET form intermittently returns HTTP 400 against the live API (confirmed roughly one call in three) and silently empties search. The POST with a `dataType` array is reliable and is the form that includes `Survey (FNDDS)`, where the everyday "as eaten" foods live (for example "Beef, ground", "Rice, cooked, NFS").
+Health Companion uses a POST with a JSON body as the primary, because the GET form intermittently returns HTTP 400 against the live API (confirmed roughly one call in three) and silently empties search. The POST with a `dataType` array is reliable and is the form that includes `Survey (FNDDS)`, where the everyday "as eaten" foods live (for example "Beef, ground", "Rice, cooked, NFS").
 
 ```js
 async function usdaSearch(query, apiKey) {
@@ -201,22 +201,22 @@ async function lookupAndLog(query, grams) {
   persist();
   render();
   // feed the one number into Vee
-  Vitality.report({
+  Health Companion.report({
     key: 'calories', label: 'Calories', value: todaysKcal(),
     date: today(), kind: 'intake', goalDirection: 'neutral'
   });
 }
 ```
 
-That last `Vitality.report` is optional. A food tile has one meaningful stream (calories), so it may emit that single number to feed the dashboard's comparable data and the optional Vee tile. A tile with no such stream just skips the call, and nothing breaks.
+That last `Health Companion.report` is optional. A food tile has one meaningful stream (calories), so it may emit that single number to feed the dashboard's comparable data and the optional Vee tile. A tile with no such stream just skips the call, and nothing breaks.
 
 ---
 
 ## 3. The seal, and good pairings
 
-The seal is simple. A tile may `fetch()` any external API it wants. It must not carry a Vitality-owned key (Anthropic, Stripe, the wearable OAuth secrets). Those live server-side in Vitality and never reach a tile. A BYO-key plugin sidesteps the seal entirely, because the key is the user's, the quota is the user's, and the request never touches Vitality's infrastructure. Keep the key in `Vitality.save` data, not hardcoded, and you are clear. The user's OWN Anthropic key is the same story: it can power a real AI mentor straight from a sealed tile. That recipe is its own file, `ai-mentor.md`.
+The seal is simple. A tile may `fetch()` any external API it wants. It must not carry a Health Companion-owned key (Anthropic, Stripe, the wearable OAuth secrets). Those live server-side in Health Companion and never reach a tile. A BYO-key plugin sidesteps the seal entirely, because the key is the user's, the quota is the user's, and the request never touches Health Companion's infrastructure. Keep the key in `Health Companion.save` data, not hardcoded, and you are clear. The user's OWN Anthropic key is the same story: it can power a real AI mentor straight from a sealed tile. That recipe is its own file, `ai-mentor.md`.
 
-Two practical notes. Some APIs send CORS headers that allow a browser `fetch` and some do not; USDA, OpenWeather, exchangerate hosts and most public read APIs allow it, so prefer those. And keep the key out of any value you pass to `Vitality.report`; report carries a number, never a secret.
+Two practical notes. Some APIs send CORS headers that allow a browser `fetch` and some do not; USDA, OpenWeather, exchangerate hosts and most public read APIs allow it, so prefer those. And keep the key out of any value you pass to `Health Companion.report`; report carries a number, never a secret.
 
 APIs that pair well with tile kinds:
 
@@ -230,4 +230,4 @@ APIs that pair well with tile kinds:
 | Public sports or steps APIs | `count` | A steps, runs, or matches-watched tile |
 | Anthropic (your own key, cheap) | mind / `done` | A real AI mentor, coach, or chatbot. See `ai-mentor.md` |
 
-Reach for an API plugin whenever the tile would be more honest with real numbers than with the user typing everything by hand. That is most of the time. Build the key prompt warmly and fail soft, and the tile earns the Vitality standard. If the tile happens to have one meaningful stream, it may also `report()` that single number so it feeds the dashboard's comparable data and the optional Vee tile. A tile without a meaningful number simply never calls `report()`, and nothing breaks.
+Reach for an API plugin whenever the tile would be more honest with real numbers than with the user typing everything by hand. That is most of the time. Build the key prompt warmly and fail soft, and the tile earns the Health Companion standard. If the tile happens to have one meaningful stream, it may also `report()` that single number so it feeds the dashboard's comparable data and the optional Vee tile. A tile without a meaningful number simply never calls `report()`, and nothing breaks.

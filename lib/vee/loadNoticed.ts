@@ -1,7 +1,7 @@
 /**
  * loadNoticed - the server-side loader for the new Vee surface (/app/mentor-next).
  * It gathers the SAME real, deterministic insight data the live mentor page builds,
- * and now carries the FULL fused goals engine too: the "Vitality noticed" feed,
+ * and now carries the FULL fused goals engine too: the "HealthCompanion noticed" feed,
  * the per-goal steering rows (buildTicker), the per-goal guides (buildGoalGuide),
  * the life chips, the rarity collection, the run-stats proof strip, and the raw
  * goals/habits/streak for the authoring section.
@@ -34,7 +34,7 @@ import { rarityOf } from '@/lib/insights/rarity'
 import { rarityForNotice, buildCollection, type CollectionTier, type Rarity } from '@/lib/vee/rarity'
 import { toDailySeries } from '@/lib/insights/series'
 import { getLiftProgression, getWater, getStimulantsDaily, type StimulantDay } from '@/mcp/src/queries'
-import type { VitalityDb } from '@/mcp/src/supabase'
+import type { HealthCompanionDb } from '@/mcp/src/supabase'
 import { EMPTY_STREAK, type BigGoal, type HabitGoal, type GoalStreak } from '@/app/app/goals/veeTypes'
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -64,7 +64,7 @@ export interface NoticedData {
   feed: FeedNotice[]
   /** Per-goal steering rows (honest sparkline + trend state), goal id keyed by row.id. */
   rows: TickerRow[]
-  /** Per-goal "how Vitality gets you there" guide items, keyed by goal id. */
+  /** Per-goal "how HealthCompanion gets you there" guide items, keyed by goal id. */
   guides: Record<string, GuideItem[]>
   lifeChips: LifeChip[]
   /** The six-tier rarity collection tally of this load's graded finds. */
@@ -213,7 +213,7 @@ export async function loadNoticed(supabase: Db, userId: string): Promise<Noticed
     ].some(r => r.error != null)
 
     // Engine helpers - each isolated so a single failure can't sink the load.
-    const v: VitalityDb = { db: supabase as unknown as VitalityDb['db'], userId, mode: 'user', scopes: ['mcp:read'] }
+    const v: HealthCompanionDb = { db: supabase as unknown as HealthCompanionDb['db'], userId, mode: 'user', scopes: ['mcp:read'] }
     const [bigGoalsRes, habitGoalsRes, streakRes, driftRes, greenLightRes, progRes, waterMcpRes, stimRes, ledgerRes] = await Promise.allSettled([
       getBigGoals(supabase as never, userId),
       getHabitGoals(supabase as never, userId),
@@ -329,7 +329,7 @@ export async function loadNoticed(supabase: Db, userId: string): Promise<Noticed
       })),
     })
 
-    // The per-goal "how Vitality gets you there" guide. A module the user already
+    // The per-goal "how HealthCompanion gets you there" guide. A module the user already
     // logs becomes a quick-link; one they don't shows a demo tile.
     const weight = weightRes.data
     const wearable = wearableRes.data

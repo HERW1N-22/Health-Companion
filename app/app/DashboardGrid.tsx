@@ -46,8 +46,8 @@ import {
   type DateConfig,
   type GemConfig,
 } from '@/lib/tiles/dashboardChrome'
-import type { ScoreState } from '@/lib/vitality/score'
-import type { DashboardTileStats } from '@/lib/vitality/dashboardStats'
+import type { ScoreState } from '@/lib/healthcompanion/score'
+import type { DashboardTileStats } from '@/lib/healthcompanion/dashboardStats'
 import sheets from './customizableDashboard.module.css'
 
 /** Dark solids for the Solid wallpaper mode (kept dark so labels stay legible). */
@@ -188,7 +188,7 @@ type SortableBits = {
 
 /** The Studio tile's live "shipped" hero number for its bespoke dashboard poster
  *  (Task 7b), read straight from the SAME tile_streams / tile_reports rows every
- *  sealed tile writes through Vitality.report({ key: 'videos_published' }); see
+ *  sealed tile writes through HealthCompanion.report({ key: 'videos_published' }); see
  *  lib/studio/report.ts + lib/tiles/reportWrites.ts. Scoped to the signed-in user
  *  via auth.getUser() (never trusted from props), matching every other client
  *  read in this file (tileSync.ts, tileDataSync.ts). Returns null while loading
@@ -968,7 +968,7 @@ export default function DashboardGrid({ userId, score, scoreState, tileStats, ch
     const m = new Map<string, string>()
     for (const f of FEATURED_TILES) {
       const d = f.envelope.design
-      if (f.author === 'Vitality' && d && f.envelope.html) m.set(d, f.envelope.html)
+      if (f.author === 'Health Companion' && d && f.envelope.html) m.set(d, f.envelope.html)
     }
     return m
   }, [])
@@ -1003,8 +1003,8 @@ export default function DashboardGrid({ userId, score, scoreState, tileStats, ch
   useEffect(() => {
     let raw: string | null = null
     try {
-      raw = localStorage.getItem('vitality:pending-tile')
-      if (raw) localStorage.removeItem('vitality:pending-tile') // consume once, always
+      raw = localStorage.getItem('healthcompanion:pending-tile')
+      if (raw) localStorage.removeItem('healthcompanion:pending-tile') // consume once, always
     } catch {
       return
     }
@@ -1110,7 +1110,7 @@ export default function DashboardGrid({ userId, score, scoreState, tileStats, ch
 
   // Return the write's promise so the host gates the report activity on the
   // ACTUAL result (and posts report:error back to the tile when it fails) —
-  // a failed Vitality.report() must never be counted as a success.
+  // a failed HealthCompanion.report() must never be counted as a success.
   const { register, unregister } = useTileHost(userId, undefined, (stream, tileId) =>
     reportStream(tileId, stream),
   )
@@ -1171,7 +1171,7 @@ export default function DashboardGrid({ userId, score, scoreState, tileStats, ch
   const layoutSig = `${sortableIds.join(',')}|${sortableIds.map((id) => skinFor(id).size + (skinFor(id).design || '')).join(',')}|${editing}`
   useEffect(() => {
     if (!ref.current || !mounted) return
-    // The Vitality score number was removed from the Vee tile, so never run the
+    // The HealthCompanion score number was removed from the Vee tile, so never run the
     // count-up. The wire-feed + ring pulse (the mentor animation) still play.
     return initVeeTiles(ref.current, { score: null, showNumber: false })
   }, [mounted, layoutSig])

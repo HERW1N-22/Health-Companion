@@ -7,7 +7,7 @@
 
 ## The loop (where each step lives)
 
-1. Open Claude Code through Vitality (the MCP connector) — exists.
+1. Open Claude Code through Health Companion (the MCP connector) — exists.
 2. Build a tile with the MCP — **DONE** (`scaffold_tile`, this window).
 3. Export into the Library — MCP packages it (**done**: `upload_tile` -> `TileUploadEnvelope`); the **catch-spot is yours**.
 4. Add it to the dashboard — your customizer + "Add a tile" already do this.

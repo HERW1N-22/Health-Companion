@@ -5,11 +5,11 @@ const html = readFileSync(join(process.cwd(), 'public/studio-tile.html'), 'utf8'
 const EMOJI = /[\u{1F000}-\u{1FAFF}\u{2600}-\u{27BF}\u{2190}-\u{21FF}\u{2B00}-\u{2BFF}]/u
 
 describe('the sealed Studio tile', () => {
-  test('ships the Vitality bridge shim, used all three ways', () => {
-    expect(html).toContain("source:'vitality-tile'")
-    expect(html).toMatch(/Vitality\.load\s*\(/)
-    expect(html).toMatch(/Vitality\.save\s*\(/)
-    expect(html).toMatch(/Vitality\.report\s*\(/)
+  test('ships the HealthCompanion bridge shim, used all three ways', () => {
+    expect(html).toContain("source:'healthcompanion-tile'")
+    expect(html).toMatch(/HealthCompanion\.load\s*\(/)
+    expect(html).toMatch(/HealthCompanion\.save\s*\(/)
+    expect(html).toMatch(/HealthCompanion\.report\s*\(/)
     // it reacts to the host's load:result reply
     expect(html).toMatch(/m\.type\s*===\s*'load:result'/)
   })

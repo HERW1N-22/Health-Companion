@@ -7,7 +7,7 @@ import { SUBSTANCES } from './substances'
 /**
  * Best-effort mirror of the local Peak state into Supabase (`peak_state`, one
  * jsonb row per user — see 20260620000002_peak_state_mirror.sql). localStorage
- * (`vitality_peak_v1`) stays the PRIMARY client store; this only adds a durable,
+ * (`healthcompanion_peak_v1`) stays the PRIMARY client store; this only adds a durable,
  * MCP-readable copy. Failures are swallowed so the UI is never affected.
  *
  * Substance logs only carry a `key`; here (the one place with the catalog) we

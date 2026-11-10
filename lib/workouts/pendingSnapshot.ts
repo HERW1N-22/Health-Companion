@@ -31,7 +31,7 @@ export interface PendingSnapshot {
   savedAt: number
 }
 
-const PREFIX = 'vitality_pending_workout'
+const PREFIX = 'healthcompanion_pending_workout'
 
 /** Storage key for one (user, local-date, day-name) workout. */
 export function pendingKey(userId: string, date: string, dayName: string): string {

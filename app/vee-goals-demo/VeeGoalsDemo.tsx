@@ -12,7 +12,7 @@ import styles from './veeGoalsDemo.module.css'
  *      each with a deadline, a priority, and a per-goal choice of how hard Vee
  *      pushes you. Setting one is the flagship loop: it must feel effortless
  *      and rewarding so a user happily returns whenever they have a new goal.
- *   2. THIS WEEK — the cozy auto-tracked Vitality goals under your identity.
+ *   2. THIS WEEK — the cozy auto-tracked HealthCompanion goals under your identity.
  *
  * The Vee gem is the REAL CoachGem 'echo' (iris dodecahedron + V), driven via
  * controlRef: 'concern' when noticing you slip, 'proud' when you set a goal.
@@ -245,7 +245,7 @@ export default function VeeGoalsDemo() {
         {view === 'weeks' ? (
           <div className={styles.view}>
             <header className={styles.header}>
-              <div className={styles.eyebrowTop}>Vitality · Vee</div>
+              <div className={styles.eyebrowTop}>HealthCompanion · Vee</div>
               <div className={styles.titleRow}>
                 <h1 className={styles.title}>Your <span className={styles.accent}>goals</span></h1>
                 <span className={styles.watchPill}><span className={styles.dot} />Vee&rsquo;s with you</span>
@@ -316,7 +316,7 @@ export default function VeeGoalsDemo() {
             ))}
             {CreateBlock}
 
-            <div className={styles.eyebrow}><span className={styles.eyebrowNum}>·02</span><span className={styles.eyebrowLbl}>This week with Vitality</span><span className={styles.eyebrowRule} /></div>
+            <div className={styles.eyebrow}><span className={styles.eyebrowNum}>·02</span><span className={styles.eyebrowLbl}>This week with HealthCompanion</span><span className={styles.eyebrowRule} /></div>
 
             <div className={styles.identity}>
               <span className={styles.idVee}><VMark size={18} /></span>
@@ -393,7 +393,7 @@ export default function VeeGoalsDemo() {
         ) : (
           <div className={styles.view}>
             <header className={styles.header}>
-              <div className={styles.eyebrowTop}>Vitality · Vee</div>
+              <div className={styles.eyebrowTop}>HealthCompanion · Vee</div>
               <div className={styles.titleRow}>
                 <h1 className={styles.title}>Your <span className={styles.accent}>goals</span></h1>
               </div>
@@ -409,7 +409,7 @@ export default function VeeGoalsDemo() {
             {CreateBlock}
 
             <div className={styles.eyebrow}><span className={styles.eyebrowNum}>·01</span><span className={styles.eyebrowLbl}>Already in motion</span><span className={styles.eyebrowRule} /></div>
-            <p className={styles.tierIntro}>The small Vitality wins I can already see in your week. Tap one and I&rsquo;ll keep tracking it for you.</p>
+            <p className={styles.tierIntro}>The small HealthCompanion wins I can already see in your week. Tap one and I&rsquo;ll keep tracking it for you.</p>
 
             <div className={styles.habits}>
               {[

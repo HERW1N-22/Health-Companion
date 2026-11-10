@@ -2,7 +2,7 @@
 -- BUILD13 — Finance module persistence (localStorage -> Supabase)
 --
 -- Migrates the Finance module off its single localStorage blob
--- (`vitality_finance_v1`) onto multi-user, RLS-scoped Postgres tables.
+-- (`healthcompanion_finance_v1`) onto multi-user, RLS-scoped Postgres tables.
 -- Mirrors the in-memory model in app/app/finance/types.ts. All money is stored
 -- as canonical CHF (numeric). Display-currency conversion stays a UI concern.
 --

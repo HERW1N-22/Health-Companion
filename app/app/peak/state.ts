@@ -4,7 +4,7 @@
  * Peak module state + persistence (BUILD14 — localStorage).
  *
  * Follows the same shape as the finance and water modules: one namespaced
- * blob (`vitality_peak_v1`) holds today's substance logs, subjective taps,
+ * blob (`healthcompanion_peak_v1`) holds today's substance logs, subjective taps,
  * and profile. WHOOP signals are pulled separately from
  * `wearable_data` via server props — they're truth-of-the-world signals,
  * not user-owned state we want to dual-write.
@@ -28,7 +28,7 @@ import { SUBSTANCES, QUICK_LOG_KEYS } from './substances'
 import { getLocalDateKey } from '@/lib/dates'
 import { mirrorPeakToSupabase } from './sync'
 
-export const STORAGE_KEY = 'vitality_peak_v1'
+export const STORAGE_KEY = 'healthcompanion_peak_v1'
 
 const DEFAULT_STATE: PeakState = {
   version: 1,

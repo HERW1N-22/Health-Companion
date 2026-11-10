@@ -1,16 +1,16 @@
 /* ============================================================================
- * vitality-theme.js  —  the entire "Vitality" look in ONE drop-in file.
+ * healthcompanion-theme.js  —  the entire "Health Companion" look in ONE drop-in file.
  *
- *   <script src="vitality-theme.js"></script>
+ *   <script src="healthcompanion-theme.js"></script>
  *
  * Adding that one line to any static HTML page injects:
  *   1. Google Fonts (Inter · Newsreader serif · JetBrains Mono)
- *   2. A <style> with the Vitality design tokens + base look + glass cards +
+ *   2. A <style> with the HealthCompanion design tokens + base look + glass cards +
  *      mint buttons/inputs + grain/aurora/mountains/particles CSS
  *   3. The backdrop DOM (#vt-backdrop — aurora · mountains · mist · particles)
  *      behind your content, plus the tiny JS that spawns drifting particles.
  *
- * Design sourced from this repo's canonical Vitality files:
+ * Design sourced from this repo's canonical HealthCompanion files:
  *   tokens / grain ............ app/globals.css
  *   aurora · mountains · mist · particles ... background/mountains-background.html
  *
@@ -23,13 +23,13 @@
  *     wins. Naked pages get the full look; styled pages keep their layout.
  *   - The backdrop is position:fixed; z-index:-1; pointer-events:none, so it
  *     sits behind everything and can never intercept a click.
- *   - Opt out per element with [data-no-vitality] (see bottom of the CSS).
+ *   - Opt out per element with [data-no-healthcompanion] (see bottom of the CSS).
  * ========================================================================== */
 (function () {
   'use strict';
 
-  if (window.__VITALITY_THEME__) return;       // run once even if included twice
-  window.__VITALITY_THEME__ = '1.0';
+  if (window.__HEALTH_COMPANION_THEME__) return;       // run once even if included twice
+  window.__HEALTH_COMPANION_THEME__ = '1.0';
 
   var head = function () { return document.head || document.documentElement; };
 
@@ -86,7 +86,7 @@
     "--vt-mono:'JetBrains Mono',ui-monospace,'SF Mono',Menlo,Consolas,monospace;",
     'color-scheme:dark;}',
 
-    /* ----- global atmosphere (normal specificity; the Vitality "feel") ----- */
+    /* ----- global atmosphere (normal specificity; the HealthCompanion "feel") ----- */
     'html{background:var(--bg);}',
     'body{background:transparent;color:var(--fg);font-family:var(--vt-sans);',
     'font-size:var(--text-base);line-height:1.5;-webkit-font-smoothing:antialiased;',
@@ -123,49 +123,49 @@
     '@media (prefers-reduced-motion:reduce){#vt-backdrop .wb-particles span{animation:none;}}',
 
     /* ----- editorial headings: serif italic is where the personality lives ----- */
-    ':where(h1,h2,h3):not([data-no-vitality]){font-family:var(--vt-serif);font-style:italic;' +
+    ':where(h1,h2,h3):not([data-no-healthcompanion]){font-family:var(--vt-serif);font-style:italic;' +
       'font-weight:400;letter-spacing:-0.01em;line-height:1.1;color:var(--fg);}',
-    ':where(h4,h5,h6):not([data-no-vitality]){font-weight:600;letter-spacing:-0.01em;line-height:1.2;}',
+    ':where(h4,h5,h6):not([data-no-healthcompanion]){font-weight:600;letter-spacing:-0.01em;line-height:1.2;}',
 
     /* ----- glassmorphism cards / panels / sections ----- */
     ':where(.card,section,article,[class*="card"],[class*="Card"],[class*="panel"],[class*="Panel"])' +
-      ':not([data-no-vitality]){background:var(--card-elevated);border:1px solid var(--border);' +
+      ':not([data-no-healthcompanion]){background:var(--card-elevated);border:1px solid var(--border);' +
       'border-radius:var(--radius-lg);-webkit-backdrop-filter:blur(16px) saturate(1.3);' +
       'backdrop-filter:blur(16px) saturate(1.3);box-shadow:var(--glass-shadow);}',
 
     /* ----- buttons (broad, mint accent) ----- */
     ':where(button,.btn,[role="button"],input[type="button"],input[type="reset"])' +
-      ':not([data-no-vitality]){font-family:var(--vt-sans);font-size:var(--text-sm);font-weight:600;' +
+      ':not([data-no-healthcompanion]){font-family:var(--vt-sans);font-size:var(--text-sm);font-weight:600;' +
       'line-height:1;display:inline-flex;align-items:center;justify-content:center;gap:var(--space-2);' +
       'padding:.6875rem var(--space-4);border-radius:var(--radius-md);border:1px solid var(--border);' +
       'background:var(--card-elevated);color:var(--fg);cursor:pointer;' +
       'transition:background var(--duration) var(--ease),border-color var(--duration) var(--ease),' +
       'color var(--duration) var(--ease),transform var(--duration-fast) var(--ease);}',
-    ':where(button,.btn,[role="button"]):not([data-no-vitality]):hover{border-color:var(--mint);background:rgba(110,231,183,.08);}',
-    ':where(button,.btn,[role="button"]):not([data-no-vitality]):active{transform:translateY(1px);}',
-    ':where(button,.btn):not([data-no-vitality]):disabled{opacity:.5;cursor:not-allowed;}',
+    ':where(button,.btn,[role="button"]):not([data-no-healthcompanion]):hover{border-color:var(--mint);background:rgba(110,231,183,.08);}',
+    ':where(button,.btn,[role="button"]):not([data-no-healthcompanion]):active{transform:translateY(1px);}',
+    ':where(button,.btn):not([data-no-healthcompanion]):disabled{opacity:.5;cursor:not-allowed;}',
     /* primary actions get the solid mint fill */
     ':where(button[type="submit"],input[type="submit"],.btn-primary)' +
-      ':not([data-no-vitality]){background:var(--mint);color:var(--mint-ink);border-color:transparent;}',
+      ':not([data-no-healthcompanion]){background:var(--mint);color:var(--mint-ink);border-color:transparent;}',
     ':where(button[type="submit"],input[type="submit"],.btn-primary)' +
-      ':not([data-no-vitality]):hover{background:var(--mint-hover);border-color:transparent;}',
+      ':not([data-no-healthcompanion]):hover{background:var(--mint-hover);border-color:transparent;}',
 
     /* ----- inputs (excludes toggles/sliders so they keep native behaviour) ----- */
     ':where(input:not([type=button]):not([type=submit]):not([type=reset]):not([type=checkbox])' +
       ':not([type=radio]):not([type=range]):not([type=color]):not([type=file]):not([type=image]),' +
-      'select,textarea):not([data-no-vitality]){font-family:var(--vt-sans);font-size:var(--text-sm);' +
+      'select,textarea):not([data-no-healthcompanion]){font-family:var(--vt-sans);font-size:var(--text-sm);' +
       'color:var(--fg);background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);' +
       'padding:.6875rem var(--space-3);outline:none;' +
       'transition:border-color var(--duration) var(--ease),background var(--duration) var(--ease);}',
-    ':where(input,textarea,select):not([data-no-vitality])::placeholder{color:var(--muted);}',
-    ':where(input,select,textarea):not([data-no-vitality]):hover{border-color:var(--border-strong);}',
-    ':where(input,select,textarea):not([data-no-vitality]):focus{border-color:var(--mint);background:rgba(110,231,183,.04);}',
+    ':where(input,textarea,select):not([data-no-healthcompanion])::placeholder{color:var(--muted);}',
+    ':where(input,select,textarea):not([data-no-healthcompanion]):hover{border-color:var(--border-strong);}',
+    ':where(input,select,textarea):not([data-no-healthcompanion]):focus{border-color:var(--mint);background:rgba(110,231,183,.04);}',
 
     /* ----- links + helpers ----- */
-    ':where(a):not([data-no-vitality]){color:inherit;text-decoration:none;transition:color var(--duration) var(--ease);}',
-    ':where(a.link,.link):not([data-no-vitality]){color:var(--mint);font-weight:500;}',
-    ':where(a.link,.link):not([data-no-vitality]):hover{color:var(--mint-hover);}',
-    ':where(code,kbd,samp,pre,.mono):not([data-no-vitality]){font-family:var(--vt-mono);}',
+    ':where(a):not([data-no-healthcompanion]){color:inherit;text-decoration:none;transition:color var(--duration) var(--ease);}',
+    ':where(a.link,.link):not([data-no-healthcompanion]){color:var(--mint);font-weight:500;}',
+    ':where(a.link,.link):not([data-no-healthcompanion]):hover{color:var(--mint-hover);}',
+    ':where(code,kbd,samp,pre,.mono):not([data-no-healthcompanion]){font-family:var(--vt-mono);}',
 
     /* ----- opt-in utility classes (normal specificity, additive) ----- */
     '.serif{font-family:var(--vt-serif);font-weight:400;letter-spacing:-0.01em;}',

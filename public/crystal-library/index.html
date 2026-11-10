@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>Vitality — Crystal Library</title>
+  <title>HealthCompanion — Crystal Library</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:ital,wght@1,400;1,500&display=swap" rel="stylesheet" />
@@ -185,7 +185,7 @@
 
   <div class="wrap">
     <header class="header">
-      <div class="eyebrow">VITALITY · STUDIO · MMXXVI</div>
+      <div class="eyebrow">HEALTH_COMPANION · STUDIO · MMXXVI</div>
       <h1>The <em>crystal</em> library.</h1>
       <p class="lede">
         Every gem rendered with the same scene that powers the landing hero —
@@ -209,7 +209,7 @@
     <div class="home-divider"><span>Icon reference — what each mark means</span></div>
     <div class="icon-grid" id="grid-icons"></div>
 
-    <div class="home-divider"><span>Nutrition &amp; tracking — the VitalityIcon set</span></div>
+    <div class="home-divider"><span>Nutrition &amp; tracking — the HealthCompanionIcon set</span></div>
     <div class="icon-grid" id="grid-icons-fuel"></div>
 
     <div class="footer">A study in restraint · Built by twins</div>
@@ -1204,7 +1204,7 @@
 
     /* ── Hero ─────────────────────────────────────────────────── */
     mountCard(document.getElementById('grid-hero'),
-      { shape: 'icosahedron', glyph: 'V', label: 'Vitality', sub: 'Icosa · V' });
+      { shape: 'icosahedron', glyph: 'V', label: 'Health Companion', sub: 'Icosa · V' });
 
     /* ── Behavior archetypes — same engine, different personality.
        Each pairs a glyph from the new tech-minimal set with timing,
@@ -1311,9 +1311,9 @@
        renderer) so the marks read as pure typography. Same 5-layer
        glow stack as the gems, so the visual language is identical. */
 
-    /* ── Vitality line-icon set (the VitalityIcon.tsx library) ──────
+    /* ── HealthCompanion line-icon set (the HealthCompanionIcon.tsx library) ──────
        These marks are authored as 24-grid SVG paths in the app
-       (components/VitalityIcon.tsx). To render them here with the SAME
+       (components/HealthCompanionIcon.tsx). To render them here with the SAME
        neon stack as the gem glyphs, we map the path data into 512²
        space with a single matrix — no redraw, so they stay pixel-faithful
        to what ships. Stroke width is left to renderFlatGlyph's passes
@@ -1420,7 +1420,7 @@
     ];
 
     const ICON_DOCS = [
-      { glyph: 'V',        name: 'V',        desc: 'Brand mark · Vitality' },
+      { glyph: 'V',        name: 'V',        desc: 'Brand mark · HealthCompanion' },
       { glyph: 'CHECK',    name: 'CHECK',    desc: 'Done · Confirmation' },
       { glyph: 'PLUS',     name: 'PLUS',     desc: 'Add · Extend · New' },
       { glyph: 'HEX',      name: 'HEX',      desc: 'Foundation · Structure' },

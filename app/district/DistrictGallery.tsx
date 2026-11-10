@@ -11,7 +11,7 @@
  *    uses, flips the button to the "Added" ghost state, and shows a toast that
  *    offers a small "View on your dashboard" link. No redirect.
  *  - Logged OUT: Add stashes ONLY the opaque tile id in localStorage
- *    ('vitality:pending-tile' = { t, id }) and routes to /signup?next=/app. The
+ *    ('healthcompanion:pending-tile' = { t, id }) and routes to /signup?next=/app. The
  *    consume effect in DashboardGrid lands the tile post-auth, always resolving
  *    the envelope from the first-party catalog / RLS-filtered published_tiles,
  *    never from the stash. Arbitrary HTML is never installed.
@@ -114,7 +114,7 @@ export default function DistrictGallery({ featured, categories, community }: Dis
   // safeNextPath on the auth page, so no open redirect.
   function stashAndSignup(t: 'featured' | 'published', id: string) {
     try {
-      localStorage.setItem('vitality:pending-tile', JSON.stringify({ t, id }))
+      localStorage.setItem('healthcompanion:pending-tile', JSON.stringify({ t, id }))
     } catch {
       /* private mode / storage full: signup still happens, the tile just won't ride */
     }
@@ -263,7 +263,7 @@ export default function DistrictGallery({ featured, categories, community }: Dis
         aria-hidden={openTile ? true : undefined}
       >
         <div className={styles.bar}>
-          <Link href="/" className={styles.mark} aria-label="Vitality">
+          <Link href="/" className={styles.mark} aria-label="Health Companion">
             V
           </Link>
           <span className={styles.barSpacer} />
@@ -435,7 +435,7 @@ export default function DistrictGallery({ featured, categories, community }: Dis
                             by @{t.handle}
                           </Link>
                         ) : (
-                          <span className={styles.byline}>a Vitality maker</span>
+                          <span className={styles.byline}>a HealthCompanion maker</span>
                         )}
                       </div>
                       <button
@@ -473,7 +473,7 @@ export default function DistrictGallery({ featured, categories, community }: Dis
           </span>
           <div className={styles.circleBody}>
             <p>
-              Every tile here is <b>free to add</b>. Make a Vitality and your dashboard fills with the ones you pick.
+              Every tile here is <b>free to add</b>. Make a HealthCompanion and your dashboard fills with the ones you pick.
             </p>
             <span className={styles.circleSmall}>No credit card. Your tiles, your dashboard, always yours.</span>
           </div>

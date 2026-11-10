@@ -1,11 +1,11 @@
-# Vitality DNA: Icons + Tile Art (inlinable SVG)
+# Health Companion DNA: Icons + Tile Art (inlinable SVG)
 
 Everything here is plain HTML, CSS, and inline SVG. No libraries, no React, no
 Three.js. The core app uses 3D Three.js gems, but those are core-app only. Tiles
 use flat SVG that captures the same idea. Where this doc references a "gem", it
 means a flat SVG translation, never a WebGL canvas.
 
-Two layers make a tile feel Vitality-grade:
+Two layers make a tile feel Health Companion-grade:
 1. A line-art icon set (the glyph vocabulary) for buttons, labels, list rows.
 2. A living background motif keyed to the tile's theme (the tile-art language).
 
@@ -60,7 +60,7 @@ the same idea the backgrounds use at large scale (see "living dots" in tile art)
 ## 2. Ready-to-inline glyph snippets
 
 All of these drop straight inside the SVG frame above. Pulled from the app's
-real icon set (`VitalityIcon`, `SubstanceIcon`, `NutritionIcon`). Pick the one
+real icon set (`Health CompanionIcon`, `SubstanceIcon`, `NutritionIcon`). Pick the one
 that matches your tile's data.
 
 ```html
@@ -412,7 +412,7 @@ stroked paths, scaled to 24x24 they become the icons in section 2. The mapping:
 
 | Mark    | Meaning              | Flat shape |
 |---------|----------------------|-----------|
-| V       | Vitality / brand     | a wide checkmark `M-28 -20 L0 28 L28 -20` |
+| V       | Health Companion / brand     | a wide checkmark `M-28 -20 L0 28 L28 -20` |
 | CHECK   | done / completion    | sharp tick |
 | PLUS    | add / new            | clean cross |
 | HEX     | foundation / steady  | 6-sided outline |
@@ -433,7 +433,7 @@ tile gets BAR or ASCEND, a focus tile gets RINGS. Keep it to one mark.
 
 ---
 
-## 6. Quick checklist for a Vitality-grade tile visual
+## 6. Quick checklist for a Health Companion-grade tile visual
 
 - Icons: `viewBox 0 0 24 24`, `fill="none"`, `stroke="currentColor"`,
   `stroke-width="1.7"`, round caps and joins. Color from CSS.

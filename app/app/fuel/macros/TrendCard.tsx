@@ -3,7 +3,7 @@
 import { useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 
-import VitalityIcon from '@/components/VitalityIcon'
+import HealthCompanionIcon from '@/components/HealthCompanionIcon'
 import { kgToDisplay, unitLabel, type Units } from '@/lib/units'
 import type { GoalBand } from '@/lib/nutrition/adaptive'
 import styles from '../fuelSections.module.css'
@@ -301,7 +301,7 @@ export default function TrendCard({ smoothed, dailyKcal, band, units, maintenanc
           </div>
           <button className={styles.mSee} onClick={() => router.push('/app/fitness/progress')}>
             See full chart
-            <VitalityIcon name="week" size={13} />
+            <HealthCompanionIcon name="week" size={13} />
           </button>
         </>
       )}

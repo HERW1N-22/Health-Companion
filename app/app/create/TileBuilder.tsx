@@ -18,11 +18,11 @@ import styles from './tileBuilder.module.css'
 import '@/components/libraryViz.css'
 
 /** One-time Claude Code hookup for the honesty-gate handoff. */
-const MCP_ADD_CMD = 'claude mcp add --transport http vitality http://localhost:3000/api/mcp/mcp'
+const MCP_ADD_CMD = 'claude mcp add --transport http healthcompanion http://localhost:3000/api/mcp/mcp'
 
 /**
  * TileBuilder - the build-your-own EDITOR (BUILD79: no free text anywhere),
- * staged as three acts on the signature Vitality world.
+ * staged as three acts on the signature HealthCompanion world.
  *
  * Act 1 THE SHELF: six shape cards (the whole menu, visible) + the Big Brother
  *                  card ("something bigger? that one deserves Claude").
@@ -283,7 +283,7 @@ export default function TileBuilder({ userId, initialIdea = '' }: { userId: stri
   const [glowGo, setGlowGo] = useState(false)
   const [fsOpen, setFsOpen] = useState(false)
   // The Big Brother storefront: opened by the "something bigger" card - the
-  // honest pitch that real apps are built with Claude + the Vitality MCP.
+  // honest pitch that real apps are built with Claude + the HealthCompanion MCP.
   const [handoff, setHandoff] = useState(false)
   const [cmdCopied, setCmdCopied] = useState(false)
   // The finder bar: FINDS pieces in the library, never generates.
@@ -337,12 +337,12 @@ export default function TileBuilder({ userId, initialIdea = '' }: { userId: stri
   useEffect(() => {
     function onMessage(e: MessageEvent) {
       const m = e.data
-      if (!m || m.source !== 'vitality-tile') return
+      if (!m || m.source !== 'healthcompanion-tile') return
       const src = e.source as Window | null
       if (!src) return
       if (m.type === 'load') {
         src.postMessage(
-          { source: 'vitality-host', type: 'load:result', id: m.id, data: previewDays.current },
+          { source: 'healthcompanion-host', type: 'load:result', id: m.id, data: previewDays.current },
           '*',
         )
       } else if (m.type === 'save') {
@@ -691,7 +691,7 @@ export default function TileBuilder({ userId, initialIdea = '' }: { userId: stri
       <div className={styles.burstLayer} ref={burstRef} aria-hidden />
 
       {/* Always-there way home */}
-      <Link href="/app" className={styles.homePill} aria-label="Back to your Vitality dashboard">
+      <Link href="/app" className={styles.homePill} aria-label="Back to your HealthCompanion dashboard">
         <svg viewBox="0 0 24 24">
           <path d={P.chev} />
         </svg>
@@ -717,7 +717,7 @@ export default function TileBuilder({ userId, initialIdea = '' }: { userId: stri
         {/* ============ THE BIG BROTHER STOREFRONT ============
             Opened by the "something bigger" card: the honest pitch that real
             apps - live numbers, AI, whole layouts - are built with Claude +
-            the Vitality MCP, and land on this same dashboard. */}
+            the HealthCompanion MCP, and land on this same dashboard. */}
         {phase === 'opening' && handoff && (
           <section className={`${styles.act} ${styles.actOpen} ${leaving ? styles.leave : ''}`}>
             <div className={styles.handoffWrap}>
@@ -733,7 +733,7 @@ export default function TileBuilder({ userId, initialIdea = '' }: { userId: stri
               <p className={styles.hVee}>
                 <span className={styles.hVeeTag}>VEE</span>
                 a whole app, live numbers, a mind of its own - more than six simple shapes. In
-                Claude Code, with the Vitality MCP, you build the real thing: pro grade,
+                Claude Code, with the HealthCompanion MCP, you build the real thing: pro grade,
                 on-brand, still yours.
               </p>
 
@@ -745,7 +745,7 @@ export default function TileBuilder({ userId, initialIdea = '' }: { userId: stri
                 <div className={styles.hStep}>
                   <span className={styles.hStepNum}>2</span>
                   <span className={styles.hStepBody}>
-                    Connect Vitality once
+                    Connect HealthCompanion once
                     <code className={styles.hCmd}>{MCP_ADD_CMD}</code>
                   </span>
                 </div>
@@ -783,7 +783,7 @@ export default function TileBuilder({ userId, initialIdea = '' }: { userId: stri
               <svg viewBox="0 0 24 24">
                 <path d={P.spark} />
               </svg>
-              VITALITY · QUICK TILE
+              HEALTH_COMPANION · QUICK TILE
             </div>
             <h1 className={styles.oTitle}>
               What do you want

@@ -1,6 +1,6 @@
 # Bugs already killed
 
-Two months of hard-won fixes from the Vitality repo, distilled for sealed single-file HTML tiles. Each line: Symptom -> the rule. If you build a tile, do not re-discover these.
+Two months of hard-won fixes from the Health Companion repo, distilled for sealed single-file HTML tiles. Each line: Symptom -> the rule. If you build a tile, do not re-discover these.
 
 ## Animation and motion
 

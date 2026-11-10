@@ -1,6 +1,6 @@
 'use client'
 
-import VitalityIcon from '@/components/VitalityIcon'
+import HealthCompanionIcon from '@/components/HealthCompanionIcon'
 import styles from '../fuelSections.module.css'
 
 // The three-step "how it works" explainer, opened from the info button on the
@@ -17,7 +17,7 @@ const STEPS = [
     title: 'It learns you',
     body: (
       <>
-        Vitality finds your <b>true calories</b> from the results, and sharpens every day.
+        HealthCompanion finds your <b>true calories</b> from the results, and sharpens every day.
       </>
     ),
   },
@@ -34,10 +34,10 @@ const STEPS = [
 
 // Timeline node glyphs — all canonical icon weight (stroke 1.7, round) so the
 // three nodes read as one even set. 'trend' uses the canonical trend-up arrow
-// (VitalityIcon "bulk") which is optically centered, matching 'scale'.
+// (HealthCompanionIcon "bulk") which is optically centered, matching 'scale'.
 function StepGlyph({ name }: { name: 'scale' | 'trend' | 'cycle' }) {
-  if (name === 'scale') return <VitalityIcon name="scale" size={19} />
-  if (name === 'trend') return <VitalityIcon name="bulk" size={19} />
+  if (name === 'scale') return <HealthCompanionIcon name="scale" size={19} />
+  if (name === 'trend') return <HealthCompanionIcon name="bulk" size={19} />
   return (
     <svg
       width="19"

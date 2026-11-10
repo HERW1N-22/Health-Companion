@@ -8,7 +8,7 @@ import styles from './pricing.module.css'
  * ConnectorDemo — the "what the connectors actually do" moment on Pricing.
  *
  * A phone (same titanium-chassis frame as the landing's HeroPhones) running
- * the real Claude app with Vitality connected. A scripted exchange plays: you
+ * the real Claude app with HealthCompanion connected. A scripted exchange plays: you
  * ask a vague question, Claude reads your connector data and answers. It
  * cycles between two fully-honest examples — money and recovery.
  *
@@ -154,7 +154,7 @@ export default function ConnectorDemo() {
               <div className={styles.connectorBar}>
                 <span className={styles.connectorPill}>
                   <span className={styles.connectorDot} aria-hidden />
-                  Vitality connected
+                  HealthCompanion connected
                 </span>
                 <span className={styles.connectorScope}>
                   subscriptions · portfolio · fitness

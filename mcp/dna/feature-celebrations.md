@@ -1,4 +1,4 @@
-# Vitality celebration moments (sealed-tile recipes)
+# Health Companion celebration moments (sealed-tile recipes)
 
 The "you did it" screens that break minimalism on purpose: a gem burst, a warm
 character voice, one big payoff. Distilled into vanilla HTML, CSS, and JS you can

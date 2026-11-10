@@ -38,8 +38,8 @@ import styles from './coachSection.module.css'
 // effect's deps, which would loop forever (any caller that omits restrictions).
 const NO_RESTRICTIONS: NutritionRestriction[] = []
 
-const CELEBRATED_KEY = 'vitality_coach_celebrated_v1'
-const ctxKey = (dayKey: string, id: string) => `vitality_coach_ctxq_${dayKey}_${id}`
+const CELEBRATED_KEY = 'healthcompanion_coach_celebrated_v1'
+const ctxKey = (dayKey: string, id: string) => `healthcompanion_coach_ctxq_${dayKey}_${id}`
 const CTX_IDS = ['preworkout_fuel_good', 'heavy_preworkout_fat'] as const
 
 const BURST_PARTICLES = Array.from({ length: 14 }, (_, i) => {
@@ -74,7 +74,7 @@ interface CoachSectionProps {
 
 // The day score, shown simply: a big number out of ten in the display font,
 // mint when good / amber when it needs work. No ring (Alex, 2026-07-11: "revert
-// back to one score, just the two Vitality colors and the font, no stupid rings").
+// back to one score, just the two HealthCompanion colors and the font, no stupid rings").
 // Keeps the count-up so a fresh score still animates in.
 function ScoreNumber({ score }: { score: number }) {
   const tone = score >= 7 ? 'good' : 'watch'

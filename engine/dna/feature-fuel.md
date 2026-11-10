@@ -1,6 +1,6 @@
 # Fuel feature recipes (copy-paste, sealed HTML)
 
-Vitality's Fuel module has the gold interaction patterns: a pre-scan quiz, a category-grid food picker, a meal breakdown card, and an analyzing overlay. Below are plain HTML/CSS/JS recipes distilled from the real React source so a tile can reuse the exact feel. No libraries, no React. Mint accent on pure black. Source for full sets: `app/app/fuel/macros/` (ScanContextSheet, FoodSearchPicker, Macros, AnalyzingOverlay, categoryMeta).
+Health Companion's Fuel module has the gold interaction patterns: a pre-scan quiz, a category-grid food picker, a meal breakdown card, and an analyzing overlay. Below are plain HTML/CSS/JS recipes distilled from the real React source so a tile can reuse the exact feel. No libraries, no React. Mint accent on pure black. Source for full sets: `app/app/fuel/macros/` (ScanContextSheet, FoodSearchPicker, Macros, AnalyzingOverlay, categoryMeta).
 
 Shared tokens (drop in `:root`): `--mint:#6ee7b7; --mint-hi:#a7f3d0; --carb:#a9b2f5; --amber:#F59E0B; --bg:#000; --rule:rgba(255,255,255,.08); --ink-dim:rgba(255,255,255,.62); --ink-faint:rgba(255,255,255,.4); --spring:cubic-bezier(.34,1.56,.64,1); --ease:cubic-bezier(0.2, 0.8, 0.2, 1); --ease-premium:cubic-bezier(0.16, 1, 0.3, 1);`
 

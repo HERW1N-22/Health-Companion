@@ -2,8 +2,8 @@ import type { Metadata } from 'next'
 import GemCoach from './GemCoach'
 
 export const metadata: Metadata = {
-  title: 'Gem Coach concepts · Vitality',
-  description: 'Concept demo for the Vitality coach gem family — real gems, shape + color + personality.',
+  title: 'Gem Coach concepts · Health Companion',
+  description: 'Concept demo for the HealthCompanion coach gem family — real gems, shape + color + personality.',
 }
 
 // Public route (not under /app, /account, or /welcome — see middleware), so the

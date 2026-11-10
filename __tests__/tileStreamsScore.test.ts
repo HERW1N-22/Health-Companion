@@ -7,7 +7,7 @@ import {
   buildStreamWindows,
   BASELINE_SCORE,
   type StreamWindow,
-} from '@/lib/vitality/contributors/tileStreams'
+} from '@/lib/healthcompanion/contributors/tileStreams'
 import { getRecentDateKeys } from '@/lib/dates'
 import type { TileStreamRow, TileReportRow } from '@/lib/tiles/reportContract'
 

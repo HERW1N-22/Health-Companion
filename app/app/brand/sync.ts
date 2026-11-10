@@ -6,7 +6,7 @@ import type { BrandState } from './types'
 /**
  * Best-effort mirror of the local brand state into Supabase (`brand_state`, one
  * jsonb row per user — the whole BrandState blob; see BUILD36 for why a single
- * blob is the right shape here). localStorage (`vitality_brand_v1`) stays the
+ * blob is the right shape here). localStorage (`healthcompanion_brand_v1`) stays the
  * PRIMARY client store — this only adds a durable, MCP-readable copy. Failures
  * are swallowed so the UI is never affected.
  */

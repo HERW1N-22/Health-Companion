@@ -1,6 +1,6 @@
-# Vitality feature interactions (sealed-tile recipes)
+# Health Companion feature interactions (sealed-tile recipes)
 
-The motions that make Vitality feel premium, distilled into vanilla HTML, CSS,
+The motions that make Health Companion feel premium, distilled into vanilla HTML, CSS,
 and JS you can paste into one sealed tile file. No libraries, no React.
 Source: app/app/fuel/macros/MyMacrosSheet + components/Quiz.tsx + app/globals.css.
 

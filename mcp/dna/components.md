@@ -1,4 +1,4 @@
-# Vitality tile components
+# Health Companion tile components
 
 Copy-paste blocks for a sealed single-file HTML tile. No libraries, no React. Inline everything.
 Color law: mint = good/brand, azure = data, amber = caution, never red, iris is Vee-only (do not use iris for a general tile). No emojis in UI, use inline SVG.

@@ -1,8 +1,8 @@
 {
-  "name": "vitality-tile-engine",
-  "what": "A forkable slice of Vitality: the design DNA + real tiles that let Claude Code build Vitality-native dashboard tiles as ambient context. No commands, no keys, no app.",
+  "name": "healthcompanion-tile-engine",
+  "what": "A forkable slice of HealthCompanion: the design DNA + real tiles that let Claude Code build HealthCompanion-native dashboard tiles as ambient context. No commands, no keys, no app.",
   "selfContained": true,
-  "takesFrom": "vitality-only",
+  "takesFrom": "healthcompanion-only",
   "entry": "ENGINE.md",
   "selfCheck": "lint.mjs",
   "dna": [

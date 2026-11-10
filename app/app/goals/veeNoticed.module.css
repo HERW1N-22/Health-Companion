@@ -1,4 +1,4 @@
-/* "Vitality noticed" — the full §01 surface (lede + goal-ticker graphs + life
+/* "HealthCompanion noticed" — the full §01 surface (lede + goal-ticker graphs + life
    chips + the cycling notice card + footer). Ported from the loved
    public/vee-notice-preview.html. Palette scoped to .noticed so the look is
    exact. iris = the AI layer, mint = your data/wins, amber = heads-up. Never red. */
@@ -57,7 +57,7 @@
 .gdRead { font-size: 0.92rem; line-height: 1.5; color: var(--n-fg); margin-bottom: 13px; }
 .gdActs { display: flex; gap: 9px; flex-wrap: wrap; margin-top: 13px; }
 
-/* Layer B — the per-goal "how Vitality gets you there" guide inside the drop */
+/* Layer B — the per-goal "how HealthCompanion gets you there" guide inside the drop */
 .guide { margin-top: 14px; padding-top: 13px; border-top: 1px solid var(--n-border); }
 .guideHd { display: flex; align-items: center; gap: 7px; font-family: var(--n-mono); font-size: 0.5rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--n-muted); margin: 0 2px 10px; }
 .guideHd svg { width: 11px; height: 11px; color: var(--iris-hi); }

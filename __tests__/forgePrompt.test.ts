@@ -7,8 +7,8 @@
  *
  * code: the Claude Code power lane. It must stay ACCURATE to the real MCP
  * surface (mcp/src/tools.ts): connect once with --scope user, then
- * vitality_tile_kit -> hand-author -> check_tile to 0 errors ->
- * vitality_add_tile with kind + born classification.
+ * healthcompanion_tile_kit -> hand-author -> check_tile to 0 errors ->
+ * healthcompanion_add_tile with kind + born classification.
  *
  * Both: zero em dashes, ever.
  */
@@ -29,7 +29,7 @@ describe('buildForgePrompt - both lanes', () => {
 
   it.each(variants)('%s demands one sealed bridge-wired file', (_name, p) => {
     expect(p).toContain('sealed')
-    expect(p).toContain('Vitality.report')
+    expect(p).toContain('HealthCompanion.report')
     expect(p.toLowerCase()).toContain('no em dashes')
   })
 
@@ -68,7 +68,7 @@ describe('buildForgePrompt - the universal brief (drop-zone lane)', () => {
 
   it('carries the FULL spec inline so a no-fetch AI still has the rulebook', () => {
     expect(brief).toContain('THE BUILD SPEC')
-    expect(brief).toContain('VITALITY TILE SPEC')
+    expect(brief).toContain('HEALTH_COMPANION TILE SPEC')
     expect(brief).toContain('THE DESIGN DNA')
     expect(brief).toContain('#6EE7B7')
     // The spec must match the real linter: color-scheme is forbidden, not required.
@@ -76,8 +76,8 @@ describe('buildForgePrompt - the universal brief (drop-zone lane)', () => {
   })
 
   it('assumes no tools: never names the MCP tool surface', () => {
-    expect(brief).not.toContain('vitality_tile_kit')
-    expect(brief).not.toContain('vitality_add_tile')
+    expect(brief).not.toContain('healthcompanion_tile_kit')
+    expect(brief).not.toContain('healthcompanion_add_tile')
     expect(brief).not.toContain(FORGE_CONNECT_CMD)
   })
 
@@ -98,9 +98,9 @@ describe('buildForgePrompt - the Claude Code lane (MCP ritual)', () => {
   })
 
   it('names the real MCP tools, staged kit then check then add', () => {
-    const kit = code.lastIndexOf('vitality_tile_kit')
+    const kit = code.lastIndexOf('healthcompanion_tile_kit')
     const check = code.lastIndexOf('check_tile')
-    const add = code.lastIndexOf('vitality_add_tile')
+    const add = code.lastIndexOf('healthcompanion_add_tile')
     expect(kit).toBeGreaterThan(-1)
     expect(check).toBeGreaterThan(kit)
     expect(add).toBeGreaterThan(check)
@@ -125,8 +125,8 @@ describe('buildForgePrompt - the Claude Code lane (MCP ritual)', () => {
     expect(code).toContain('veeNote')
   })
 
-  it('routes a write refusal through vitality_connection first', () => {
-    expect(code).toContain('vitality_connection')
+  it('routes a write refusal through healthcompanion_connection first', () => {
+    expect(code).toContain('healthcompanion_connection')
     expect(code).toContain('do not hand me html to paste')
   })
 })

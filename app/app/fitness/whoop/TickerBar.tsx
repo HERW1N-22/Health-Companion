@@ -11,7 +11,7 @@ import styles from './whoop.module.css'
  *   · value   — current value as displayed
  *   · spark   — mini sparkline from whatever recent history we have
  *   · delta   — signed change vs baseline / weekly avg / target, with unit
- *   · tone    — vitality canon: mint (good) / amber (watch) / red (urgent)
+ *   · tone    — healthcompanion canon: mint (good) / amber (watch) / red (urgent)
  *
  * Live behaviour:
  *   · the track scrolls horizontally (existing marquee)
@@ -250,10 +250,10 @@ export default function TickerBar({ d }: { d: TickerDataLike }) {
   const rolled = [...items, ...items]
 
   return (
-    <div className={styles.ticker} role="status" aria-label="Vitality live insights">
+    <div className={styles.ticker} role="status" aria-label="HealthCompanion live insights">
       <div className={styles.tickerEyebrow}>
         <span className={styles.tickerPulse} aria-hidden />
-        Vitality · Live
+        HealthCompanion · Live
       </div>
       <div className={styles.tickerScroll}>
         <div className={styles.tickerTrack}>

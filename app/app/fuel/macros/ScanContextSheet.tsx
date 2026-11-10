@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import VitalityIcon, { type IconName } from '@/components/VitalityIcon'
+import HealthCompanionIcon, { type IconName } from '@/components/HealthCompanionIcon'
 import type { MealType } from '@/lib/nutrition/types'
 import { FOOD_SOURCES, FAT_METER, FAT_LEVELS, type FoodSource, type FoodSourceDef, type FatLevel } from '@/lib/nutrition/foodSource'
 import styles from './scanSheet.module.css'
@@ -56,7 +56,7 @@ function SourceInfoCard({ def, onClose }: { def: FoodSourceDef; onClose: () => v
     <div className={styles.infoScrim} onClick={onClose} role="dialog" aria-modal="true" aria-label={def.label}>
       <div className={styles.infoCard} onClick={(e) => e.stopPropagation()}>
         <div className={styles.infoDisc}>
-          <VitalityIcon name={def.icon} size={26} />
+          <HealthCompanionIcon name={def.icon} size={26} />
         </div>
         <div className={styles.infoTitle}>{def.label}</div>
         <div className={styles.infoMeaning}>{def.meaning}</div>
@@ -137,7 +137,7 @@ export default function ScanContextSheet({ photoUrl, defaultMealType, onCancel, 
         <div className={styles.detail}>
           <SectionLabel active={foodSummary.trim().length > 0} delay={0.16}>What&apos;s on the plate?</SectionLabel>
           <div className={`${styles.detailbox} ${styles.anim}`} style={{ animationDelay: '0.2s' }}>
-            <VitalityIcon name="search" size={15} />
+            <HealthCompanionIcon name="search" size={15} />
             <input
               value={foodSummary}
               onChange={(e) => setFoodSummary(e.target.value)}
@@ -161,9 +161,9 @@ export default function ScanContextSheet({ photoUrl, defaultMealType, onCancel, 
               style={{ animationDelay: `${0.34 + i * 0.04}s` }}
               onClick={() => setMealType(mealType === meal.id ? 'auto' : meal.id)}
             >
-              <span className={styles.optIcon}><VitalityIcon name={meal.icon} size={17} /></span>
+              <span className={styles.optIcon}><HealthCompanionIcon name={meal.icon} size={17} /></span>
               <span className={styles.optLabel}>{meal.label}</span>
-              <span className={styles.check} aria-hidden><VitalityIcon name="check" size={12} strokeWidth={2.6} /></span>
+              <span className={styles.check} aria-hidden><HealthCompanionIcon name="check" size={12} strokeWidth={2.6} /></span>
             </button>
           ))}
         </div>
@@ -178,9 +178,9 @@ export default function ScanContextSheet({ photoUrl, defaultMealType, onCancel, 
               style={{ animationDelay: `${0.5 + i * 0.04}s` }}
               onClick={() => pickSource(s.id)}
             >
-              <span className={styles.optIcon}><VitalityIcon name={s.icon} size={17} /></span>
+              <span className={styles.optIcon}><HealthCompanionIcon name={s.icon} size={17} /></span>
               <span className={styles.optLabel}>{s.label}</span>
-              <span className={styles.check} aria-hidden><VitalityIcon name="check" size={12} strokeWidth={2.6} /></span>
+              <span className={styles.check} aria-hidden><HealthCompanionIcon name="check" size={12} strokeWidth={2.6} /></span>
               <span
                 className={styles.optInfo}
                 role="button"
@@ -221,7 +221,7 @@ export default function ScanContextSheet({ photoUrl, defaultMealType, onCancel, 
 
         <div className={`${styles.actions} ${styles.anim}`} style={{ animationDelay: '0.66s' }}>
           <button type="button" className={styles.scan} onClick={scan}>
-            <VitalityIcon name="sparkles" size={17} />
+            <HealthCompanionIcon name="sparkles" size={17} />
             Scan my plate
           </button>
         </div>

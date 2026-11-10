@@ -1,5 +1,5 @@
 -- ===========================================================================
--- noticed_ledger — the "Vitality noticed" cooldown ledger
+-- noticed_ledger — the "HealthCompanion noticed" cooldown ledger
 -- ===========================================================================
 -- The §01 cross-domain card (caffeine x recovery, sleep x training, ...) should
 -- land like a gift, not a feed of repeats. This table rests each cross-domain

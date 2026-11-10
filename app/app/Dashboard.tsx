@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { useCallback, useEffect, useRef, useState, useTransition } from 'react'
 import styles from './dashboard.module.css'
 import DashboardHeader from './DashboardHeader'
-import VitalityIntro from './VitalityIntro'
+import HealthCompanionIntro from './HealthCompanionIntro'
 import WelcomeBackdrop from '@/components/WelcomeBackdrop'
 import DashboardHeaderGem from './DashboardHeaderGem'
 import DashboardGrid from './DashboardGrid'
@@ -17,24 +17,24 @@ import { dashboardChrome, backgroundAccent, DEFAULT_CHROME, type DashboardChrome
 import { safeNextPath } from '@/lib/auth/safe-next'
 import type { Units } from '@/lib/units'
 import type { OnboardingTask } from '@/lib/onboardingTasks'
-import type { ScoreState } from '@/lib/vitality/score'
-import type { DashboardTileStats } from '@/lib/vitality/dashboardStats'
+import type { ScoreState } from '@/lib/healthcompanion/score'
+import type { DashboardTileStats } from '@/lib/healthcompanion/dashboardStats'
 
 /** The tile-entrance library (see dashboard.module.css). One is picked at
  *  random per app-open; sessionStorage remembers the last pick so two opens
  *  in a row never feel identical. */
 const ENTRANCES = ['rise', 'spring', 'blur', 'slide', 'settle', 'drift'] as const
 
-/** "Vitality, I'm home" entry gate. The full ritual (3 acts + questions +
+/** "HealthCompanion, I'm home" entry gate. The full ritual (3 acts + questions +
  *  close) shipped with the 4-lane mega-build; the gem tap is live. */
 const IMHOME_ENABLED = true
 
 function pickEntrance(): string {
   let i = Math.floor(Math.random() * ENTRANCES.length)
   try {
-    const last = window.sessionStorage.getItem('vitality:entrance-last')
+    const last = window.sessionStorage.getItem('healthcompanion:entrance-last')
     if (ENTRANCES[i] === last) i = (i + 1) % ENTRANCES.length
-    window.sessionStorage.setItem('vitality:entrance-last', ENTRANCES[i])
+    window.sessionStorage.setItem('healthcompanion:entrance-last', ENTRANCES[i])
   } catch {
     /* storage unavailable: any pick works */
   }
@@ -45,7 +45,7 @@ interface DashboardProps {
   firstName: string | null
   units: Units
   /** Onboarding tasks + user id passed through to SettingsSheet so the
-   *  "Your Vitality setup" entry can render once the user is fully set up. */
+   *  "Your HealthCompanion setup" entry can render once the user is fully set up. */
   tasks: OnboardingTask[]
   userId: string
   /** The user's maker handle (Arts District). Drives the top-bar profile
@@ -62,7 +62,7 @@ interface DashboardProps {
 }
 
 /**
- * Consolidated dashboard. The Vitality character lives in ONE place in the
+ * Consolidated dashboard. The HealthCompanion character lives in ONE place in the
  * header: the <DashboardHeaderGem> next to the greeting. Below it sits
  * <VeeTiles> - the animated-orb tile grid ported 1:1 from the approved mockup
  * (public/vee-dashboard.html), each tile a Link to its real module route.
@@ -88,7 +88,7 @@ export default function Dashboard({
   const profileHref = creatorHandle ? `/u/${creatorHandle}` : '/account'
   const [units, setUnits] = useState<Units>(initialUnits)
   const [settingsOpen, setSettingsOpen] = useState(false)
-  // "Vitality, I'm home" - tapping the header gem opens the daily ritual.
+  // "HealthCompanion, I'm home" - tapping the header gem opens the daily ritual.
   const [homeOpen, setHomeOpen] = useState(false)
   const [, startTransition] = useTransition()
   // The chrome the user themed (wallpaper + greeting + date + gem). Undefined
@@ -106,9 +106,9 @@ export default function Dashboard({
   // hard navigation because OAuth ?next targets are route handlers, not pages.
   useEffect(() => {
     try {
-      const raw = window.localStorage.getItem('vitality:next-after-onboarding')
+      const raw = window.localStorage.getItem('healthcompanion:next-after-onboarding')
       if (!raw) return
-      window.localStorage.removeItem('vitality:next-after-onboarding')
+      window.localStorage.removeItem('healthcompanion:next-after-onboarding')
       const next = safeNextPath(raw)
       if (next && next !== '/app') window.location.replace(next)
     } catch {
@@ -117,7 +117,7 @@ export default function Dashboard({
   }, [])
 
   // ── App-open reveal ──
-  // The VitalityIntro splash calls reveal() as it starts to fade (or right
+  // The HealthCompanionIntro splash calls reveal() as it starts to fade (or right
   // away when it skips: already played this session, storage blocked, or it
   // crashed). reveal() arms the staggered greeting word-in and stamps one
   // random tile-entrance style on the page. FAIL OPEN: with no reveal at all
@@ -173,7 +173,7 @@ export default function Dashboard({
       {/* "The Swipe" app-open splash. Sibling of <main> (not a child) so no
           page stacking context can trap it; it covers everything, plays once
           per browser session, then fades to reveal the dashboard. */}
-      <VitalityIntro onReveal={reveal} />
+      <HealthCompanionIntro onReveal={reveal} />
       <main
         className={`${styles.page} ${styles.oneScreen} grain-overlay`}
         style={{ ['--wall-accent' as string]: wallAccent }}
@@ -187,7 +187,7 @@ export default function Dashboard({
       <div className={styles.shell}>
         <div className={styles.headerRow}>
           {/* The gem is the ritual's front door: tap it and Vee pulls your day
-              ("Vitality, I'm home"). DEV-GATED until the full ritual ships:
+              ("HealthCompanion, I'm home"). DEV-GATED until the full ritual ships:
               the spine went out half-built and buggy (gem sizing), and the
               locked method is build-it-ALL, then test once at the end. Flip
               IMHOME_ENABLED when the finished ritual merges. */}
@@ -196,7 +196,7 @@ export default function Dashboard({
               type="button"
               className={styles.gemBtn}
               onClick={() => setHomeOpen(true)}
-              aria-label="Vitality, I'm home"
+              aria-label="HealthCompanion, I'm home"
               title="I'm home"
             >
               <DashboardHeaderGem className={styles.headerGem} />
@@ -264,7 +264,7 @@ export default function Dashboard({
       )}
       </main>
 
-      {/* "Vitality, I'm home" - the full-screen daily ritual. Sibling of <main>
+      {/* "HealthCompanion, I'm home" - the full-screen daily ritual. Sibling of <main>
           (like the intro splash) so no page stacking context can trap it. */}
       {homeOpen && (
         <Homecoming

@@ -1,14 +1,14 @@
-// Nudge engine for the Vitality MCP.
+// Nudge engine for the HealthCompanion MCP.
 //
 // Pulls the read layer, then derives a prioritized list of nudges across every
-// server-readable domain. This is what powers `vitality_daily_briefing` and the
+// server-readable domain. This is what powers `healthcompanion_daily_briefing` and the
 // scheduled morning/evening agent. Pure derivation — no writes, no side effects.
 //
 // Honesty rule: anything the server genuinely cannot see (water, goals, brand,
 // supplements — all browser-only localStorage today) is reported as a known gap,
 // never silently dropped.
 
-import type { VitalityDb } from './supabase.js';
+import type { HealthCompanionDb } from './supabase.js';
 import { fmtHour, fmtKpi, getLocalDateKey, round } from './util.js';
 import {
   getProfile,
@@ -71,7 +71,7 @@ export interface Nudge {
 
 const SEVERITY_RANK: Record<Severity, number> = { urgent: 0, suggest: 1, info: 2 };
 
-// ── Recovery → training tier (SKILL.md "Vitality score" tiers) ─────────────────
+// ── Recovery → training tier (SKILL.md "HealthCompanion score" tiers) ─────────────────
 function recoveryTier(recovery: number): { label: string; advice: string } {
   if (recovery >= 80) return { label: 'Peak', advice: 'push hard — green light for a heavy session' };
   if (recovery >= 65) return { label: 'Solid', advice: 'train normal' };
@@ -308,7 +308,7 @@ function subscriptionNudges(subs: SubscriptionData, todayKey: string): Nudge[] {
   }
 
   // Review candidates — the honest version of "cancel what you don't use".
-  // Vitality stores no usage signal, so we surface the priciest and say so.
+  // HealthCompanion stores no usage signal, so we surface the priciest and say so.
   const candidates = subs.subs.slice(0, 3);
   if (candidates.length) {
     out.push({
@@ -317,7 +317,7 @@ function subscriptionNudges(subs: SubscriptionData, todayKey: string): Nudge[] {
       title: 'Worth a review: your priciest subscriptions',
       detail:
         candidates.map((s) => `${s.name} (${round(s.monthlyChf, 2)} CHF/mo)`).join(' · ') +
-        '. Heads up: Vitality does not track last-used, so I can\'t tell which you actually use — these are simply the costliest. You decide if each earns its keep.',
+        '. Heads up: HealthCompanion does not track last-used, so I can\'t tell which you actually use — these are simply the costliest. You decide if each earns its keep.',
     });
   }
 
@@ -826,7 +826,7 @@ const tiredEatingSeam: SeamDef = {
       : mostlyEaten
         ? ' Today reads low — no guilt about what you ate; just finish the day gently.'
         : ' Today reads low, so be kind to yourself and keep meals simple and satisfying.';
-    // Always calm 'info' — a gentle mirror, never an alarm (Vitality's no-shame law).
+    // Always calm 'info' — a gentle mirror, never an alarm (HealthCompanion's no-shame law).
     return {
       severity: 'info',
       title: todayIsLow
@@ -1009,7 +1009,7 @@ export function assembleNudges(d: BriefingInputs): Nudge[] {
 }
 
 /** Build the full daily briefing across every server-readable domain. */
-export async function buildBriefing(v: VitalityDb): Promise<Briefing> {
+export async function buildBriefing(v: HealthCompanionDb): Promise<Briefing> {
   const todayKey = getLocalDateKey();
   // Recovery + nutrition fetched over a 30-day window so the cross-module engine
   // has enough paired days to read; single-domain nudges still slice the recent
@@ -1050,7 +1050,7 @@ export async function buildBriefing(v: VitalityDb): Promise<Briefing> {
 export function renderBriefing(b: Briefing): string {
   const icon: Record<Severity, string> = { urgent: '🔴', suggest: '🟡', info: '·' };
   const lines: string[] = [];
-  lines.push(`Vitality briefing — ${b.dayKey}${b.greetingName ? ` for ${b.greetingName}` : ''}`);
+  lines.push(`HealthCompanion briefing — ${b.dayKey}${b.greetingName ? ` for ${b.greetingName}` : ''}`);
   lines.push('');
   for (const n of b.nudges) {
     lines.push(`${icon[n.severity]} [${n.domain}] ${n.title}`);

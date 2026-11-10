@@ -18,7 +18,7 @@ const URGENCY: Record<Severity, number> = { urgent: 100, suggest: 40, info: 10 }
 // moodNudges' gate) leads over a routine training 'suggest' — being in someone's
 // corner comes before the deload reminder. A true 'urgent' (100) still wins.
 const CARE_BOOST: Partial<Record<Nudge['domain'], number>> = {
-  mind: 40,       // a low-mood reach-out — Vitality's emotional core
+  mind: 40,       // a low-mood reach-out — HealthCompanion's emotional core
   nutrition: 12,  // the tired→eating cross-tile pattern surfaces here
   finance: 12,    // a renewal / large debit worth a word
   peak: 8,        // the caffeine→recovery seam — a cross-tile steer leads over a routine suggest, but stays under a low-mood reach-out

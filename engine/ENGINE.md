@@ -1,6 +1,6 @@
-# Vitality Tile Engine
+# Health Companion Tile Engine
 
-You are building a **Vitality dashboard tile**. This folder is the whole engine: the
+You are building a **Health Companion dashboard tile**. This folder is the whole engine: the
 design DNA, the real shipped tiles, and a self-check. No app, no keys, no backend, no
 build step. Everything a tile needs is here as ambient context — just ask for a tile
 and build it to this standard.
@@ -18,19 +18,19 @@ someone's dashboard. It cannot see the page, the account, or other tiles. It tal
 its host through exactly one bridge, injected at the top of the tile's `<script>`:
 
 ```js
-var Vitality={_w:{},
-  save:function(d){parent.postMessage({source:'vitality-tile',type:'save',data:d},'*')},
-  load:function(){return new Promise(function(res){var id=Math.random().toString(36).slice(2);Vitality._w[id]=res;parent.postMessage({source:'vitality-tile',type:'load',id:id},'*')})},
-  report:function(s){parent.postMessage({source:'vitality-tile',type:'report',stream:s},'*')}
+var Health Companion={_w:{},
+  save:function(d){parent.postMessage({source:'healthcompanion-tile',type:'save',data:d},'*')},
+  load:function(){return new Promise(function(res){var id=Math.random().toString(36).slice(2);Health Companion._w[id]=res;parent.postMessage({source:'healthcompanion-tile',type:'load',id:id},'*')})},
+  report:function(s){parent.postMessage({source:'healthcompanion-tile',type:'report',stream:s},'*')}
 };
-window.addEventListener('message',function(e){var m=e.data;if(m&&m.source==='vitality-host'&&m.type==='load:result'&&Vitality._w[m.id]){Vitality._w[m.id](m.data);delete Vitality._w[m.id]}});
+window.addEventListener('message',function(e){var m=e.data;if(m&&m.source==='healthcompanion-host'&&m.type==='load:result'&&Health Companion._w[m.id]){Health Companion._w[m.id](m.data);delete Health Companion._w[m.id]}});
 ```
 
-- `Vitality.save(data)` — persist the tile's state. Call it on **every discrete action**,
+- `Health Companion.save(data)` — persist the tile's state. Call it on **every discrete action**,
   never "save at the end". `data` is any JSON-able value.
-- `Vitality.load()` — returns a Promise of the last saved `data` (or `null`/`undefined`
+- `Health Companion.load()` — returns a Promise of the last saved `data` (or `null`/`undefined`
   on a fresh tile). Always sanitize what comes back; a tile must render before it resolves.
-- `Vitality.report({ key, label, value, date, kind })` — OPTIONAL. If the tile has one
+- `Health Companion.report({ key, label, value, date, kind })` — OPTIONAL. If the tile has one
   meaningful number, end an action with a single `report()` so that number feeds the
   dashboard and the mentor. At most one `report()` per tile. `kind` ∈
   `intake | count | duration | rating | measure | money | done`. A tile that reports
@@ -41,7 +41,7 @@ always paint a sensible default first, then hydrate.
 
 ---
 
-## The floor (hard rules — a tile that trips one is not Vitality-grade)
+## The floor (hard rules — a tile that trips one is not Health Companion-grade)
 
 Run `node lint.mjs yourtile.html` before you call a tile done. The floor:
 
@@ -99,24 +99,24 @@ Full detail in `dna/theme.md`. The essentials:
 3. **Pull the domain reference** for your tile's kind — see `dna/feature-*.md` (fuel,
    vitals, peak, goals-water, finance-brand, weight-supps, vee) and the worked examples
    `dna/example-workout-logger.md`. `dna/README.md` is the full index + build order.
-4. **Build the sealed HTML.** Inline the bridge. Paint a default, then `Vitality.load()`
-   and hydrate. `Vitality.save()` on every action. Add one `report()` if there's a number.
+4. **Build the sealed HTML.** Inline the bridge. Paint a default, then `Health Companion.load()`
+   and hydrate. `Health Companion.save()` on every action. Add one `report()` if there's a number.
 5. **Self-check:** `node lint.mjs yourtile.html` → fix every error. Then it's a real tile.
 
-That's the engine. New tiles come out looking like Vitality because they're built from
-Vitality's own DNA and its real tiles — but they're yours, not copies.
+That's the engine. New tiles come out looking like Health Companion because they're built from
+Health Companion's own DNA and its real tiles — but they're yours, not copies.
 
 ---
 
 ## Provenance
 
-This folder is a **slice** of the Vitality app — the design DNA (`dna/`, from the app's
+This folder is a **slice** of the Health Companion app — the design DNA (`dna/`, from the app's
 `mcp/dna/`) and the real shipped tiles (`examples/`, from the app's featured catalog). It
-takes from Vitality and nothing else. Regenerate it from the canonical sources with
-`node scripts/build-engine.mjs` (run inside the Vitality repo). `manifest.json` lists
+takes from Health Companion and nothing else. Regenerate it from the canonical sources with
+`node scripts/build-engine.mjs` (run inside the Health Companion repo). `manifest.json` lists
 exactly what's here and where it came from.
 
-The **live connector** is the same engine as MCP resources (`vitality://engine`,
-`vitality://dna/{name}`, `vitality://kit/{domain}`): connect the Vitality MCP and this
+The **live connector** is the same engine as MCP resources (`healthcompanion://engine`,
+`healthcompanion://dna/{name}`, `healthcompanion://kit/{domain}`): connect the Health Companion MCP and this
 context loads with no folder to fork and always the newest DNA. This folder is the
 offline, forkable form of that.

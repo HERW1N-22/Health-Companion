@@ -11,7 +11,7 @@ export function initVeeTiles(
   root: HTMLElement,
   opts?: { score?: number | null; showNumber?: boolean },
 ): () => void {
-  // The real Vitality Score drives the reveal. When there's no number to show
+  // The real HealthCompanion Score drives the reveal. When there's no number to show
   // (no-routine), the score reveal loop is skipped entirely so the animation
   // never paints a stale digit over the "Set up your routine" prompt. It also
   // requires the .vnum node: the number was removed from the home-grid Vee tile

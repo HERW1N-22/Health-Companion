@@ -5,5 +5,5 @@
 -- Both nullable + backfilled by the app (lib/goals/categorize.ts), so existing
 -- goals stay valid and the feature is purely additive.
 
-alter table public.vitality_goals add column if not exists category   text;
-alter table public.vitality_goals add column if not exists clean_title text;
+alter table public.healthcompanion_goals add column if not exists category   text;
+alter table public.healthcompanion_goals add column if not exists clean_title text;

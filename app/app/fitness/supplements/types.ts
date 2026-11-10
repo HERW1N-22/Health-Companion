@@ -2,7 +2,7 @@
  * Supplement module types.
  *
  * State is persisted as a single namespaced blob in localStorage
- * (`vitality_supplements_v1`). Mirrors the water module pattern; will
+ * (`healthcompanion_supplements_v1`). Mirrors the water module pattern; will
  * migrate to Supabase in a later BUILD.
  */
 
@@ -19,7 +19,7 @@ export interface ConditionLabel {
   id: string
   label: string
   tone: ConditionTone
-  /** VitalityIcon name shown on the chip. */
+  /** HealthCompanionIcon name shown on the chip. */
   icon: string
 }
 

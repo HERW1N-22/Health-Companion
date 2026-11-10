@@ -4,7 +4,7 @@ import { getRolloverDateKey, getNutritionDayKey, getSupplementDayKey, localDaySt
 
 // Pin the timezone so the rollover math is deterministic regardless of the host.
 // (node:test runs each file in its own process, so this does not leak.)
-process.env.VITALITY_TIMEZONE = 'UTC';
+process.env.HEALTH_COMPANION_TIMEZONE = 'UTC';
 
 test('rollover: an entry before the cutoff hour counts as the previous day', () => {
   // 02:00 UTC with a 4am rollover -> shift back 4h -> 22:00 the day before.

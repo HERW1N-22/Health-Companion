@@ -20,7 +20,7 @@ interface Props {
   composition: CompositionSignal
 }
 
-const PHOTOS_KEY = 'vitality_progress_photos_v1'
+const PHOTOS_KEY = 'healthcompanion_progress_photos_v1'
 const CHART_WINDOW = 30           // days shown on the trend chart
 const MOVING_AVG_WINDOW = 7
 

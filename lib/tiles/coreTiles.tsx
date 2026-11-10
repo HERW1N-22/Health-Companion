@@ -1,9 +1,9 @@
 import type { ReactNode } from 'react'
 import type { TileSize } from './tileSkin'
-import type { DashboardTileStats } from '@/lib/vitality/dashboardStats'
+import type { DashboardTileStats } from '@/lib/healthcompanion/dashboardStats'
 
 /**
- * The core tiles are Vitality's pre-installed apps (Train, Fuel, Vitals, Peak,
+ * The core tiles are HealthCompanion's pre-installed apps (Train, Fuel, Vitals, Peak,
  * Brand, Finance). On the fused dashboard they live in the SAME grid as
  * a user's own built tiles, so they can be dragged, resized, removed, and
  * re-added from the library just like any tile. This registry is the static
@@ -282,7 +282,7 @@ export const isCreateId = (id: string) => id === CREATE_TILE.id
  * The Forge descriptor. The storefront of the tile platform and the third
  * always-on locked tile beside Library (manage your apps) and Create (quick
  * bounded shapes). Forge is the BIG path: describe any idea in plain words
- * and Claude hand-builds the real thing through the Vitality MCP, landing
+ * and Claude hand-builds the real thing through the HealthCompanion MCP, landing
  * the finished tile back on this dashboard. Tapping it navigates to
  * /app/forge, so like Create it carries an `href` and rides the same
  * navigate-on-tap path as the core tiles. Seeded beside Create, backfilled

@@ -14,7 +14,7 @@
  *  - a per-schedule, per-date log of how many "ships" happened that day
  *  - optional latest reflection text + timestamp
  *
- * Stored in localStorage under `vitality_brand_v1`. Supabase migration
+ * Stored in localStorage under `healthcompanion_brand_v1`. Supabase migration
  * lands in a later BUILD alongside the water/supplements migration.
  *
  * Archetypes steer smart defaults at create-time only; everything is
@@ -199,7 +199,7 @@ export interface BrandAccount {
 }
 
 /**
- * A labeled URL pointing somewhere outside Vitality — a Google Sheet,
+ * A labeled URL pointing somewhere outside HealthCompanion — a Google Sheet,
  * a Stripe dashboard, a Calendly link, a project folder. Lets
  * non-creator brands keep their daily-driver tools one tap away.
  */

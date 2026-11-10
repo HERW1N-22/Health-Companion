@@ -3,7 +3,7 @@
 import { useMemo, useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 
-import VitalityIcon from '@/components/VitalityIcon'
+import HealthCompanionIcon from '@/components/HealthCompanionIcon'
 import { getLocalDateKey } from '@/lib/dates'
 import { computeTrendRate, type Checkin } from '@/lib/nutrition/adaptive'
 import type { GoalBand, WeighIn, DailyKcal } from '@/lib/nutrition/adaptive'
@@ -124,7 +124,7 @@ export default function MaintenanceSection({
   const Header = (
     <div className={styles.tileTop}>
       <span className={styles.tileIc}>
-        <VitalityIcon name="scale" size={20} />
+        <HealthCompanionIcon name="scale" size={20} />
       </span>
       <span className={styles.tileLbl}>Maintenance</span>
       {pendingDot && <span className={styles.mDot} aria-label="new read" />}
@@ -142,7 +142,7 @@ export default function MaintenanceSection({
           </svg>
         </button>
         <button className={styles.gear} onClick={() => setGear((v) => !v)} aria-label="Maintenance settings">
-          <VitalityIcon name="gear" size={16} />
+          <HealthCompanionIcon name="gear" size={16} />
         </button>
       </span>
       {howOpen && <HowItWorks onClose={() => setHowOpen(false)} />}
@@ -170,7 +170,7 @@ export default function MaintenanceSection({
   const loggedWeightToday = weighIns.some((w) => w.date === getLocalDateKey())
   function goLogWeight() {
     document.getElementById('weight-logger')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-    if (!loggedWeightToday) window.dispatchEvent(new Event('vitality:log-weight'))
+    if (!loggedWeightToday) window.dispatchEvent(new Event('healthcompanion:log-weight'))
   }
   // The coach also needs a few days of food. Scroll up to the macro logger
   // (Snap a meal / Add food) so a missing-food nudge has somewhere to land.
@@ -206,11 +206,11 @@ export default function MaintenanceSection({
         <div className={styles.card}>
           <div className={styles.mGate}>
             <span className={styles.mGateGlyph}>
-              <VitalityIcon name="scale" size={22} />
+              <HealthCompanionIcon name="scale" size={22} />
             </span>
             <span className={styles.mGateTitle}>Want your plan to adjust itself?</span>
             <p className={styles.mGateText}>
-              You picked the no-numbers way, and that is perfectly fine. If you would like Vitality to quietly learn your real
+              You picked the no-numbers way, and that is perfectly fine. If you would like HealthCompanion to quietly learn your real
               maintenance and gently nudge your calories, turn on macro counting whenever you are ready.
             </p>
             <button className={styles.mPrimary} onClick={toggleEnabled}>Turn on macro counting</button>
@@ -248,7 +248,7 @@ export default function MaintenanceSection({
   )
 
   // ── "just a number" pieces, shared by the calibrating + calm cards ──
-  // The card leads with one number: what Vitality currently thinks your real
+  // The card leads with one number: what HealthCompanion currently thinks your real
   // maintenance is. A small Stocks-style delta shows how far that has moved from
   // your setup estimate (mint up, amber down, never red — a falling number is
   // your body, not a failure). The graph is tucked behind a button and only

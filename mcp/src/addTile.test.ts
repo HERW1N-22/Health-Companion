@@ -2,10 +2,10 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { addTile } from './mutations.js';
 import { scaffoldTile } from './scaffoldTile.js';
-import { WRITE_SCOPE, type VitalityDb } from './supabase.js';
+import { WRITE_SCOPE, type HealthCompanionDb } from './supabase.js';
 
 // Real coverage for the gated write path (the registration test only proves the
-// handler reaches for the authed client). A fake VitalityDb lets us exercise
+// handler reaches for the authed client). A fake HealthCompanionDb lets us exercise
 // requireWrite, the build/floor enforcement, and the exact row that gets inserted,
 // without a live database.
 
@@ -29,7 +29,7 @@ function fakeDb(cap: Capture) {
   };
 }
 
-function makeV(scopes: string[], cap: Capture): VitalityDb {
+function makeV(scopes: string[], cap: Capture): HealthCompanionDb {
   return { db: fakeDb(cap) as never, userId: 'user-1', mode: 'user', scopes };
 }
 
@@ -85,11 +85,11 @@ test('addTile: a pre-built (rich) html tile is stored as-is, floor-checked, owne
   assert.equal(out.name, 'My rich tile');
 });
 
-test('addTile: a measurable html tile that lacks Vitality.report() is refused loud, never landed dark', async () => {
+test('addTile: a measurable html tile that lacks HealthCompanion.report() is refused loud, never landed dark', async () => {
   const cap: Capture = {};
   // A sealed tile that persists via save/load but emits no report(): the exact
   // "measurable tile that would feed Vee nothing" the floor guard exists to catch.
-  const dark = scaffoldTile({ goal: 'track my pushups' }).html.replace(/Vitality\.report\(/g, 'VitalityReportDisabled(');
+  const dark = scaffoldTile({ goal: 'track my pushups' }).html.replace(/HealthCompanion\.report\(/g, 'HealthCompanionReportDisabled(');
   await assert.rejects(
     () => addTile(makeV(['mcp:read', WRITE_SCOPE], cap), { html: dark, name: 'Pushups', kind: 'count' }),
     /report-missing/,

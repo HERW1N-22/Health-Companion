@@ -1,10 +1,10 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { getTiles } from './queries.js';
-import type { VitalityDb } from './supabase.js';
+import type { HealthCompanionDb } from './supabase.js';
 
 // getTiles joins the user's tile registry against board_layout.ordering so the
-// vitality_my_tiles tool can mark each tile ON BOARD vs IN LIBRARY (removed) —
+// healthcompanion_my_tiles tool can mark each tile ON BOARD vs IN LIBRARY (removed) —
 // Claude must never treat a removed tile as active. A fake db proves the join
 // logic + the honest "board unknown" fallback without a live database.
 
@@ -34,7 +34,7 @@ function fakeDb(tiles: TileRow[], board: { ordering: unknown } | null, boardErro
   };
 }
 
-function makeV(db: unknown): VitalityDb {
+function makeV(db: unknown): HealthCompanionDb {
   return { db: db as never, userId: 'user-1', mode: 'user', scopes: ['mcp:read'] };
 }
 

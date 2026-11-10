@@ -1,7 +1,7 @@
 -- BUILD23 · user_profile.preferences
 --
 -- Adds a single JSONB column that stores the user's answers to the
--- tailoring quizzes (Vitality Goal / Mentor Voice / Hydration /
+-- tailoring quizzes (HealthCompanion Goal / Mentor Voice / Hydration /
 -- Supplements / Peak — and any future quizzes). One column, one
 -- source of truth, per-quiz slice keyed by quiz id.
 --

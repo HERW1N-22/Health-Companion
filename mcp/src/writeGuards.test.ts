@@ -1,13 +1,13 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { addTile, requireWrite } from './mutations.js';
-import { WRITE_SCOPE, WRITE_PAUSED_SCOPE, type VitalityDb } from './supabase.js';
+import { WRITE_SCOPE, WRITE_PAUSED_SCOPE, type HealthCompanionDb } from './supabase.js';
 
 // The two write-path safety valves added in the Fable fortify pass:
 //   1. a size cap on hand-built tile HTML (before it can hit the row);
 //   2. a per-user rate limit built on mcp_write_log, fail-OPEN so an unreadable
 //      audit table never blocks a legitimate write.
-// A fake VitalityDb serves a configurable mcp_write_log history and captures the
+// A fake HealthCompanionDb serves a configurable mcp_write_log history and captures the
 // tiles insert, so we can drive both guards without a live database.
 
 interface Capture { table?: string; row?: Record<string, unknown>; }
@@ -44,7 +44,7 @@ function fakeDb(opts: { stamps?: string[]; selectError?: boolean; cap?: Capture 
   };
 }
 
-function makeV(db: unknown): VitalityDb {
+function makeV(db: unknown): HealthCompanionDb {
   return { db: db as never, userId: 'user-1', mode: 'user', scopes: ['mcp:read', WRITE_SCOPE] };
 }
 
@@ -56,18 +56,18 @@ const isoAgo = (ms: number) => new Date(Date.now() - ms).toISOString();
 // it; a credential that truly never granted write keeps the reconnect steps.
 
 test('requireWrite: kill-switch paused marker gets the honest paused message, not reconnect advice', () => {
-  const v: VitalityDb = { db: null as never, userId: 'user-1', mode: 'user', scopes: ['mcp:read', WRITE_PAUSED_SCOPE] };
-  assert.throws(() => requireWrite(v), /temporarily paused by the Vitality team/);
+  const v: HealthCompanionDb = { db: null as never, userId: 'user-1', mode: 'user', scopes: ['mcp:read', WRITE_PAUSED_SCOPE] };
+  assert.throws(() => requireWrite(v), /temporarily paused by the HealthCompanion team/);
   assert.throws(() => requireWrite(v), (err: unknown) => !/disconnect|Allow it again/i.test((err as Error).message));
 });
 
 test('requireWrite: a genuinely read-only credential keeps the reconnect guidance', () => {
-  const v: VitalityDb = { db: null as never, userId: 'user-1', mode: 'user', scopes: ['mcp:read'] };
-  assert.throws(() => requireWrite(v), /disconnect the Vitality connector.*Allow it again/);
+  const v: HealthCompanionDb = { db: null as never, userId: 'user-1', mode: 'user', scopes: ['mcp:read'] };
+  assert.throws(() => requireWrite(v), /disconnect the HealthCompanion connector.*Allow it again/);
 });
 
 test('requireWrite: a write-granted credential passes', () => {
-  const v: VitalityDb = { db: null as never, userId: 'user-1', mode: 'user', scopes: ['mcp:read', WRITE_SCOPE] };
+  const v: HealthCompanionDb = { db: null as never, userId: 'user-1', mode: 'user', scopes: ['mcp:read', WRITE_SCOPE] };
   assert.doesNotThrow(() => requireWrite(v));
 });
 

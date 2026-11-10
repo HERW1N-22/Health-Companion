@@ -588,7 +588,7 @@
 /* ---- section label ---- */
 /* Linear-grade section header: a status pip, a normal-case group name, and a
    count in a small badge (not an uppercase micro-label). Reads like a real
-   file/issue app, in Vitality's black+mint skin. */
+   file/issue app, in HealthCompanion's black+mint skin. */
 .seclabel {
   display: flex;
   align-items: center;

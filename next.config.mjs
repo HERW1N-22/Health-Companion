@@ -40,7 +40,7 @@ const nextConfig = {
       {
         // The Lab (arsenal storefront) is served as static files from
         // public/lab/. Map the bare /lab path onto its index.html so the
-        // storefront has a clean URL (getvitality.com/lab once the brand
+        // storefront has a clean URL (example.test/lab once the brand
         // domain lands). All other /lab/* assets serve statically as-is.
         source: '/lab',
         destination: '/lab/index.html',

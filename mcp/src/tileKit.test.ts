@@ -56,7 +56,7 @@ test('kit integrity: every domain bundle adds real content beyond the base', () 
   }
 });
 
-test('vitality_tile_kit tool is registered and returns the kit (pure, no getVdb)', async () => {
+test('healthcompanion_tile_kit tool is registered and returns the kit (pure, no getVdb)', async () => {
   const tools: Record<string, { handler: (a: unknown) => Promise<{ content: { type: string; text: string }[]; isError?: boolean }> }> = {};
   const server = {
     registerTool(name: string, _d: unknown, handler: (a: unknown) => Promise<{ content: { type: string; text: string }[]; isError?: boolean }>) {
@@ -66,8 +66,8 @@ test('vitality_tile_kit tool is registered and returns the kit (pure, no getVdb)
   registerTools(server as never, async () => {
     throw new Error('getVdb must not be called');
   });
-  assert.ok(tools['vitality_tile_kit'], 'tool registered');
-  const res = await tools['vitality_tile_kit'].handler({ domain: 'food' });
+  assert.ok(tools['healthcompanion_tile_kit'], 'tool registered');
+  const res = await tools['healthcompanion_tile_kit'].handler({ domain: 'food' });
   assert.match(res.content[0].text, /#6EE7B7/);
   assert.notEqual(res.isError, true);
 });

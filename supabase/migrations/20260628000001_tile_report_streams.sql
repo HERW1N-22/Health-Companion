@@ -1,7 +1,7 @@
 -- ===========================================================================
 -- tile_streams + tile_reports — the tile-to-Vee report contract, in the database
 -- ===========================================================================
--- A sealed tile feeds Vee one numeric life-stream via Vitality.report({ key,
+-- A sealed tile feeds Vee one numeric life-stream via HealthCompanion.report({ key,
 -- label, value, date, kind, goalDirection }). Two tables hold it, both RLS-scoped
 -- so one user's tile can never read or write another's stream:
 --   tile_streams  = the IDENTITY of a stream (one row per user+key). canonical_key

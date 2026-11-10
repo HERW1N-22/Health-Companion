@@ -25,6 +25,6 @@ test('scaffold_tile is registered and returns the tile as text', async () => {
   assert.match(text, /tile is ready/);
   assert.match(text, /copy everything below this line/i);
   assert.match(text, /<!doctype html>/);
-  assert.match(text, /Vitality\.report\(/);
+  assert.match(text, /HealthCompanion\.report\(/);
   assert.notEqual(res.isError, true);
 });

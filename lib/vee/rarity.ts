@@ -1,5 +1,5 @@
 /**
- * Vee rarity mapping — turns a real, deterministic "Vitality noticed" insight into
+ * Vee rarity mapping — turns a real, deterministic "HealthCompanion noticed" insight into
  * an OG-loot rarity tier for the feed UI. Pure, total, and never throws: any
  * unrecognized input degrades to 'common'.
  *

@@ -543,7 +543,7 @@
 }
 
 /* Vee role kicker - uppercase mono mint line sitting just above the name.
-   Tells the user this tile IS Vitality's AI mentor at a glance. Mirrors the
+   Tells the user this tile IS HealthCompanion's AI mentor at a glance. Mirrors the
    .tileLabel left edge (22px) and the phone block tightens it to 16px. */
 .tileKicker {
   position: absolute;
@@ -570,7 +570,7 @@
    these by data-crystal-slot and uses getBoundingClientRect to size
    each gem's WebGL viewport. The slot itself draws nothing. */
 /* Header row: gem on the left, greeting + date on the right. The gem
-   anchors the "Vitality character" presence on the dashboard without
+   anchors the "HealthCompanion character" presence on the dashboard without
    cluttering the tiles. */
 .headerRow {
   display: flex;
@@ -578,7 +578,7 @@
   gap: var(--space-6);
 }
 
-/* The gem's tap target ("Vitality, I'm home"). Invisible chrome: the button
+/* The gem's tap target ("HealthCompanion, I'm home"). Invisible chrome: the button
    contributes no box of its own, the .headerGem inside keeps owning the size
    (and its media-query shrink); the cursor + a gentle lift are the affordance. */
 .gemBtn {
@@ -786,7 +786,7 @@
 }
 
 /* ───────── App-open reveal: greeting words + randomized tile entrance ─────────
-   Driven by Dashboard.tsx: the VitalityIntro overlay calls reveal() as it
+   Driven by Dashboard.tsx: the HealthCompanionIntro overlay calls reveal() as it
    starts to fade, which (a) flips .greetReveal onto the greeting so its words
    stream in, and (b) stamps ONE of six entrance styles on .page[data-entrance]
    for ~3s, then removes the attribute so finished animation fills never fight

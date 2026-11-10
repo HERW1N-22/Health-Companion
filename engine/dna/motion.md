@@ -1,6 +1,6 @@
-# Vitality Motion + Animation DNA
+# Health Companion Motion + Animation DNA
 
-How Vitality moves. Every recipe here is plain CSS / vanilla JS / inline SVG, ready to paste into a single sealed HTML tile (no React, no libraries, no build step). Where a source used React or Three.js, the idea is translated to something a flat tile reproduces.
+How Health Companion moves. Every recipe here is plain CSS / vanilla JS / inline SVG, ready to paste into a single sealed HTML tile (no React, no libraries, no build step). Where a source used React or Three.js, the idea is translated to something a flat tile reproduces.
 
 The feel in one line: things arrive softly and confidently, settle with a tiny overshoot, then breathe. Never linear, never harsh, never strobing. Mint accent on near-black. Always reduced-motion safe.
 
@@ -12,7 +12,7 @@ The feel in one line: things arrive softly and confidently, settle with a tiny o
 
 ## 1. The motion tokens (paste into :root)
 
-These are Vitality's exact easing + timing constants. Use the tokens, do not hand-pick random cubic-beziers.
+These are Health Companion's exact easing + timing constants. Use the tokens, do not hand-pick random cubic-beziers.
 
 ```css
 :root {
@@ -149,7 +149,7 @@ Note: "cozy loader" is a STYLE (warm, springy, tinted, with a real fact). It is 
 
 ## 3. Entrance system: draw-on, scale-from-inside, spring-pop
 
-Three primitives compose every Vitality entrance. Combine them; stagger them.
+Three primitives compose every Health Companion entrance. Combine them; stagger them.
 
 ### A. Line / path draws itself on (pathLength trick)
 
@@ -239,7 +239,7 @@ dots.forEach((d, i) => {
 
 ## 4. Tile-art choreography (intro once, then breathe)
 
-The signature shape of a Vitality background tile: play an intro sequence ONCE, then settle into a slow idle breathe. Never loop the dramatic part.
+The signature shape of a Health Companion background tile: play an intro sequence ONCE, then settle into a slow idle breathe. Never loop the dramatic part.
 
 Order for a graph tile (the Train "Ascent"):
 1. Base wash slow-breathes from the start (`scale 1.02 -> 1.05`, opacity `.92 -> 1`, 9s loop).

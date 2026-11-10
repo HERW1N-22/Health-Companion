@@ -1,5 +1,5 @@
 /**
- * Cold-start for "Vitality noticed".
+ * Cold-start for "HealthCompanion noticed".
  *
  * The green-light oracle only fires on a real, gated, goal-anchored convergence
  * (greenlight.ts) — which is exactly right, but means a brand-new user (the

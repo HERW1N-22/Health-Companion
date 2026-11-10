@@ -102,7 +102,7 @@ function categoryLabel(key: string): string {
 /** One-line, plain-English meaning per category so "Data" / "Measure" are
  *  self-explanatory (shown as a tooltip on each sidebar category). */
 const CATEGORY_DESC: Record<string, string> = {
-  core: 'Built-in Vitality modules',
+  core: 'Built-in HealthCompanion modules',
   side: 'Extra apps, kept off your core dashboard until you place them',
   intake: 'Things you take in, like water, food or supplements',
   count: 'Tallies and streaks you add up',

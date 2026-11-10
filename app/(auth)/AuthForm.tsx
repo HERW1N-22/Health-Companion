@@ -89,7 +89,7 @@ export default function AuthForm({ initialMode }: { initialMode: Mode }) {
       // dashboard consumes it once after onboarding lands the user at /app.
       if (nextPath) {
         try {
-          localStorage.setItem('vitality:next-after-onboarding', nextPath)
+          localStorage.setItem('healthcompanion:next-after-onboarding', nextPath)
         } catch {
           /* storage blocked: signup proceeds, they just land on /app */
         }
@@ -141,7 +141,7 @@ export default function AuthForm({ initialMode }: { initialMode: Mode }) {
       </div>
 
       <h1 className={styles.heading}>
-        {isSignin ? 'Sign in to Vitality' : 'Create your account'}
+        {isSignin ? 'Sign in to HealthCompanion' : 'Create your account'}
       </h1>
       <p className={styles.subhead}>
         <em>{isSignin ? 'Welcome back.' : 'One member, one ledger.'}</em>

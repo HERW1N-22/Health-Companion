@@ -9,7 +9,7 @@
 
 import type { DayTarget, DayType, NutritionGoals } from './types'
 
-export const DAY_TYPE_KEY = 'vitality_fuel_daytype_v1'
+export const DAY_TYPE_KEY = 'healthcompanion_fuel_daytype_v1'
 
 // A fresh, unmarked day defaults to a gym day (the bigger target) — the user
 // taps once to drop to a rest day. Decided with Alex: predictable over clever.

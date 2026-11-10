@@ -3,16 +3,16 @@
 //
 // Deliberately env-free: this module is imported by tools.ts/queries.ts/
 // nudges.ts, which the HOSTED Next.js route also imports. Reaching for env.ts's
-// getEnv() here would drag its `process.exit(1)`-on-missing-VITALITY_* loader
+// getEnv() here would drag its `process.exit(1)`-on-missing-HEALTH_COMPANION_* loader
 // into the Vercel bundle and kill the serverless function (its env vars only
-// exist on the stdio CLI). So we read VITALITY_TIMEZONE straight off
+// exist on the stdio CLI). So we read HEALTH_COMPANION_TIMEZONE straight off
 // process.env — set by env.ts's loadDotenv() in the CLI process, simply absent
 // (→ host local time) in the hosted route. No import, no exit-on-missing.
 
-/** Local YYYY-MM-DD, honoring VITALITY_TIMEZONE if set, else host local time.
+/** Local YYYY-MM-DD, honoring HEALTH_COMPANION_TIMEZONE if set, else host local time.
  *  Mirrors the app's getLocalDateKey() (never toISOString — UTC drift). */
 export function getLocalDateKey(date = new Date()): string {
-  const tz = process.env.VITALITY_TIMEZONE;
+  const tz = process.env.HEALTH_COMPANION_TIMEZONE;
   if (tz) {
     // en-CA yields YYYY-MM-DD parts.
     const parts = new Intl.DateTimeFormat('en-CA', {

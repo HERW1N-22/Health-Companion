@@ -6,7 +6,7 @@ import type { SupplementsState } from './types'
 /**
  * Best-effort mirror of the local supplements state into Supabase
  * (`supplements_state`, one jsonb row per user). localStorage
- * (`vitality_supplements_v1`) stays the PRIMARY client store — this only adds a
+ * (`healthcompanion_supplements_v1`) stays the PRIMARY client store — this only adds a
  * durable, MCP-readable copy. Failures are swallowed so the UI is never
  * affected. (The legacy `supplements_stack` table is unused/mismatched and
  * stays dormant.) See BUILD36.

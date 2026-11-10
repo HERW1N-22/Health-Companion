@@ -1,6 +1,6 @@
-# Vitality DNA: Weight trend chart + Supplement stack
+# Health Companion DNA: Weight trend chart + Supplement stack
 
-Two flagship Vitality UI patterns distilled to copyable, sealed-HTML snippets.
+Two flagship Health Companion UI patterns distilled to copyable, sealed-HTML snippets.
 Vanilla CSS, vanilla JS, inline SVG only. No libraries, no React, no build step.
 
 Source (read-only, for the full version):
@@ -299,7 +299,7 @@ text). When missed add `item-row--missed`. The dose + note meta is built as
 .item-row--missed { animation:pulseAmber 1.8s var(--ease) infinite; }
 ```
 
-Note: the source uses a red pulse for missed. Vitality's color law is azure good / amber
+Note: the source uses a red pulse for missed. Health Companion's color law is azure good / amber
 caution / never red for nudges, so this recipe pulses amber instead.
 
 ### JS (toggle taken + mark missed)

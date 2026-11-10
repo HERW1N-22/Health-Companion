@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 /**
- * Phase 1 — Free Exercise DB mapping for the Vitality EX dictionary.
+ * Phase 1 — Free Exercise DB mapping for the HealthCompanion EX dictionary.
  *
- * Fetches the public-domain exercise dataset, fuzzy-matches every Vitality
+ * Fetches the public-domain exercise dataset, fuzzy-matches every HealthCompanion
  * exercise to its best Free DB candidate, downloads the matched images into
- * /public/exercise-refs/<vitalityId>/, and writes a typed map to
+ * /public/exercise-refs/<healthcompanionId>/, and writes a typed map to
  * lib/exerciseReferences.ts.
  *
  * Print contract: short summary only — totals, confidence buckets, and a
@@ -53,10 +53,10 @@ async function loadDataset() {
 }
 
 // ────────────────────────────────────────────────────────────────────────────
-// 2. Parse Vitality EX dictionary from splitData.ts
+// 2. Parse HealthCompanion EX dictionary from splitData.ts
 // ────────────────────────────────────────────────────────────────────────────
 
-async function loadVitalityExercises() {
+async function loadHealthCompanionExercises() {
   const src = await readFile(SPLIT_DATA, 'utf-8')
   const start = src.indexOf('export const EX:')
   if (start < 0) throw new Error('EX dictionary not found in splitData.ts')
@@ -74,8 +74,8 @@ async function loadVitalityExercises() {
 }
 
 // ────────────────────────────────────────────────────────────────────────────
-// 2b. Manual overrides — for exercises whose Vitality name doesn't fuzzy-
-//     match well to the Free DB naming convention. Add a vitality_id → free_db_id
+// 2b. Manual overrides — for exercises whose HealthCompanion name doesn't fuzzy-
+//     match well to the Free DB naming convention. Add a healthcompanion_id → free_db_id
 //     pair here and re-run the script.
 // ────────────────────────────────────────────────────────────────────────────
 
@@ -139,11 +139,11 @@ function jaccard(a, b) {
 }
 
 /**
- * Score a Vitality exercise against a Free DB candidate.
+ * Score a HealthCompanion exercise against a Free DB candidate.
  * Range 0..1. Combines token Jaccard with bonuses for key-equipment match.
  */
-function scoreMatch(vitality, candidate) {
-  const vNorm = normalize(vitality.name + ' ' + vitality.id)
+function scoreMatch(healthcompanion, candidate) {
+  const vNorm = normalize(healthcompanion.name + ' ' + healthcompanion.id)
   const cNorm = normalize(candidate.name)
   const vTokens = new Set(vNorm.split(' ').filter(t => t.length > 1))
   const cTokens = new Set(cNorm.split(' ').filter(t => t.length > 1))
@@ -165,10 +165,10 @@ function scoreMatch(vitality, candidate) {
   return s
 }
 
-function pickBestMatch(vitality, dataset) {
+function pickBestMatch(healthcompanion, dataset) {
   let best = null
   for (const cand of dataset) {
-    const score = scoreMatch(vitality, cand)
+    const score = scoreMatch(healthcompanion, cand)
     if (!best || score > best.score) best = { score, cand }
   }
   return best
@@ -231,7 +231,7 @@ export const exerciseReferences: Record<string, ExerciseReference> = `
 
 async function main() {
   const dataset = await loadDataset()
-  const vitality = await loadVitalityExercises()
+  const healthcompanion = await loadHealthCompanionExercises()
 
   // Optional build-time distilled summaries (gist/steps/cues). Merged in when
   // present so a full rebuild keeps the phone-readable copy; absent is fine.
@@ -246,7 +246,7 @@ async function main() {
   let dlTotal = 0
   let dlSkipped = 0
 
-  for (const v of vitality) {
+  for (const v of healthcompanion) {
     let best = pickBestMatch(v, dataset)
     let conf = confidenceBucket(best.score)
 
@@ -300,7 +300,7 @@ async function main() {
 
   console.log('')
   console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━')
-  console.log(`Vitality EX dictionary: ${vitality.length} exercises`)
+  console.log(`HealthCompanion EX dictionary: ${healthcompanion.length} exercises`)
   console.log(`  high   : ${buckets.high}`)
   console.log(`  medium : ${buckets.medium}`)
   console.log(`  low    : ${buckets.low}      (review by hand)`)
@@ -325,7 +325,7 @@ async function main() {
     }
   }
   console.log(`\nOutput: ${OUTPUT_TS}`)
-  console.log(`Images: ${IMAGES_DIR}/<vitalityId>/*.jpg`)
+  console.log(`Images: ${IMAGES_DIR}/<healthcompanionId>/*.jpg`)
 }
 
 main().catch(e => { console.error(e); process.exit(1) })

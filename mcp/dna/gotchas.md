@@ -1,6 +1,6 @@
 # Gotchas
 
-Vitality's hard-won rules, so a tile is right the first time. A tile is ONE sealed
+Health Companion's hard-won rules, so a tile is right the first time. A tile is ONE sealed
 HTML file: no libraries, no CDN, no React, no fonts fetched at runtime. Inline all
 HTML, CSS, vanilla JS, and SVG. Each rule reads "Do X, not Y (because Z)." These are
 bugs Alex already fixed. Do not re-discover them.
@@ -29,7 +29,7 @@ bugs Alex already fixed. Do not re-discover them.
 
 - Build local date keys with local getters, never `toISOString().split('T')[0]` (because UTC drift shows yesterday's or tomorrow's date). Format all keys `YYYY-MM-DD`.
 - Re-derive the active day on a ~60s timer, not once on load (because a tile left open across midnight or the rollover hour keeps writing to the stale day).
-- If "the day" should not flip at midnight, subtract a rollover hour first (because people log late-night events against the day they just finished). Vitality rolls supplements at 6am, food and macros at 4am. Default with no late-night meaning is plain midnight.
+- If "the day" should not flip at midnight, subtract a rollover hour first (because people log late-night events against the day they just finished). Health Companion rolls supplements at 6am, food and macros at 4am. Default with no late-night meaning is plain midnight.
 - Pick ONE rollover rule per concept and use the same key for the write, the cache, and the read, do not mix (because two views with different rollovers disagree between midnight and the cutoff).
 - For "last N days" math, step with noon-UTC dates, not by adding 86400000 ms (because DST days are 23 or 25 hours, so ms stepping drifts a day twice a year). Build each key from `new Date(Date.UTC(y, m-1, d - i, 12))`.
 - Date each record by the user's own offset, carrying the offset with the data, not server-local time (because server-local is not the user's calendar day).
@@ -108,7 +108,7 @@ function dayKeyRollover(hour, d = new Date()) {
 - Make committing an edit an explicit separate button, not tapping the row or pressing Enter (because that doubles as save and silently logs the value). Let people edit freely, save only when they mean to.
 - Add an explicit neutral state and require real data for the positive state, do not let empty fall through to "on track" (because testing only the bad branch reads falsely positive on an empty state).
 - Gate any "done today" badge on the entry's date equalling today, not a bare completion flag (because a flag with no date check shows stale success on a fresh day). Otherwise revert to neutral.
-- Persist via the host bridge `Vitality.save` on each discrete action and fold unconfirmed local work back in additively on mount, not rely on in-flight async writes (because an installed or standalone page frozen on app-switch loses the last edits). `localStorage` is only a standalone fallback, wrapped in try/catch. Never delete what is already persisted.
+- Persist via the host bridge `Health Companion.save` on each discrete action and fold unconfirmed local work back in additively on mount, not rely on in-flight async writes (because an installed or standalone page frozen on app-switch loses the last edits). `localStorage` is only a standalone fallback, wrapped in try/catch. Never delete what is already persisted.
 - Stamp saved data with an owner id and wipe your keys before hydrating if a DIFFERENT owner is present, not trust that storage is yours (because `localStorage` survives sign-out and shows the previous person's data on a shared device). An ABSENT stamp means pre-existing own data: never wipe it. After a real owner-switch wipe, force one reload.
 - Store cross-references by key and resolve the value live at render, do not duplicate the value into two places (because duplicates drift). Keep one source of truth.
 - Make first render deterministic, then randomize on mount, not pick randomly during the initial paint (because a random value at first paint causes a hydration mismatch flash). Render index 0 first, shuffle after mount.
@@ -186,7 +186,7 @@ input, textarea, select, [contenteditable], .selectable, .selectable * {
 
 ## What the linter enforces as a hard error (a tile that trips one does not ship)
 
-These are the `error` findings in `mcp/src/tiles/lintTile.ts`, run on the final HTML. A tile with any of them is not Vitality-grade and is rejected. Each rule below names the check that catches it.
+These are the `error` findings in `mcp/src/tiles/lintTile.ts`, run on the final HTML. A tile with any of them is not Health Companion-grade and is rejected. Each rule below names the check that catches it.
 
 ### Sealed and self-contained
 - Ship one `<!doctype html>` document with inline `<style>` and `<script>`, not a fragment or a page that pulls in a stylesheet (because a tile is a sealed file, if it is not in the file assume it will not load). Enforced by `doc-structure`.
@@ -225,11 +225,11 @@ The worked examples (`exampleMentor.test.ts`, `exampleRecipe.test.ts`) assert th
 - If the tile animates at all, add a `prefers-reduced-motion` block that disables it. Enforced by `reduced-motion-missing`.
 - Focus an input with `.focus()`, never `.select()` (because `.select()` highlights the value as a blue block). Enforced by `select-not-focus`.
 
-## The Vitality host bridge (the only channel out of the sealed iframe)
+## The Health Companion host bridge (the only channel out of the sealed iframe)
 
-- Speak to the host through `Vitality.save` / `Vitality.load` (the tile's OWN private data) and `Vitality.report(stream)` (ONE life-stream into Vee), a tile with no bridge call persists nothing and lands nothing on the dashboard. At least one of `Vitality.save/load/report` must appear. Enforced by `bridge-missing` (warning). The bridge posts to `parent` via `postMessage`, see the `BRIDGE` const in `templates.ts`.
-- Report is the DEFAULT for a measurable tile, not an optional extra. A tile of a measurable kind (`intake count duration rating measure money`, and `done`, which reports value 1 on the day it is marked) MUST emit one contract-valid `Vitality.report(...)` or it feeds Vee's cross-reference engine nothing, that is the whole point of the tile. Every one of the six templates already injects one report() in its commit path by default (see the `reportLine` helper in `templates.ts`). A measurable tile that emits NO report is refused at the envelope by `assertTileExportable` (error `report-missing`), which is the one place the tile's `kind` is known; `buildUploadEnvelope` and the hand-built `addTile` path both pass it. The only tiles that may legitimately report zero streams are non-metric note/mentor tiles that carry no reporting kind at all (the mentor example asserts exactly zero report calls).
-- Report AT MOST ONE stream, one `Vitality.report(...)` call per tile (because a tile owns a single life-number). Enforced by `report-multiple` (warning, on two or more calls).
+- Speak to the host through `Health Companion.save` / `Health Companion.load` (the tile's OWN private data) and `Health Companion.report(stream)` (ONE life-stream into Vee), a tile with no bridge call persists nothing and lands nothing on the dashboard. At least one of `Health Companion.save/load/report` must appear. Enforced by `bridge-missing` (warning). The bridge posts to `parent` via `postMessage`, see the `BRIDGE` const in `templates.ts`.
+- Report is the DEFAULT for a measurable tile, not an optional extra. A tile of a measurable kind (`intake count duration rating measure money`, and `done`, which reports value 1 on the day it is marked) MUST emit one contract-valid `Health Companion.report(...)` or it feeds Vee's cross-reference engine nothing, that is the whole point of the tile. Every one of the six templates already injects one report() in its commit path by default (see the `reportLine` helper in `templates.ts`). A measurable tile that emits NO report is refused at the envelope by `assertTileExportable` (error `report-missing`), which is the one place the tile's `kind` is known; `buildUploadEnvelope` and the hand-built `addTile` path both pass it. The only tiles that may legitimately report zero streams are non-metric note/mentor tiles that carry no reporting kind at all (the mentor example asserts exactly zero report calls).
+- Report AT MOST ONE stream, one `Health Companion.report(...)` call per tile (because a tile owns a single life-number). Enforced by `report-multiple` (warning, on two or more calls).
 - Shape the report as `{key, label, value, date, kind}` (goalDirection optional), every one of `key value date kind` must be present (because the noticed engine reads a fixed shape). A `report()` call present but MISSING a required field is now a hard-floor `report-shape` **ERROR** (a broken stream lands nothing and silently poisons priors, worse than none), and a `kind:` literal outside the taxonomy is a `report-kind-invalid` **ERROR**. The dashboard-side `validateReport` (mirrored in `mcp/src/tiles/reportContract.ts`) additionally rejects: `key` over 64 chars, `label` over 120 chars, a non-finite `value` or `abs(value) > 1e9`, a `date` not matching `YYYY-MM-DD`, a `kind` outside the fixed taxonomy `intake count duration rating measure money done`, and a `goalDirection` that is not `up`/`down`/`neutral`.
 - Report only a REAL value, never a fabricated zero on an empty tile (because a fake stream pollutes the user's priors). Every kind reports its true today-number and only once data exists.
 
@@ -237,7 +237,7 @@ The worked examples (`exampleMentor.test.ts`, `exampleRecipe.test.ts`) assert th
 
 `mcp/src/tiles/richness.ts` checks seven structural marks, ALL must be present. A bare counter passes the linter but fails here.
 
-- Actually LOAD Instrument Serif via the `fonts.googleapis.com/css2?family=...Instrument+Serif...` link, do not merely name it in a `font-family` stack (because unloaded, every serif title silently falls to Georgia and the tile stops looking like Vitality). Mark `signature-fonts`.
+- Actually LOAD Instrument Serif via the `fonts.googleapis.com/css2?family=...Instrument+Serif...` link, do not merely name it in a `font-family` stack (because unloaded, every serif title silently falls to Georgia and the tile stops looking like Health Companion). Mark `signature-fonts`.
 - Give the tile a serif hero NUMBER as its star, an element with `class="bignum"`, not a lone label (because the huge serif number is the Fuel-grade signature). Mark `serif-hero-number`.
 - Include a header eyebrow row (`class="eyebrow"`, the `01` serif number plus a mono label). Mark `header-eyebrow`.
 - Include a status pill (`class="pill"`) so state reads honestly as idle, good, or caution. Mark `status-pill`.

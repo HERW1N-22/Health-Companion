@@ -1,7 +1,7 @@
 'use server'
 
 /**
- * Vitality.report() server write. The thin authed wrapper around
+ * HealthCompanion.report() server write. The thin authed wrapper around
  * lib/tiles/reportWrites: resolves the user from the SESSION (never the iframe),
  * then upserts the stream + datapoint under RLS. The tile-to-Vee waist in code.
  *

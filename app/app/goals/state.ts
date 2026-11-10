@@ -11,7 +11,7 @@ import type {
   StreakState,
 } from './types'
 
-const LS_KEY = 'vitality_goals_v1'
+const LS_KEY = 'healthcompanion_goals_v1'
 
 const DEFAULT_STREAK: StreakState = {
   current: 0,

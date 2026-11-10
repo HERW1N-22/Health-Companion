@@ -1,5 +1,5 @@
 /**
- * Pure goal-ticker derivation for the "Vitality noticed" surface.
+ * Pure goal-ticker derivation for the "HealthCompanion noticed" surface.
  *
  * Turns a user's goals + real module data into honest per-goal trend rows. The
  * locked rule: a measured number ONLY when a real metric backs it (weight rate

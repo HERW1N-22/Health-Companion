@@ -118,7 +118,7 @@ export async function createBigGoal(input: CreateBigGoalInput): Promise<Ok<{ goa
   )
 
   const { data, error } = await supabase
-    .from('vitality_goals')
+    .from('healthcompanion_goals')
     .insert(row)
     .select('*')
     .single()
@@ -140,7 +140,7 @@ export async function updateBigGoalProgress(id: string, current: number): Promis
   if (!user) return { ok: false, error: 'unauthorized' }
 
   const { data, error } = await supabase
-    .from('vitality_goals')
+    .from('healthcompanion_goals')
     .update({ progress_current: Math.max(0, Math.round(current)), updated_at: new Date().toISOString() })
     .eq('id', id)
     .eq('user_id', user.id)
@@ -166,7 +166,7 @@ export async function updateBigGoalPush(id: string, push: Push): Promise<Ok<{ go
   if (!user) return { ok: false, error: 'unauthorized' }
 
   const { data, error } = await supabase
-    .from('vitality_goals')
+    .from('healthcompanion_goals')
     .update({ push_level: push, updated_at: new Date().toISOString() })
     .eq('id', id)
     .eq('user_id', user.id)
@@ -208,7 +208,7 @@ export async function setGoalBinding(id: string, binding: string | null): Promis
   if (!user) return { ok: false, error: 'unauthorized' }
 
   const { data, error } = await supabase
-    .from('vitality_goals')
+    .from('healthcompanion_goals')
     .update({ binding_override: binding, updated_at: new Date().toISOString() })
     .eq('id', id)
     .eq('user_id', user.id)
@@ -231,7 +231,7 @@ export async function setBigGoalStatus(id: string, status: BigGoalStatus): Promi
   if (status === 'achieved') patch.achieved_at = new Date().toISOString()
 
   const { data, error } = await supabase
-    .from('vitality_goals')
+    .from('healthcompanion_goals')
     .update(patch)
     .eq('id', id)
     .eq('user_id', user.id)
@@ -257,7 +257,7 @@ export async function deleteBigGoal(id: string): Promise<Ok<unknown> | Err> {
   if (!user) return { ok: false, error: 'unauthorized' }
 
   const { error } = await supabase
-    .from('vitality_goals')
+    .from('healthcompanion_goals')
     .delete()
     .eq('id', id)
     .eq('user_id', user.id)
@@ -285,7 +285,7 @@ export async function categorizeAndCleanGoal(goalId: string): Promise<Ok<{ goal:
   if (!user) return { ok: false, error: 'unauthorized' }
 
   const { data: row } = await supabase
-    .from('vitality_goals')
+    .from('healthcompanion_goals')
     .select('title, progress_unit')
     .eq('id', goalId)
     .eq('user_id', user.id)
@@ -304,7 +304,7 @@ export async function categorizeAndCleanGoal(goalId: string): Promise<Ok<{ goal:
   if (backfillUnit) patch.progress_unit = backfillUnit
 
   const { data, error } = await supabase
-    .from('vitality_goals')
+    .from('healthcompanion_goals')
     .update(patch)
     .eq('id', goalId)
     .eq('user_id', user.id)
@@ -356,7 +356,7 @@ export async function addHabitGoal(input: AddHabitGoalInput): Promise<Ok<{ habit
   )
 
   const { data, error } = await supabase
-    .from('vitality_habit_goals')
+    .from('healthcompanion_habit_goals')
     .insert(row)
     .select('*')
     .single()
@@ -373,7 +373,7 @@ export async function setHabitGoalDone(id: string, done: boolean): Promise<Ok<{ 
   if (!user) return { ok: false, error: 'unauthorized' }
 
   const { data, error } = await supabase
-    .from('vitality_habit_goals')
+    .from('healthcompanion_habit_goals')
     .update({ status: done ? 'completed' : 'open', completed_at: done ? new Date().toISOString() : null })
     .eq('id', id)
     .eq('user_id', user.id)
@@ -392,7 +392,7 @@ export async function deleteHabitGoal(id: string): Promise<Ok<unknown> | Err> {
   if (!user) return { ok: false, error: 'unauthorized' }
 
   const { error } = await supabase
-    .from('vitality_habit_goals')
+    .from('healthcompanion_habit_goals')
     .delete()
     .eq('id', id)
     .eq('user_id', user.id)

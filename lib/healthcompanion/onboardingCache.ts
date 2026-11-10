@@ -1,6 +1,6 @@
 import type { Sex, Units, FocusArea } from '@/lib/supabase/types'
 
-const STORAGE_KEY = 'vitality_onboarding_v1'
+const STORAGE_KEY = 'healthcompanion_onboarding_v1'
 
 // Strict return type — all fields have the exact union types that FormState expects.
 // This is what the component spreads into state, so types must match.

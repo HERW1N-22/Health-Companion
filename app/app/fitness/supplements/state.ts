@@ -11,7 +11,7 @@ import type {
   WindowKey,
 } from './types'
 
-const LS_KEY = 'vitality_supplements_v1'
+const LS_KEY = 'healthcompanion_supplements_v1'
 
 const VALID_WINDOWS: WindowKey[] = ['morning', 'lunch', 'evening', 'bed', 'anytime']
 const SLOT_ORDER: ToggleableSlot[] = ['morning', 'lunch', 'evening', 'bed']

@@ -98,7 +98,7 @@ export async function confirmTrainingDay(
 
 // ── Mental-health context store ("Folded Notes") ──
 // Each finished sentence is one durable user_facts row Vee reads everywhere
-// (in-app chat + MCP vitality_user_facts). source='mental_health', kind=<area>.
+// (in-app chat + MCP healthcompanion_user_facts). source='mental_health', kind=<area>.
 const CONTEXT_SOURCE = 'mental_health'
 
 export async function saveContextFact(

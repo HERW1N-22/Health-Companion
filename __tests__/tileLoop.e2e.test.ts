@@ -2,7 +2,7 @@
  * The build -> dashboard loop, locked end to end at the WEB boundary.
  *
  * The loop this guards (source of truth for each hop):
- *   1. MCP `vitality_add_tile` -> `addTile` (mcp/src/mutations.ts) INSERTs a row
+ *   1. MCP `healthcompanion_add_tile` -> `addTile` (mcp/src/mutations.ts) INSERTs a row
  *      into the Supabase `tiles` table.  Row shape: {user_id, name, html, stream,
  *      category, color, source} (id + timestamps default in the DB).
  *   2. On dashboard load `pullAndMerge(userId)` (lib/tiles/tileSync.ts) READS the

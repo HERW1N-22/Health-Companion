@@ -31,7 +31,7 @@ import type {
   WishItem,
 } from './types'
 
-export const STORAGE_KEY = 'vitality_finance_v1'
+export const STORAGE_KEY = 'healthcompanion_finance_v1'
 export const ACTIVITY_MAX = 50
 export const NW_HISTORY_MAX = 500
 export const PRICE_HISTORY_MAX = 30
@@ -537,7 +537,7 @@ export function categoryBreakdown(orders: Order[], now = new Date()): CategorySp
   return out
 }
 
-const BUDGET_KEY = 'vitality_finance_budget_v1'
+const BUDGET_KEY = 'healthcompanion_finance_budget_v1'
 
 /**
  * Device-local monthly spending budget (canonical CHF). Deliberately kept OUT of
@@ -569,7 +569,7 @@ export function useMonthlyBudget(): { budgetCHF: number | null; setBudgetCHF: (v
   return { budgetCHF, setBudgetCHF }
 }
 
-const NW_GOAL_KEY = 'vitality_finance_nw_goal_v1'
+const NW_GOAL_KEY = 'healthcompanion_finance_nw_goal_v1'
 
 /**
  * Device-local net-worth target (canonical CHF) for the hero goal ring. Same

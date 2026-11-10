@@ -2,9 +2,9 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Add a pure, deterministic `scaffold_tile` tool to the Vitality MCP that turns one plain-English goal into one finished, themed, bridge-wired Vitality tile (sealed HTML), matching the locked tile->Vee report contract.
+**Goal:** Add a pure, deterministic `scaffold_tile` tool to the Health Companion MCP that turns one plain-English goal into one finished, themed, bridge-wired Health Companion tile (sealed HTML), matching the locked tile->Vee report contract.
 
-**Architecture:** A pure generator (`scaffoldTile.ts`) infers `{key,label,kind,goalDirection,unit,template}` from the goal (overridable), picks one of 6 themed templates, and fills in the Vitality bridge plus one `Vitality.report(...)` line. The tool layer in `tools.ts` wires the pure function to an MCP tool that returns a header + the HTML as text. No DB, no `getVdb`, no LLM, no API key.
+**Architecture:** A pure generator (`scaffoldTile.ts`) infers `{key,label,kind,goalDirection,unit,template}` from the goal (overridable), picks one of 6 themed templates, and fills in the Health Companion bridge plus one `Health Companion.report(...)` line. The tool layer in `tools.ts` wires the pure function to an MCP tool that returns a header + the HTML as text. No DB, no `getVdb`, no LLM, no API key.
 
 **Tech Stack:** TypeScript (ESM, NodeNext), `@modelcontextprotocol/sdk`, `zod`, Node's built-in test runner via `tsx` (already a devDep). No new dependencies.
 
@@ -14,7 +14,7 @@
 - The tile->Vee report contract is LOCKED: source of truth `lib/tiles/reportContract.ts` on `origin/vee-tile-fuse`. We vendor a VERBATIM mirror into `mcp/`; never change its logic.
 - Report stream shape: `{ key, label, value, date, kind, goalDirection? }`. `date` = local `YYYY-MM-DD`. `kind` in `intake | count | duration | rating | measure | money | done`. `goalDirection` in `up | down | neutral` (optional). Tile emits the NATURAL key (beer); the server normalizes (beer->alcohol). Do not normalize in the tile.
 - Theme every tile: `body{background:transparent}`, color `#fff`, accent `#6EE7B7`, `accent-color:#6EE7B7`, Inter body + Instrument-Serif-italic title, rounded inputs/cards, spring `cubic-bezier(.16,1,.3,1)`, NO external libs, NO emojis.
-- Bridge: `Vitality.save(data)` / `Vitality.load()` (host replies `{source:'vitality-host',type:'load:result',id,data}`) / `Vitality.report(stream)`, all via `postMessage(..., '*')`. Tiles run sealed (`sandbox="allow-scripts"`, opaque origin), so `'*'` is correct.
+- Bridge: `Health Companion.save(data)` / `Health Companion.load()` (host replies `{source:'healthcompanion-host',type:'load:result',id,data}`) / `Health Companion.report(stream)`, all via `postMessage(..., '*')`. Tiles run sealed (`sandbox="allow-scripts"`, opaque origin), so `'*'` is correct.
 - Commit on branch `worktree-mcp-tile-builder`. Commit author email `founder@example.com` (three e's, no r). Do NOT push to prod. No em dashes anywhere.
 
 **Run tests with:** `cd mcp && npm test` (added in Task 1).
@@ -287,8 +287,8 @@ Co-Authored-By: Claude Opus 4.8 (1M context) <noreply@anthropic.com>"
 **Shared rules for every template (the contract + theme made concrete):**
 - Head boilerplate: reset, `body{background:transparent;color:#fff;accent-color:#6EE7B7;font-family:-apple-system,BlinkMacSystemFont,'Inter','Segoe UI',sans-serif}`. Title uses `font-family:'Instrument Serif',Georgia,serif;font-style:italic`.
 - The BRIDGE constant (below) is included verbatim in every tile's `<script>`.
-- History model is uniform: `history = [{date, value}]`; `get(date)` finds-or-creates today's row; `commit()` renders, `Vitality.save(history)`, then reports.
-- The report line is exactly: `Vitality.report({key:'<key>',label:'<label>',value:<v>,date:today(),kind:'<kind>'<,goalDirection:'<dir>'>});`
+- History model is uniform: `history = [{date, value}]`; `get(date)` finds-or-creates today's row; `commit()` renders, `Health Companion.save(history)`, then reports.
+- The report line is exactly: `Health Companion.report({key:'<key>',label:'<label>',value:<v>,date:today(),kind:'<kind>'<,goalDirection:'<dir>'>});`
 - The closing script tag is a literal `</script>` (the output is a standalone HTML document, like `public/beer-tracker-tile.html`; no escaping needed).
 
 - [ ] **Step 1: Implement `mcp/src/tiles/templates.ts`**
@@ -296,12 +296,12 @@ Co-Authored-By: Claude Opus 4.8 (1M context) <noreply@anthropic.com>"
 ```ts
 import type { TileMeta } from './infer.js';
 
-const BRIDGE = `var Vitality={_w:{},
-  save:function(d){parent.postMessage({source:'vitality-tile',type:'save',data:d},'*')},
-  load:function(){return new Promise(function(res){var id=Math.random().toString(36).slice(2);Vitality._w[id]=res;parent.postMessage({source:'vitality-tile',type:'load',id:id},'*')})},
-  report:function(s){parent.postMessage({source:'vitality-tile',type:'report',stream:s},'*')}
+const BRIDGE = `var Health Companion={_w:{},
+  save:function(d){parent.postMessage({source:'healthcompanion-tile',type:'save',data:d},'*')},
+  load:function(){return new Promise(function(res){var id=Math.random().toString(36).slice(2);Health Companion._w[id]=res;parent.postMessage({source:'healthcompanion-tile',type:'load',id:id},'*')})},
+  report:function(s){parent.postMessage({source:'healthcompanion-tile',type:'report',stream:s},'*')}
 };
-window.addEventListener('message',function(e){var m=e.data;if(m&&m.source==='vitality-host'&&m.type==='load:result'&&Vitality._w[m.id]){Vitality._w[m.id](m.data);delete Vitality._w[m.id]}});
+window.addEventListener('message',function(e){var m=e.data;if(m&&m.source==='healthcompanion-host'&&m.type==='load:result'&&Health Companion._w[m.id]){Health Companion._w[m.id](m.data);delete Health Companion._w[m.id]}});
 function today(){var d=new Date();var m=String(d.getMonth()+1).padStart(2,'0');var day=String(d.getDate()).padStart(2,'0');return d.getFullYear()+'-'+m+'-'+day}
 var history=[];
 function get(date){for(var i=0;i<history.length;i++){if(history[i].date===date)return history[i]}var row={date:date,value:0};history.push(row);return row}`;
@@ -340,7 +340,7 @@ function dir(meta: TileMeta): string {
   return meta.goalDirection ? `,goalDirection:'${meta.goalDirection}'` : '';
 }
 function reportLine(meta: TileMeta, valueExpr: string): string {
-  return `Vitality.report({key:'${meta.key}',label:'${meta.label.replace(/'/g, "")}',value:${valueExpr},date:today(),kind:'${meta.kind}'${dir(meta)}});`;
+  return `Health Companion.report({key:'${meta.key}',label:'${meta.label.replace(/'/g, "")}',value:${valueExpr},date:today(),kind:'${meta.kind}'${dir(meta)}});`;
 }
 function head(meta: TileMeta, sub: string): string {
   return `${HEAD}<div class="title">${meta.label}</div><div class="label">${sub}</div>`;
@@ -357,10 +357,10 @@ function counter(meta: TileMeta): string {
 <script>${BRIDGE}
 ${weekScript()}
 function render(){var t=get(today());document.getElementById('v').textContent=t.value;document.getElementById('u').textContent=t.value===0?'tap to log a ${meta.unit.replace(/s$/,'')}':(t.value+' ${meta.unit}');renderWeek()}
-function commit(){render();Vitality.save(history);var t=get(today());${reportLine(meta, 't.value')}}
+function commit(){render();Health Companion.save(history);var t=get(today());${reportLine(meta, 't.value')}}
 document.getElementById('plus').onclick=function(){get(today()).value++;commit()};
 document.getElementById('minus').onclick=function(){var t=get(today());if(t.value>0)t.value--;commit()};
-Vitality.load().then(function(d){history=Array.isArray(d)?d:[];render()});
+Health Companion.load().then(function(d){history=Array.isArray(d)?d:[];render()});
 </script></body></html>`;
 }
 
@@ -373,10 +373,10 @@ function timer(meta: TileMeta): string {
 <script>${BRIDGE}
 ${weekScript()}
 function render(){document.getElementById('v').textContent=get(today()).value;renderWeek()}
-function commit(){render();Vitality.save(history);var t=get(today());${reportLine(meta, 't.value')}}
+function commit(){render();Health Companion.save(history);var t=get(today());${reportLine(meta, 't.value')}}
 Array.prototype.forEach.call(document.querySelectorAll('[data-a]'),function(b){b.onclick=function(){get(today()).value+=parseInt(b.getAttribute('data-a'),10);commit()}});
 document.getElementById('clear').onclick=function(){get(today()).value=0;commit()};
-Vitality.load().then(function(d){history=Array.isArray(d)?d:[];render()});
+Health Companion.load().then(function(d){history=Array.isArray(d)?d:[];render()});
 </script></body></html>`;
 }
 
@@ -389,8 +389,8 @@ function scale(meta: TileMeta): string {
 ${weekScript()}
 var MAX=${max};
 function render(){var t=get(today());var s=document.getElementById('scale');s.innerHTML='';for(var i=1;i<=MAX;i++){(function(n){var b=document.createElement('button');b.className='dot'+(t.value===n?' on':'');b.textContent=n;b.onclick=function(){get(today()).value=n;commit()};s.appendChild(b)})(i)}document.getElementById('u').textContent=t.value?('rated '+t.value+'/'+MAX):'tap a number';renderWeek()}
-function commit(){render();Vitality.save(history);var t=get(today());${reportLine(meta, 't.value')}}
-Vitality.load().then(function(d){history=Array.isArray(d)?d:[];render()});
+function commit(){render();Health Companion.save(history);var t=get(today());${reportLine(meta, 't.value')}}
+Health Companion.load().then(function(d){history=Array.isArray(d)?d:[];render()});
 </script></body></html>`;
 }
 
@@ -403,9 +403,9 @@ function measure(meta: TileMeta): string {
 <script>${BRIDGE}
 ${weekScript()}
 function render(){var t=get(today());document.getElementById('v').textContent=t.value?t.value:'--';renderWeek()}
-function commit(){render();Vitality.save(history);var t=get(today());${reportLine(meta, 't.value')}}
+function commit(){render();Health Companion.save(history);var t=get(today());${reportLine(meta, 't.value')}}
 document.getElementById('save').onclick=function(){var n=parseFloat(document.getElementById('in').value);if(isNaN(n))return;get(today()).value=n;document.getElementById('in').value='';commit()};
-Vitality.load().then(function(d){history=Array.isArray(d)?d:[];render()});
+Health Companion.load().then(function(d){history=Array.isArray(d)?d:[];render()});
 </script></body></html>`;
 }
 
@@ -418,9 +418,9 @@ function money(meta: TileMeta): string {
 <script>${BRIDGE}
 ${weekScript()}
 function render(){var t=get(today());document.getElementById('v').textContent='$'+(t.value||0);renderWeek()}
-function commit(){render();Vitality.save(history);var t=get(today());${reportLine(meta, 't.value')}}
+function commit(){render();Health Companion.save(history);var t=get(today());${reportLine(meta, 't.value')}}
 document.getElementById('save').onclick=function(){var n=parseFloat(document.getElementById('in').value);if(isNaN(n))return;get(today()).value=n;document.getElementById('in').value='';commit()};
-Vitality.load().then(function(d){history=Array.isArray(d)?d:[];render()});
+Health Companion.load().then(function(d){history=Array.isArray(d)?d:[];render()});
 </script></body></html>`;
 }
 
@@ -431,9 +431,9 @@ function toggle(meta: TileMeta): string {
 <script>${BRIDGE}
 ${weekScript()}
 function render(){var t=get(today());var b=document.getElementById('t');b.className='toggle'+(t.value?' on':'');b.textContent=t.value?'done':'not yet';renderWeek()}
-function commit(){render();Vitality.save(history);var t=get(today());${reportLine(meta, 't.value')}}
+function commit(){render();Health Companion.save(history);var t=get(today());${reportLine(meta, 't.value')}}
 document.getElementById('t').onclick=function(){var t=get(today());t.value=t.value?0:1;commit()};
-Vitality.load().then(function(d){history=Array.isArray(d)?d:[];render()});
+Health Companion.load().then(function(d){history=Array.isArray(d)?d:[];render()});
 </script></body></html>`;
 }
 
@@ -498,7 +498,7 @@ for (const kind of REPORT_KINDS) {
     const r = validateReport({ key: meta.key, label: meta.label, value: 3, date: '2026-06-28', kind: meta.kind, ...(meta.goalDirection ? { goalDirection: meta.goalDirection } : {}) });
     assert.equal(r.ok, true, r.ok ? '' : (r as any).error);
     // the HTML must actually wire that report with the right key + kind
-    assert.match(html, new RegExp(`Vitality\\.report\\([^)]*key:'${meta.key}'`));
+    assert.match(html, new RegExp(`Health Companion\\.report\\([^)]*key:'${meta.key}'`));
     assert.match(html, new RegExp(`kind:'${meta.kind}'`));
     // bridge present
     assert.match(html, /type:'save'/);
@@ -559,7 +559,7 @@ function buildHeader(meta: TileMeta): string {
     `template: ${meta.template}`,
   ].filter(Boolean).join(' | ');
   return [
-    `Vitality tile ready: "${meta.label}"`,
+    `Health Companion tile ready: "${meta.label}"`,
     `  ${fields}`,
     `Paste the HTML below into /app/create (Run tile), or upload it to your dashboard.`,
     `It is just HTML. Edit it freely.`,
@@ -625,9 +625,9 @@ test('scaffold_tile is registered and returns the tile as text', async () => {
   assert.ok(tools['scaffold_tile'], 'tool registered');
   const res = await tools['scaffold_tile'].handler({ goal: 'beer tracker' });
   const text = res.content[0].text as string;
-  assert.match(text, /Vitality tile ready/);
+  assert.match(text, /Health Companion tile ready/);
   assert.match(text, /<!doctype html>/);
-  assert.match(text, /Vitality\.report\(/);
+  assert.match(text, /Health Companion\.report\(/);
   assert.notEqual(res.isError, true);
 });
 ```
@@ -649,9 +649,9 @@ Inside `registerTools`, after the existing tools (before the closing `}`), add:
   server.registerTool(
     'scaffold_tile',
     {
-      title: 'Build a Vitality tile',
+      title: 'Build a Health Companion tile',
       description:
-        'Turn a plain-English goal ("beer tracker", "track my cold plunges") into ONE finished, on-brand Vitality tile: sealed self-contained HTML, themed, pre-wired to the Vitality bridge (save/load) and carrying one optional report() line so it can connect to the dashboard with zero setup. Deterministic (no LLM/keys). Returns a short header naming the inferred {key,label,kind,goalDirection,template} followed by the HTML; paste it into /app/create or upload it. The caller may freely edit the returned HTML.',
+        'Turn a plain-English goal ("beer tracker", "track my cold plunges") into ONE finished, on-brand Health Companion tile: sealed self-contained HTML, themed, pre-wired to the Health Companion bridge (save/load) and carrying one optional report() line so it can connect to the dashboard with zero setup. Deterministic (no LLM/keys). Returns a short header naming the inferred {key,label,kind,goalDirection,template} followed by the HTML; paste it into /app/create or upload it. The caller may freely edit the returned HTML.',
       inputSchema: {
         goal: z.string().min(1).max(300).describe('What the tile tracks, in plain words'),
         kind: z.enum(['intake', 'count', 'duration', 'rating', 'measure', 'money', 'done']).optional().describe('Override the inferred tile type'),
@@ -665,7 +665,7 @@ Inside `registerTools`, after the existing tools (before the closing `}`), add:
         return text(scaffoldTile(args).text);
       } catch (err) {
         const msg = err instanceof Error ? err.message : String(err);
-        return { content: [{ type: 'text', text: `Vitality error: ${msg}` }], isError: true };
+        return { content: [{ type: 'text', text: `Health Companion error: ${msg}` }], isError: true };
       }
     },
   );
@@ -699,7 +699,7 @@ Expected: all tests pass, no type errors, `dist/` builds.
 - [ ] **Step 2: Smoke the real output**
 
 Run: `cd mcp && node --import tsx -e "import('./src/scaffoldTile.ts').then(m=>process.stdout.write(m.scaffoldTile({goal:'track my cold plunges'}).html))" > /tmp/tile.html`
-Then open `/tmp/tile.html` in Chrome to eyeball the look (it will say "tap to log"; the bridge is inert outside Vitality, which is expected).
+Then open `/tmp/tile.html` in Chrome to eyeball the look (it will say "tap to log"; the bridge is inert outside Health Companion, which is expected).
 
 - [ ] **Step 3: Document in `mcp/README.md`**
 

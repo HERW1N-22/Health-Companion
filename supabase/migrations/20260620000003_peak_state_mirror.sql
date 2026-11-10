@@ -4,7 +4,7 @@
 -- Follows the BUILD36 pattern (goals_state / supplements_state / brand_state in
 -- 20260615000002): the live Peak module (/app/peak) keeps its substance logs,
 -- subjective energy taps, stimulant profile, and day tasks in a single
--- localStorage blob (`vitality_peak_v1`) that nothing on the server could read.
+-- localStorage blob (`healthcompanion_peak_v1`) that nothing on the server could read.
 -- The Peak *schedule* is already relational (peak_tracker_* tables); this fills
 -- the remaining blind spot so the MCP can answer "what have I taken today / how
 -- am I feeling" and fold stimulants into the briefing.

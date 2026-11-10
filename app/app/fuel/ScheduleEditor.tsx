@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 
-import VitalityIcon, { type IconName } from '@/components/VitalityIcon'
+import HealthCompanionIcon, { type IconName } from '@/components/HealthCompanionIcon'
 import CozyLoader from '@/components/CozyLoader'
 import type { CozyItem } from '@/lib/cozy/types'
 import type { useSupplementsState } from '../fitness/supplements/state'
@@ -40,7 +40,7 @@ const COZY: CozyItem[] = [
 
 /**
  * Schedule editor — the card page behind "When to take them". Toggle time
- * blocks, set each supplement's block, and follow Vitality's recommended intake
+ * blocks, set each supplement's block, and follow HealthCompanion's recommended intake
  * conditions. On open it plays a brief cozy "reading your stack" moment, then
  * each supplement shows the recommended tag(s) it knows (from DB_CONDITION_HINTS)
  * with a one-tap "Use these"; "Edit" opens the full colour-coded label library.
@@ -69,7 +69,7 @@ export default function ScheduleEditor({
         <div className={styles.editHead}>
           <div className={styles.editTitle}>
             <span className={styles.tileIc}>
-              <VitalityIcon name="clock" size={18} />
+              <HealthCompanionIcon name="clock" size={18} />
             </span>
             When to take them
           </div>
@@ -92,7 +92,7 @@ export default function ScheduleEditor({
                     className={`${styles.blockChip} ${on ? styles.blockChipOn : ''}`}
                     onClick={() => actions.toggleSlot(key)}
                   >
-                    <VitalityIcon name={SLOT_ICON[key]} size={15} />
+                    <HealthCompanionIcon name={SLOT_ICON[key]} size={15} />
                     {META[key]?.title ?? key}
                   </button>
                 )
@@ -121,7 +121,7 @@ export default function ScheduleEditor({
                   <div key={item.id} className={styles.editItem}>
                     <div className={styles.editItemHead}>
                       <span className={styles.suppIc}>
-                        <VitalityIcon name="pill" size={16} />
+                        <HealthCompanionIcon name="pill" size={16} />
                       </span>
                       <span className={styles.editItemName}>{item.name}</span>
                       {item.dose && <span className={styles.suppDose}>{item.dose}</span>}
@@ -142,17 +142,17 @@ export default function ScheduleEditor({
                       </div>
                     </div>
 
-                    {/* Vitality recommendation */}
+                    {/* HealthCompanion recommendation */}
                     <div className={styles.recRow}>
                       <span className={styles.recLbl}>
-                        <VitalityIcon name="sparkles" size={12} /> We suggest
+                        <HealthCompanionIcon name="sparkles" size={12} /> We suggest
                       </span>
                       <div className={styles.editPills}>
                         {hints.length === 0 ? (
                           <span className={styles.recNone}>No special timing. Take it whenever suits you.</span>
                         ) : allApplied ? (
                           <span className={styles.recFollowing}>
-                            <VitalityIcon name="star" size={12} /> Following the recommendation
+                            <HealthCompanionIcon name="star" size={12} /> Following the recommendation
                           </span>
                         ) : (
                           <>
@@ -166,7 +166,7 @@ export default function ScheduleEditor({
                                   className={`${styles.recChip} ${TONE_CLASS[c.tone]} ${on ? styles.recChipOn : ''}`}
                                   onClick={() => actions.toggleCondition(item.id, cid)}
                                 >
-                                  <VitalityIcon name={c.icon as IconName} size={12} />
+                                  <HealthCompanionIcon name={c.icon as IconName} size={12} />
                                   {c.label}
                                 </button>
                               )
@@ -198,7 +198,7 @@ export default function ScheduleEditor({
                                   }`}
                                   onClick={() => actions.toggleCondition(item.id, c.id)}
                                 >
-                                  <VitalityIcon name={c.icon as IconName} size={13} />
+                                  <HealthCompanionIcon name={c.icon as IconName} size={13} />
                                   {c.label}
                                 </button>
                               )
@@ -214,7 +214,7 @@ export default function ScheduleEditor({
                               if (!c) return null
                               return (
                                 <span key={cid} className={`${styles.condChip} ${TONE_CLASS[c.tone]}`}>
-                                  <VitalityIcon name={c.icon as IconName} size={12} />
+                                  <HealthCompanionIcon name={c.icon as IconName} size={12} />
                                   {c.label}
                                 </span>
                               )
@@ -225,7 +225,7 @@ export default function ScheduleEditor({
                           </>
                         ) : (
                           <button className={styles.addCondBtn} onClick={() => setEditId(item.id)}>
-                            <VitalityIcon name="plus" size={13} /> Add your own
+                            <HealthCompanionIcon name="plus" size={13} /> Add your own
                           </button>
                         )}
                       </div>

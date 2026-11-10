@@ -8,9 +8,9 @@ import {
   logBusinessMetric,
   requireWrite,
 } from '@/mcp/src/mutations'
-import type { VitalityDb } from '@/mcp/src/supabase'
+import type { HealthCompanionDb } from '@/mcp/src/supabase'
 
-// Write layer for the Vitality MCP (BUILD42 + BUILD46). Pins the capability gate,
+// Write layer for the HealthCompanion MCP (BUILD42 + BUILD46). Pins the capability gate,
 // input validation (which must run BEFORE any DB call), the happy paths, and the
 // persisted shapes — against a minimal mock of the Supabase fluent client that is
 // both chainable AND awaitable (like PostgrestBuilder) and records its writes.
@@ -60,8 +60,8 @@ const untouchableDb = {
   },
 }
 
-function vdb(scopes: string[], db: unknown): VitalityDb {
-  return { db, userId: 'u1', mode: 'user', scopes } as unknown as VitalityDb
+function vdb(scopes: string[], db: unknown): HealthCompanionDb {
+  return { db, userId: 'u1', mode: 'user', scopes } as unknown as HealthCompanionDb
 }
 
 describe('requireWrite', () => {

@@ -59,7 +59,7 @@ export const SKIP_ANSWER = '__skip__'
 // The intro "how to log" banner is a one-time tip card, NOT the section wall.
 // It gates on this localStorage flag so dismissing it never touches
 // nutrition_goals.onboarded — only the quiz summary sets that wall flag.
-const TIPS_SEEN_KEY = 'vitality_fuel_tips_seen'
+const TIPS_SEEN_KEY = 'healthcompanion_fuel_tips_seen'
 
 export type StatusTone = 'info' | 'working' | 'error' | 'success'
 export interface Status {

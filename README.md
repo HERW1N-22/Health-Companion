@@ -1,6 +1,6 @@
 # Health Companion
 
-A personal health and wellness application for tracking nutrition, calories and macros, workouts, hydration, weight, sleep and recovery, with optional AI coaching.
+A student college project exploring personal health tracking and AI-assisted wellness. It includes nutrition and macro logging, workouts, hydration, weight trends, sleep and recovery, and optional AI coaching.
 
 ## Features
 - Food logging, food-photo analysis, barcode lookup, calorie and macro tracking.

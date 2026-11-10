@@ -1,17 +1,17 @@
 {
-  "name": "vitality-mcp",
+  "name": "healthcompanion-mcp",
   "version": "0.1.0",
   "private": true,
   "license": "UNLICENSED",
   "author": "Alex Rivera",
-  "description": "MCP server that exposes a Vitality user's data (sleep, training, nutrition, weight, finances, notes) to Claude, with read tools plus 7 scope-gated write tools, a daily-briefing nudge engine, and a tile builder (scaffold_tile / check_tile / vitality_tile_kit / upload_tile).",
+  "description": "MCP server that exposes a HealthCompanion user's data (sleep, training, nutrition, weight, finances, notes) to Claude, with read tools plus 7 scope-gated write tools, a daily-briefing nudge engine, and a tile builder (scaffold_tile / check_tile / healthcompanion_tile_kit / upload_tile).",
   "repository": {
     "type": "git",
     "directory": "mcp"
   },
   "type": "module",
   "bin": {
-    "vitality-mcp": "./dist/index.js"
+    "healthcompanion-mcp": "./dist/index.js"
   },
   "scripts": {
     "dev": "tsx src/index.ts",

@@ -1,6 +1,6 @@
 # Gotchas
 
-Vitality's hard-won rules, so a tile is right the first time. A tile is ONE sealed
+Health Companion's hard-won rules, so a tile is right the first time. A tile is ONE sealed
 HTML file: no libraries, no CDN, no React, no fonts fetched at runtime. Inline all
 HTML, CSS, vanilla JS, and SVG. Each rule reads "Do X, not Y (because Z)." These are
 bugs Alex already fixed. Do not re-discover them.
@@ -22,7 +22,7 @@ bugs Alex already fixed. Do not re-discover them.
 
 - Build local date keys with local getters, never `toISOString().split('T')[0]` (because UTC drift shows yesterday's or tomorrow's date). Format all keys `YYYY-MM-DD`.
 - Re-derive the active day on a ~60s timer, not once on load (because a tile left open across midnight or the rollover hour keeps writing to the stale day).
-- If "the day" should not flip at midnight, subtract a rollover hour first (because people log late-night events against the day they just finished). Vitality rolls supplements at 6am, food and macros at 4am. Default with no late-night meaning is plain midnight.
+- If "the day" should not flip at midnight, subtract a rollover hour first (because people log late-night events against the day they just finished). Health Companion rolls supplements at 6am, food and macros at 4am. Default with no late-night meaning is plain midnight.
 - Pick ONE rollover rule per concept and use the same key for the write, the cache, and the read, do not mix (because two views with different rollovers disagree between midnight and the cutoff).
 - For "last N days" math, step with noon-UTC dates, not by adding 86400000 ms (because DST days are 23 or 25 hours, so ms stepping drifts a day twice a year). Build each key from `new Date(Date.UTC(y, m-1, d - i, 12))`.
 - Date each record by the user's own offset, carrying the offset with the data, not server-local time (because server-local is not the user's calendar day).
@@ -101,7 +101,7 @@ function dayKeyRollover(hour, d = new Date()) {
 - Make committing an edit an explicit separate button, not tapping the row or pressing Enter (because that doubles as save and silently logs the value). Let people edit freely, save only when they mean to.
 - Add an explicit neutral state and require real data for the positive state, do not let empty fall through to "on track" (because testing only the bad branch reads falsely positive on an empty state).
 - Gate any "done today" badge on the entry's date equalling today, not a bare completion flag (because a flag with no date check shows stale success on a fresh day). Otherwise revert to neutral.
-- Persist via the host bridge `Vitality.save` on each discrete action and fold unconfirmed local work back in additively on mount, not rely on in-flight async writes (because an installed or standalone page frozen on app-switch loses the last edits). `localStorage` is only a standalone fallback, wrapped in try/catch. Never delete what is already persisted.
+- Persist via the host bridge `Health Companion.save` on each discrete action and fold unconfirmed local work back in additively on mount, not rely on in-flight async writes (because an installed or standalone page frozen on app-switch loses the last edits). `localStorage` is only a standalone fallback, wrapped in try/catch. Never delete what is already persisted.
 - Stamp saved data with an owner id and wipe your keys before hydrating if a DIFFERENT owner is present, not trust that storage is yours (because `localStorage` survives sign-out and shows the previous person's data on a shared device). An ABSENT stamp means pre-existing own data: never wipe it. After a real owner-switch wipe, force one reload.
 - Store cross-references by key and resolve the value live at render, do not duplicate the value into two places (because duplicates drift). Keep one source of truth.
 - Make first render deterministic, then randomize on mount, not pick randomly during the initial paint (because a random value at first paint causes a hydration mismatch flash). Render index 0 first, shuffle after mount.

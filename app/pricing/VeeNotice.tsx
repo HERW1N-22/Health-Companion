@@ -1,7 +1,7 @@
 import styles from './pricing.module.css'
 
 /**
- * VeeNotice — the in-app "Vee notice" exactly as it appears in Vitality,
+ * VeeNotice — the in-app "Vee notice" exactly as it appears in HealthCompanion,
  * shown inside a laptop/browser frame on the pricing page. This is the
  * INPUT side of the story: the app holds your goals + history + live stats
  * and surfaces the one move, then hands the deep version to Claude
@@ -40,12 +40,12 @@ export default function VeeNotice() {
           <span />
           <span />
         </span>
-        <span className={styles.laptopUrl}>vitality.app/today</span>
+        <span className={styles.laptopUrl}>example.test/today</span>
       </div>
 
       <div className={styles.laptopScreen}>
         <div className={styles.vnEyebrow}>
-          <span className={styles.vnEyebrowDot} /> Vitality · Vee — this afternoon
+          <span className={styles.vnEyebrowDot} /> HealthCompanion · Vee — this afternoon
         </div>
         <h3 className={styles.vnTitle}>Howdy, Alex.</h3>
         <p className={styles.vnIntro}>
@@ -101,11 +101,11 @@ export default function VeeNotice() {
           </div>
         </div>
 
-        {/* What Vitality noticed — the iris insight card */}
+        {/* What HealthCompanion noticed — the iris insight card */}
         <div className={styles.vnNotice}>
           <div className={styles.vnNoticeTop}>
             <span className={styles.vnVmark}>V</span>
-            <span className={styles.vnNoticeTag}>Vitality noticed</span>
+            <span className={styles.vnNoticeTag}>HealthCompanion noticed</span>
             <span className={styles.vnNoticeSrc}>goals + sleep + fuel · 21d</span>
           </div>
           <p className={styles.vnNoticeBody}>

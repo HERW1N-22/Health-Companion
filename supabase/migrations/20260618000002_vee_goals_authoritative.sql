@@ -2,8 +2,8 @@
 -- the Vee mentor experience, replacing the legacy localStorage /app/goals module.
 --
 -- Four owner-scoped tables, RLS pattern copied from 20260608000001_vitals_goals.sql:
---   1. vitality_goals       — the BIG personal goals the user authors
---   2. vitality_habit_goals — the small auto-tracked / manual "THIS WEEK" goals
+--   1. healthcompanion_goals       — the BIG personal goals the user authors
+--   2. healthcompanion_habit_goals — the small auto-tracked / manual "THIS WEEK" goals
 --   3. goals_streak         — one row per user; preserves the rollStreak engine 1:1
 --   4. goal_nudges          — drift-watch cooldown ledger (cron + on-open share it)
 --
@@ -13,9 +13,9 @@
 -- read-back + backfill are verified in prod.
 
 -- ===========================================================================
--- TABLE 1 — public.vitality_goals  (the BIG personal goals: "hit 1,000 subs")
+-- TABLE 1 — public.healthcompanion_goals  (the BIG personal goals: "hit 1,000 subs")
 -- ===========================================================================
-create table if not exists public.vitality_goals (
+create table if not exists public.healthcompanion_goals (
   id               uuid primary key default gen_random_uuid(),
   user_id          uuid not null references auth.users(id) on delete cascade,
   title            text not null,
@@ -38,31 +38,31 @@ create table if not exists public.vitality_goals (
   achieved_at      timestamptz
 );
 
-create index if not exists vitality_goals_user_idx
-  on public.vitality_goals (user_id, status, target_date);
+create index if not exists healthcompanion_goals_user_idx
+  on public.healthcompanion_goals (user_id, status, target_date);
 
-alter table public.vitality_goals enable row level security;
+alter table public.healthcompanion_goals enable row level security;
 
-create policy "users can read own vitality goals"
-  on public.vitality_goals for select using (auth.uid() = user_id);
-create policy "users can insert own vitality goals"
-  on public.vitality_goals for insert with check (auth.uid() = user_id);
-create policy "users can update own vitality goals"
-  on public.vitality_goals for update using (auth.uid() = user_id) with check (auth.uid() = user_id);
-create policy "users can delete own vitality goals"
-  on public.vitality_goals for delete using (auth.uid() = user_id);
+create policy "users can read own healthcompanion goals"
+  on public.healthcompanion_goals for select using (auth.uid() = user_id);
+create policy "users can insert own healthcompanion goals"
+  on public.healthcompanion_goals for insert with check (auth.uid() = user_id);
+create policy "users can update own healthcompanion goals"
+  on public.healthcompanion_goals for update using (auth.uid() = user_id) with check (auth.uid() = user_id);
+create policy "users can delete own healthcompanion goals"
+  on public.healthcompanion_goals for delete using (auth.uid() = user_id);
 
-grant select, insert, update, delete on table public.vitality_goals to anon, authenticated, service_role;
+grant select, insert, update, delete on table public.healthcompanion_goals to anon, authenticated, service_role;
 
 -- ===========================================================================
--- TABLE 2 — public.vitality_habit_goals  (the small "THIS WEEK" auto/manual goals)
+-- TABLE 2 — public.healthcompanion_habit_goals  (the small "THIS WEEK" auto/manual goals)
 -- Faithful normalization of the legacy single-table Goal (kind/dueDate/parentId).
 -- ===========================================================================
-create table if not exists public.vitality_habit_goals (
+create table if not exists public.healthcompanion_habit_goals (
   id                  uuid primary key default gen_random_uuid(),
   user_id             uuid not null references auth.users(id) on delete cascade,
   -- replaces the in-blob parentId: links a habit/milestone to a big goal
-  parent_goal_id      uuid references public.vitality_goals(id) on delete set null,
+  parent_goal_id      uuid references public.healthcompanion_goals(id) on delete set null,
   title               text not null,
   kind                text not null default 'task'
                         check (kind in ('habit', 'task', 'milestone')),
@@ -86,25 +86,25 @@ create table if not exists public.vitality_habit_goals (
   completed_at        timestamptz
 );
 
-create index if not exists vitality_habit_goals_due_idx
-  on public.vitality_habit_goals (user_id, due_date);
-create index if not exists vitality_habit_goals_tomorrow_idx
-  on public.vitality_habit_goals (user_id, is_tomorrow);
-create index if not exists vitality_habit_goals_parent_idx
-  on public.vitality_habit_goals (parent_goal_id);
+create index if not exists healthcompanion_habit_goals_due_idx
+  on public.healthcompanion_habit_goals (user_id, due_date);
+create index if not exists healthcompanion_habit_goals_tomorrow_idx
+  on public.healthcompanion_habit_goals (user_id, is_tomorrow);
+create index if not exists healthcompanion_habit_goals_parent_idx
+  on public.healthcompanion_habit_goals (parent_goal_id);
 
-alter table public.vitality_habit_goals enable row level security;
+alter table public.healthcompanion_habit_goals enable row level security;
 
 create policy "users can read own habit goals"
-  on public.vitality_habit_goals for select using (auth.uid() = user_id);
+  on public.healthcompanion_habit_goals for select using (auth.uid() = user_id);
 create policy "users can insert own habit goals"
-  on public.vitality_habit_goals for insert with check (auth.uid() = user_id);
+  on public.healthcompanion_habit_goals for insert with check (auth.uid() = user_id);
 create policy "users can update own habit goals"
-  on public.vitality_habit_goals for update using (auth.uid() = user_id) with check (auth.uid() = user_id);
+  on public.healthcompanion_habit_goals for update using (auth.uid() = user_id) with check (auth.uid() = user_id);
 create policy "users can delete own habit goals"
-  on public.vitality_habit_goals for delete using (auth.uid() = user_id);
+  on public.healthcompanion_habit_goals for delete using (auth.uid() = user_id);
 
-grant select, insert, update, delete on table public.vitality_habit_goals to anon, authenticated, service_role;
+grant select, insert, update, delete on table public.healthcompanion_habit_goals to anon, authenticated, service_role;
 
 -- ===========================================================================
 -- TABLE 3 — public.goals_streak  (one row per user; preserves rollStreak() 1:1)

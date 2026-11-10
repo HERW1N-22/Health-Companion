@@ -21,7 +21,7 @@ import {
   moodTrend,
 } from '@/mcp/src/insights'
 
-// Pure-derivation layer for the Vitality MCP (richer insights, BUILD41).
+// Pure-derivation layer for the HealthCompanion MCP (richer insights, BUILD41).
 
 describe('date helpers', () => {
   test('dayIndex parses YYYY-MM-DD and is invertible via keyForIndex', () => {

@@ -13,7 +13,7 @@ export const metadata = { title: 'Vee · preview' }
 
 /**
  * /vee-live-preview - a public, no-auth look at the launch Vee (Echo gem, the
- * run-stats strip, the showcase-design Vitality Noticed card incl. a
+ * run-stats strip, the showcase-design HealthCompanion Noticed card incl. a
  * deterministic one-tap action, the notice-preview goals board, life chips,
  * and the kept bottom strip) with representative mock data, so the visual can
  * be reviewed without logging in.

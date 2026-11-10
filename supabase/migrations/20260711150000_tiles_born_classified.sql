@@ -3,7 +3,7 @@
 -- A tile can declare, AT BUILD TIME, which of the nine life buckets it serves
 -- (the goal-triage categories from lib/goals/categories.ts) plus one line of
 -- why it was built ("note for Vee"). Claude passes both through
--- vitality_add_tile / upload_tile; the goal triage and the collection read them
+-- healthcompanion_add_tile / upload_tile; the goal triage and the collection read them
 -- later. Deterministic classification at birth - no scanning, no guessing.
 --
 -- Additive + nullable: every existing row and every caller that does not pass

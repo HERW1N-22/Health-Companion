@@ -7,7 +7,7 @@
 >
 > **Status (BUILD83): the socket is LIVE.** `upload_tile` now posts the built tile
 > straight into the `tiles` registry by default (same write path as
-> `vitality_add_tile`); the envelope below is returned only with `package_only:true`
+> `healthcompanion_add_tile`); the envelope below is returned only with `package_only:true`
 > and remains the shape the Library's manual upload box consumes.
 
 ## The envelope: `TileUploadEnvelope` (v1)

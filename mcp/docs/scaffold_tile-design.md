@@ -1,17 +1,17 @@
-# scaffold_tile design (Vitality MCP, brick 2)
+# scaffold_tile design (Health Companion MCP, brick 2)
 
-> Brainstormed + locked with Alex 2026-06-28. North star: `docs/ideas/AIKIDO-VITALITY.md`
-> (we build the game, users build the app). The Vitality MCP is the BUILDER pillar.
-> `scaffold_tile` is its heart: one sentence in, one finished Vitality tile out.
+> Brainstormed + locked with Alex 2026-06-28. North star: `docs/ideas/AIKIDO-HEALTH_COMPANION.md`
+> (we build the game, users build the app). The Health Companion MCP is the BUILDER pillar.
+> `scaffold_tile` is its heart: one sentence in, one finished Health Companion tile out.
 > Superpowers: yes.
 
 ## What it is
 
 A PURE, deterministic MCP tool. The user's own Claude Code calls it with a plain-English
 goal; it returns one self-contained, themed, dashboard-ready sealed-HTML tile, pre-wired to
-the Vitality bridge and carrying one optional `Vitality.report(...)` line. No per-tile LLM,
+the Health Companion bridge and carrying one optional `Health Companion.report(...)` line. No per-tile LLM,
 no API key, no DB access. The deep intelligence is the caller's Claude Code, which can further
-edit the returned HTML. The tool guarantees the result is correct Vitality every time.
+edit the returned HTML. The tool guarantees the result is correct Health Companion every time.
 
 ## Tool signature
 
@@ -28,7 +28,7 @@ Input (zod):
 
 Output text shape:
 ```
-Vitality tile ready: "Cold plunges"
+Health Companion tile ready: "Cold plunges"
   key: coldplunge | label: Cold plunges | kind: count | goalDirection: up | template: counter
 Paste the HTML below into /app/create (Run tile), or upload it to your dashboard.
 It is just HTML. Edit it freely.
@@ -48,7 +48,7 @@ From `goal` (each step skipped if the matching param is supplied):
    - done: `did i, yes/no, habit, complete, stick to, took my, no-fap, abstain, quit, streak`
    - intake: `beer(s), alcohol, drink(s), water, glass(es), coffee, caffeine, calorie(s), cigarette(s), sugar, soda, supplement(s), pill(s)`
    - count: everything else (`track/count X`, reps, pages, sessions, tasks).
-2. **key**: slugify the salient noun. Strip stopwords + tracker words (`track, tracker, log, counter, my, a, the, daily`), take the first 1-2 remaining words, lowercase. ("beer tracker" -> `beer`; "track my cold plunges" -> `coldplunge`). If `name` is given, derive the key from it. The tile emits this NATURAL key; Vitality normalizes server-side (beer -> alcohol).
+2. **key**: slugify the salient noun. Strip stopwords + tracker words (`track, tracker, log, counter, my, a, the, daily`), take the first 1-2 remaining words, lowercase. ("beer tracker" -> `beer`; "track my cold plunges" -> `coldplunge`). If `name` is given, derive the key from it. The tile emits this NATURAL key; Health Companion normalizes server-side (beer -> alcohol).
 3. **label**: `name` if given, else Title Case of the noun ("Beers", "Cold plunges").
 4. **goalDirection** by keyword, else a per-kind default, else omitted:
    - down: `alcohol/beer, sugar, soda, cigarette, caffeine, spend/cost, screen time, cut, reduce, less, quit, no-fap`
@@ -74,9 +74,9 @@ Every template:
 - Theme: `body{background:transparent}`, color #fff, mint `#6EE7B7`, `accent-color:#6EE7B7`,
   Inter body + Instrument-Serif-italic title, rounded inputs/cards, spring `cubic-bezier(.16,1,.3,1)`,
   no external libs, no emojis.
-- Bridge: `Vitality.save(history)` / `Vitality.load()` + the `load:result` listener.
+- Bridge: `Health Companion.save(history)` / `Health Companion.load()` + the `load:result` listener.
 - Stores its own history as `[{date, value}]` via save; hydrates via load on boot.
-- On every commit: `Vitality.report({ key, label, value, date: today(), kind, goalDirection })`.
+- On every commit: `Health Companion.report({ key, label, value, date: today(), kind, goalDirection })`.
 - `today()` returns a LOCAL `YYYY-MM-DD`.
 - `<\/script>` escaped inside the generated string.
 
@@ -97,7 +97,7 @@ redefine it.
 `mcp/src/scaffoldTile.test.ts` asserts, for each of the 7 kinds (and a batch of real prompts):
 - the generated tile's report stream (`{...meta, value, date}` for a sample value + a valid date)
   passes the contract's `validateReport` -> proves every template emits a valid stream.
-- the HTML contains a `Vitality.report(` call whose `key`/`kind` literals match meta.
+- the HTML contains a `Health Companion.report(` call whose `key`/`kind` literals match meta.
 - the bridge is present (`save`, `load`, `report`, the `load:result` listener).
 - no unescaped `</script>`; no emoji; theme token `#6EE7B7` present.
 - inference: a table of prompts -> expected kind/key/goalDirection (beer->intake/down,
@@ -123,7 +123,7 @@ redefine it.
 ## Brick 3 (next): the upload tool (envelope defined here, endpoint owned by the dashboard window)
 
 A second MCP tool (e.g. `upload_tile`) packages and POSTs, over the user's authenticated
-connection, this envelope to a Vitality endpoint:
+connection, this envelope to a Health Companion endpoint:
 ```
 { html, key, label, kind, goalDirection,
   name, category, design, color }   // category/design/color auto-picked, user can confirm

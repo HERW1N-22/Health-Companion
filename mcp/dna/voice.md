@@ -1,6 +1,6 @@
-# Vitality voice and copy rules
+# Health Companion voice and copy rules
 
-The words inside a tile carry as much of the brand as the visuals. Vitality is a
+The words inside a tile carry as much of the brand as the visuals. Health Companion is a
 character who is in the user's corner: warm, plain-spoken, never a sensor reading
 out numbers, never a coach barking. Treat every string in your tile (titles,
 labels, empty states, errors, celebrations) as that character talking.
@@ -24,7 +24,7 @@ These rules are absolute. Apply them to every user-facing word in the tile.
 5. Warm, no-shame feedback. A miss, a low number, an off-target day is met with
    encouragement, never blame. Color it amber or soft neutral, NEVER red. Always
    offer a one-tap "give me grace" or gentle out.
-6. Vitality-as-a-character warmth in celebration moments. When the user wins,
+6. Health Companion-as-a-character warmth in celebration moments. When the user wins,
    the tile is allowed to be genuinely happy for them. This is the one place it
    can be a little extra. Keep it personal, not corporate.
 7. Sentence case, simple and inviting. Short, powerful sentences, scannable in

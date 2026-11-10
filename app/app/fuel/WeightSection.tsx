@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import VitalityIcon from '@/components/VitalityIcon'
+import HealthCompanionIcon from '@/components/HealthCompanionIcon'
 import styles from './fuelSections.module.css'
 
 /**
@@ -24,7 +24,7 @@ export default function WeightSection() {
 
       <Link href="/app/fitness/progress" className={styles.card} style={{ flexDirection: 'row', alignItems: 'center', gap: 'var(--space-4)', textDecoration: 'none' }}>
         <span className={styles.tileIc} aria-hidden>
-          <VitalityIcon name="scale" size={22} />
+          <HealthCompanionIcon name="scale" size={22} />
         </span>
         <span style={{ display: 'flex', flexDirection: 'column', gap: 2, flex: 1 }}>
           <span className={styles.tileLbl} style={{ fontSize: 'var(--text-base)', color: 'var(--fg)' }}>Weight tracker</span>

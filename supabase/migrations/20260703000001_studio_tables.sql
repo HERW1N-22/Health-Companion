@@ -3,7 +3,7 @@
 -- ===========================================================================
 -- The Studio tile is a sealed Arts District tile: a per-video "brain" of manual
 -- upload-package fields plus a reusable link library. Its working set rides the
--- Vitality.save/load bridge, which the host mirrors into these two RLS-scoped
+-- HealthCompanion.save/load bridge, which the host mirrors into these two RLS-scoped
 -- tables so a creator's cards persist and cross devices (localStorage alone caps
 -- at 512KB/tile and is single-device; these tables are the real store).
 --   studio_videos = one row per video card (manual fields; status lifecycle)

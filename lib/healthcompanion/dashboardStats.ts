@@ -25,7 +25,7 @@ export async function getDashboardTileStats(
   supabase: SupabaseClient,
   userId: string,
   /**
-   * The user's LOCAL "today" day key (from the `vitality_local_date` cookie
+   * The user's LOCAL "today" day key (from the `healthcompanion_local_date` cookie
    * LocalDateSync writes). This runs in a Server Component, so `getLocalDayKey()`
    * would use Vercel's UTC clock — for a user west of UTC in the evening that is
    * already "tomorrow", so their logged calories vanish from the tile. Pass the

@@ -523,7 +523,7 @@ const CORE_GROUP_HREF: Record<CoreGroup, string> = {
 }
 
 function claudeHref(title: string): string {
-  const q = `My Vitality goal: "${title}". Vee is steering it with my real data. Help me plan this week to move it.`
+  const q = `My HealthCompanion goal: "${title}". Vee is steering it with my real data. Help me plan this week to move it.`
   return `https://claude.ai/new?q=${encodeURIComponent(q)}`
 }
 
@@ -564,7 +564,7 @@ export default function VeeGoalsSection({ goals: initialGoals, habits: initialHa
   const [added, setAdded] = useState<Record<number, boolean>>({})
   const [busyHabit, setBusyHabit] = useState<string | null>(null)
   const [suggestError, setSuggestError] = useState<string | null>(null)
-  // "this week with vitality" lives behind a quiet disclosure (v1.2), closed by
+  // "this week with healthcompanion" lives behind a quiet disclosure (v1.2), closed by
   // default: cozy progressive disclosure is the house rule.
   const [weekOpen, setWeekOpen] = useState(false)
 
@@ -1200,7 +1200,7 @@ export default function VeeGoalsSection({ goals: initialGoals, habits: initialHa
 
       {CreateBlock}
 
-      {/* "this week with vitality": the habit rows fold behind one quiet mono
+      {/* "this week with healthcompanion": the habit rows fold behind one quiet mono
           disclosure next to Add a goal. Hidden entirely when there is nothing
           real to show (no habits, no evidence-backed suggestions). */}
       {(habits.length > 0 || openSuggestions.length > 0) && (
@@ -1212,7 +1212,7 @@ export default function VeeGoalsSection({ goals: initialGoals, habits: initialHa
             aria-expanded={weekOpen}
           >
             <svg className={s.weekSpark} viewBox="0 0 24 24" fill="currentColor" aria-hidden><path d="M11.6 2.4l1.7 5.4 5.4 1.7-5.4 1.7-1.7 5.4-1.7-5.4-5.4-1.7 5.4-1.7z" /></svg>
-            this week with vitality · {habits.length + openSuggestions.length}
+            this week with healthcompanion · {habits.length + openSuggestions.length}
             <svg className={s.weekChev} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d="M6 9l6 6 6-6" /></svg>
           </button>
 

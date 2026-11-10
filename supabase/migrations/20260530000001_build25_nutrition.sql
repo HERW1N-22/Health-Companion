@@ -1,6 +1,6 @@
 -- BUILD25 — Nutrition (Fuel · Macros module)
 --
--- Port of the calories-standalone macro tracker into Vitality as the Macros
+-- Port of the calories-standalone macro tracker into HealthCompanion as the Macros
 -- module under /app/fuel/macros. The standalone stored everything in
 -- localStorage; here every record is multi-user and RLS-scoped.
 --

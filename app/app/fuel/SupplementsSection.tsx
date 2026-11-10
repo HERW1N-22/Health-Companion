@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 
-import VitalityIcon, { type IconName } from '@/components/VitalityIcon'
+import HealthCompanionIcon, { type IconName } from '@/components/HealthCompanionIcon'
 import { useSupplementsState } from '../fitness/supplements/state'
 import type { WindowKey, DbSupplement } from '../fitness/supplements/types'
 import { SUPPLEMENT_DB, WINDOWS, CONDITION_BY_ID, recommendedFor } from '../fitness/supplements/supplements'
@@ -52,7 +52,7 @@ function searchSupps(raw: string): DbSupplement[] {
 
 /**
  * Supplements — day rail. Reuses `useSupplementsState` + localStorage
- * (`vitality_supplements_v1`), so saved stacks survive. Each supplement sits in
+ * (`healthcompanion_supplements_v1`), so saved stacks survive. Each supplement sits in
  * its time block with its dose + colour-coded intake-condition tags; checking
  * one off plays a little (randomised) animation. The "When to take them" button
  * opens the schedule editor where blocks + conditions are configured.
@@ -129,7 +129,7 @@ export default function SupplementsSection() {
       <div className={styles.card}>
         <div className={styles.tileTop}>
           <span className={styles.tileIc}>
-            <VitalityIcon name="pill" size={20} />
+            <HealthCompanionIcon name="pill" size={20} />
           </span>
           <span className={styles.tileLbl}>Daily stack</span>
           {totalCount > 0 && (
@@ -154,7 +154,7 @@ export default function SupplementsSection() {
               <div key={key} className={styles.slot}>
                 <div className={styles.slotHead}>
                   <span className={styles.slotIc}>
-                    <VitalityIcon name={SLOT_ICON[key]} size={17} />
+                    <HealthCompanionIcon name={SLOT_ICON[key]} size={17} />
                   </span>
                   <div>
                     <div className={styles.slotTitle}>{m?.title ?? key}</div>
@@ -178,7 +178,7 @@ export default function SupplementsSection() {
                             {taken && CHECK}
                           </button>
                           <span className={styles.suppIc}>
-                            <VitalityIcon name="pill" size={16} />
+                            <HealthCompanionIcon name="pill" size={16} />
                           </span>
                           <div className={styles.suppMid}>
                             <span className={`${styles.suppName} ${taken ? styles.suppNameTaken : ''}`}>{item.name}</span>
@@ -189,7 +189,7 @@ export default function SupplementsSection() {
                                 if (!c) return null
                                 return (
                                   <span key={cid} className={`${styles.cond} ${TONE_CLASS[c.tone]}`}>
-                                    <VitalityIcon name={c.icon as IconName} size={11} />
+                                    <HealthCompanionIcon name={c.icon as IconName} size={11} />
                                     {c.label}
                                   </span>
                                 )
@@ -214,7 +214,7 @@ export default function SupplementsSection() {
         {/* search add */}
         <div className={styles.searchWrap}>
           <span className={styles.searchIcon}>
-            <VitalityIcon name="search" size={16} />
+            <HealthCompanionIcon name="search" size={16} />
           </span>
           <input
             className={`${styles.addInput} ${styles.searchField}`}
@@ -236,7 +236,7 @@ export default function SupplementsSection() {
               {matches.map((s) => (
                 <button key={s.id} type="button" className={styles.suggestion} onMouseDown={() => addLib(s)}>
                   <span className={styles.sugIc}>
-                    <VitalityIcon name="pill" size={15} />
+                    <HealthCompanionIcon name="pill" size={15} />
                   </span>
                   <span className={styles.sugBody}>
                     <span className={styles.sugName}>{s.name}</span>
@@ -259,9 +259,9 @@ export default function SupplementsSection() {
         </div>
 
         <button className={styles.timingBtn} onClick={() => setShowEditor(true)}>
-          <VitalityIcon name="clock" size={15} /> When to take them
+          <HealthCompanionIcon name="clock" size={15} /> When to take them
           <span className={styles.timingArrow}>
-            <VitalityIcon name="arrowRight" size={15} />
+            <HealthCompanionIcon name="arrowRight" size={15} />
           </span>
         </button>
       </div>

@@ -1,6 +1,6 @@
-# Vitality Supplement Library (for any supplement / stack tile)
+# Health Companion Supplement Library (for any supplement / stack tile)
 
-Build a sealed HTML tile that knows Vitality's supplement domain: doses, timing
+Build a sealed HTML tile that knows Health Companion's supplement domain: doses, timing
 slots, and how to take each one. Everything below inlines into one file. No
 libraries, no fetches. Copy the JSON sample, render a daily stack grouped by
 time of day, and let the user check things off.
@@ -175,7 +175,7 @@ localStorage keyed by the active date.
 </script>
 ```
 
-Vitality look: pure black background, mint accent (`#5fe3b3` ish) for the
+Health Companion look: pure black background, mint accent (`#5fe3b3` ish) for the
 taken-circle and the check, a softer amber for the missed state (never red),
 Inter font. The taken circle is the primary tap target on the right of each
 row in the real module; the version above keeps the whole row tappable for a

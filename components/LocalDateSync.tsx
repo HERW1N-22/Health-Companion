@@ -4,13 +4,13 @@ import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { getLocalDateKey } from '@/lib/dates'
 
-const COOKIE_NAME = 'vitality_local_date'
+const COOKIE_NAME = 'healthcompanion_local_date'
 const COOKIE_MAX_AGE_DAYS = 1
 const RESYNC_INTERVAL_MS = 60_000
 
 /**
  * Mounted once in app/app/layout.tsx. Writes the browser's real local
- * date (YYYY-MM-DD) to the `vitality_local_date` cookie so server-rendered
+ * date (YYYY-MM-DD) to the `healthcompanion_local_date` cookie so server-rendered
  * pages can compute "today" against the user's timezone, not Vercel's UTC.
  *
  * Why this matters: a US East Coast user logging a workout at 9pm local

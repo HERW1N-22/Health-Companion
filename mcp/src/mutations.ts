@@ -1,4 +1,4 @@
-// Write layer for the Vitality MCP — the mutating analogue of queries.ts.
+// Write layer for the HealthCompanion MCP — the mutating analogue of queries.ts.
 //
 // This is the FIRST departure from read-only (BUILD42). Every write here:
 //   • runs through the caller's own RLS-scoped client, so it can structurally
@@ -14,7 +14,7 @@
 // (notes, weights) — NOT the localStorage-mirror jsonb blobs, whose client-owned
 // shape a blind server write could corrupt.
 
-import { type VitalityDb, WRITE_SCOPE, WRITE_PAUSED_SCOPE } from './supabase.js';
+import { type HealthCompanionDb, WRITE_SCOPE, WRITE_PAUSED_SCOPE } from './supabase.js';
 import { getLocalDateKey, getNutritionDayKey, getSupplementDayKey, round } from './util.js';
 import { buildUploadTile, type UploadTileInput } from './uploadTile.js';
 import { assertTileExportable, kindMustReport, reportIdentityFromHtml, sanitizeColor, type Category } from './tiles/uploadEnvelope.js';
@@ -29,15 +29,15 @@ import { getProfile } from './queries.js';
  *  message says "wait, your data is safe" because reconnecting cannot fix it; a
  *  genuinely read-only consent gets the reconnect steps that actually restore
  *  write. */
-export function requireWrite(v: VitalityDb): void {
+export function requireWrite(v: HealthCompanionDb): void {
   if (v.scopes.includes(WRITE_SCOPE)) return;
   if (v.scopes.includes(WRITE_PAUSED_SCOPE)) {
     throw new Error(
-      'Writes are temporarily paused by the Vitality team, so nothing can be added or logged right now. Your data is safe and reading still works. The pause is on our side, so reconnecting will not change it. Try again in a little while.',
+      'Writes are temporarily paused by the HealthCompanion team, so nothing can be added or logged right now. Your data is safe and reading still works. The pause is on our side, so reconnecting will not change it. Try again in a little while.',
     );
   }
   throw new Error(
-    'This Vitality connection is read-only, so it cannot add a tile or log data yet. Fix it in one step: disconnect the Vitality connector in your MCP client, then Allow it again. New connections get read and write access by default. (Or use a Vitality CLI token from your account for full access.)',
+    'This HealthCompanion connection is read-only, so it cannot add a tile or log data yet. Fix it in one step: disconnect the HealthCompanion connector in your MCP client, then Allow it again. New connections get read and write access by default. (Or use a HealthCompanion CLI token from your account for full access.)',
   );
 }
 
@@ -46,7 +46,7 @@ const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 /** Append a one-line audit row for a successful write. Best-effort by design:
  *  the actual data write already happened, so a missing audit row (e.g. the
  *  table not migrated yet) must NEVER turn a success into a failure. */
-export async function recordWrite(v: VitalityDb, tool: string, summary: string): Promise<void> {
+export async function recordWrite(v: HealthCompanionDb, tool: string, summary: string): Promise<void> {
   try {
     await v.db.from('mcp_write_log').insert({ user_id: v.userId, tool, summary: summary.slice(0, 500) });
   } catch {
@@ -72,7 +72,7 @@ const WRITE_RATE_PER_HOUR = clampInt(process.env.MCP_WRITE_RATE_PER_HOUR, 200, 1
 
 /** Throw a friendly "slow down" error if this user has crossed the per-minute or
  *  per-hour write ceiling. Call at the top of an append-y write, after requireWrite. */
-export async function checkWriteRate(v: VitalityDb): Promise<void> {
+export async function checkWriteRate(v: HealthCompanionDb): Promise<void> {
   let stamps: number[];
   try {
     const hourAgo = new Date(Date.now() - 3_600_000).toISOString();
@@ -111,7 +111,7 @@ export interface AddedNote {
 
 /** Append a note to the Mentor "void"/quick-jot inbox — the same place the
  *  app's quick-jot writes, so it shows up in the user's Mentor on next load. */
-export async function addNote(v: VitalityDb, body: string): Promise<AddedNote> {
+export async function addNote(v: HealthCompanionDb, body: string): Promise<AddedNote> {
   requireWrite(v);
   await checkWriteRate(v);
   const clean = (body ?? '').trim();
@@ -125,7 +125,7 @@ export async function addNote(v: VitalityDb, body: string): Promise<AddedNote> {
     .single();
   if (error) throw new Error(`Could not save note: ${error.message}`);
 
-  await recordWrite(v, 'vitality_add_note', `Note: "${clean.slice(0, 80)}"`);
+  await recordWrite(v, 'healthcompanion_add_note', `Note: "${clean.slice(0, 80)}"`);
   return {
     id: (data?.id as string | undefined) ?? null,
     body: (data?.body as string | undefined) ?? clean,
@@ -150,7 +150,7 @@ export interface LoggedWeight {
  * canonical unit; callers convert lb→kg before calling. Date defaults to today.
  */
 export async function logWeight(
-  v: VitalityDb,
+  v: HealthCompanionDb,
   kg: number,
   opts: { date?: string; note?: string } = {},
 ): Promise<LoggedWeight> {
@@ -178,7 +178,7 @@ export async function logWeight(
     .single();
   if (error) throw new Error(`Could not save weigh-in: ${error.message}`);
 
-  await recordWrite(v, 'vitality_log_weight', `${existing ? 'Updated' : 'Logged'} weigh-in ${date}: ${weightKg} kg`);
+  await recordWrite(v, 'healthcompanion_log_weight', `${existing ? 'Updated' : 'Logged'} weigh-in ${date}: ${weightKg} kg`);
   return {
     date: (data?.date as string | undefined) ?? date,
     kg: Number(data?.weight_kg ?? weightKg),
@@ -209,7 +209,7 @@ export interface LoggedMeal {
  * (getNutrition) agrees with this write.
  */
 export async function logMeal(
-  v: VitalityDb,
+  v: HealthCompanionDb,
   opts: { kcal: number; protein?: number; carbs?: number; fat?: number; description?: string; date?: string },
 ): Promise<LoggedMeal> {
   requireWrite(v);
@@ -231,7 +231,7 @@ export async function logMeal(
     .insert({ user_id: v.userId, day_key: dayKey, what_i_see: description, totals });
   if (error) throw new Error(`Could not log meal: ${error.message}`);
 
-  await recordWrite(v, 'vitality_log_meal', `Meal ${dayKey}: ${totals.kcal} kcal / ${totals.protein}g protein${description ? ` — ${description.slice(0, 60)}` : ''}`);
+  await recordWrite(v, 'healthcompanion_log_meal', `Meal ${dayKey}: ${totals.kcal} kcal / ${totals.protein}g protein${description ? ` — ${description.slice(0, 60)}` : ''}`);
   return { dayKey, description, totals };
 }
 
@@ -249,7 +249,7 @@ export interface LoggedWater {
  * `setTo` to set an absolute value instead. Count floors at 0.
  */
 export async function logWater(
-  v: VitalityDb,
+  v: HealthCompanionDb,
   opts: { servings?: number; setTo?: number; date?: string } = {},
 ): Promise<LoggedWater> {
   requireWrite(v);
@@ -279,7 +279,7 @@ export async function logWater(
     .upsert({ user_id: v.userId, date, count: next }, { onConflict: 'user_id,date' });
   if (error) throw new Error(`Could not log water: ${error.message}`);
 
-  await recordWrite(v, 'vitality_log_water', `Water ${date}: ${next} serving(s)`);
+  await recordWrite(v, 'healthcompanion_log_water', `Water ${date}: ${next} serving(s)`);
   return { date, count: next, added: next - current };
 }
 
@@ -311,7 +311,7 @@ export interface LoggedWorkout {
  * simple: one weight/reps per exercise expanded across its sets.
  */
 export async function logWorkout(
-  v: VitalityDb,
+  v: HealthCompanionDb,
   opts: { dayName: string; exercises: WorkoutExerciseInput[]; date?: string },
 ): Promise<LoggedWorkout> {
   requireWrite(v);
@@ -351,7 +351,7 @@ export async function logWorkout(
     : await v.db.from('workouts').insert(row);
   if (error) throw new Error(`Could not log workout: ${error.message}`);
 
-  await recordWrite(v, 'vitality_log_workout', `Workout ${date}: ${dayName}, ${exercises.length} exercise(s) / ${setCount} set(s)`);
+  await recordWrite(v, 'healthcompanion_log_workout', `Workout ${date}: ${dayName}, ${exercises.length} exercise(s) / ${setCount} set(s)`);
   return { date, dayName, exerciseCount: exercises.length, setCount, replaced: Boolean(existing?.id) };
 }
 
@@ -374,7 +374,7 @@ export interface SupplementTaken {
  * the app shows and the MCP read (getSupplements) agrees with this write.
  */
 export async function markSupplementTaken(
-  v: VitalityDb,
+  v: HealthCompanionDb,
   opts: { name?: string; id?: string; date?: string; taken?: boolean },
 ): Promise<SupplementTaken> {
   requireWrite(v);
@@ -410,7 +410,7 @@ export async function markSupplementTaken(
   if (error) throw new Error(`Could not update supplements: ${error.message}`);
 
   const name = String(item.name ?? itemId);
-  await recordWrite(v, 'vitality_mark_supplement_taken', `${setTaken ? 'Took' : 'Un-took'} ${name} on ${dayKey}`);
+  await recordWrite(v, 'healthcompanion_mark_supplement_taken', `${setTaken ? 'Took' : 'Un-took'} ${name} on ${dayKey}`);
   return { name, taken: setTaken, dayKey };
 }
 
@@ -441,7 +441,7 @@ const bizKpiId = (): string => `k_${Date.now()}_${Math.random().toString(36).sli
  * assistant write (same tradeoff markSupplementTaken accepts).
  */
 export async function logBusinessMetric(
-  v: VitalityDb,
+  v: HealthCompanionDb,
   opts: { metric: string; value: number; business?: string; unit?: string },
 ): Promise<LoggedBusinessMetric> {
   requireWrite(v);
@@ -508,7 +508,7 @@ export async function logBusinessMetric(
   const brandName = String(brand.name ?? '').trim() || '(unnamed)';
   await recordWrite(
     v,
-    'vitality_log_business_metric',
+    'healthcompanion_log_business_metric',
     `${created ? 'Logged' : 'Updated'} ${brandName} · ${label}: ${value}${outUnit ? ' ' + outUnit : ''}`,
   );
   return { brand: brandName, label, value, unit: outUnit, created };
@@ -601,7 +601,7 @@ function isBornClassifiedColumnMissing(error: { code?: string; message: string }
  */
 // Read the user's metric/imperial preference so a built tile labels values in their
 // units. Best-effort: default to metric if the profile is missing or unreadable.
-async function resolveUnitSystem(v: VitalityDb): Promise<UnitSystem> {
+async function resolveUnitSystem(v: HealthCompanionDb): Promise<UnitSystem> {
   try {
     const p = await getProfile(v);
     return p.units === 'imperial' ? 'imperial' : 'metric';
@@ -614,7 +614,7 @@ async function resolveUnitSystem(v: VitalityDb): Promise<UnitSystem> {
 // (£/€/¥/…) instead of a hardcoded '$'. The user's currency already lives in
 // finance_prefs.currency (the Finance module's preference — no new column). Best-effort:
 // default to 'USD' if the row is missing or unreadable.
-async function resolveCurrency(v: VitalityDb): Promise<string> {
+async function resolveCurrency(v: HealthCompanionDb): Promise<string> {
   try {
     const { data } = await v.db
       .from('finance_prefs')
@@ -629,12 +629,12 @@ async function resolveCurrency(v: VitalityDb): Promise<string> {
 }
 
 // A generous ceiling on hand-built tile HTML. The tool schema already caps at 400K, but
-// addTile itself had no bound; a rich Vitality tile is ~15-30K chars, so 200K is ~8-10x
+// addTile itself had no bound; a rich HealthCompanion tile is ~15-30K chars, so 200K is ~8-10x
 // headroom for a very elaborate one while refusing a multi-megabyte payload before it
 // hits the row. Tunable via env for ops.
 const TILE_HTML_MAX = clampInt(process.env.MCP_TILE_HTML_MAX, 200_000, 20_000, 400_000);
 
-export async function addTile(v: VitalityDb, input: AddTileInput): Promise<AddedTile> {
+export async function addTile(v: HealthCompanionDb, input: AddTileInput): Promise<AddedTile> {
   requireWrite(v);
   await checkWriteRate(v);
 
@@ -643,13 +643,13 @@ export async function addTile(v: VitalityDb, input: AddTileInput): Promise<Added
     const html = input.html.trim();
     if (html.length > TILE_HTML_MAX) {
       throw new Error(
-        `This tile's HTML is too large (${html.length.toLocaleString()} chars; limit ${TILE_HTML_MAX.toLocaleString()}). A rich Vitality tile is usually 15,000-30,000 chars, so trim unused code or split it into two tiles.`,
+        `This tile's HTML is too large (${html.length.toLocaleString()} chars; limit ${TILE_HTML_MAX.toLocaleString()}). A rich HealthCompanion tile is usually 15,000-30,000 chars, so trim unused code or split it into two tiles.`,
       );
     }
     // Floor-enforce a hand-built tile too: an unsealed/off-brand one throws the fix-it
     // list here and never lands. The declared kind comes from an explicit `stream` when
-    // one is given, else from the tool's `kind` arg (the only kind field vitality_add_tile
-    // exposes), so a measurable hand-built tile that forgot its Vitality.report() is
+    // one is given, else from the tool's `kind` arg (the only kind field healthcompanion_add_tile
+    // exposes), so a measurable hand-built tile that forgot its HealthCompanion.report() is
     // refused with the report-missing guidance, never silently landed dark.
     const name = (input.name && input.name.trim()) || 'Untitled tile';
     const declaredKind = input.stream?.kind ?? input.kind;
@@ -678,7 +678,7 @@ export async function addTile(v: VitalityDb, input: AddTileInput): Promise<Added
       });
       if (!probe.ok) {
         throw new Error(
-          `This tile's stream identity is not contract-valid: ${probe.error}. Fix the stream's key/label/kind (the same shape as Vitality.report) and try again.`,
+          `This tile's stream identity is not contract-valid: ${probe.error}. Fix the stream's key/label/kind (the same shape as HealthCompanion.report) and try again.`,
         );
       }
       stream = {
@@ -757,6 +757,6 @@ export async function addTile(v: VitalityDb, input: AddTileInput): Promise<Added
     throw new Error(`Could not add tile: ${error.message}`);
   }
 
-  await recordWrite(v, 'vitality_add_tile', `Added tile "${row.name}" (${row.category}) to the dashboard`);
+  await recordWrite(v, 'healthcompanion_add_tile', `Added tile "${row.name}" (${row.category}) to the dashboard`);
   return { id: (data?.id as string | undefined) ?? null, name: row.name, category: row.category };
 }

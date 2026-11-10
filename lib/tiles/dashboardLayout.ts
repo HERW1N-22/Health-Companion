@@ -11,10 +11,10 @@ import type { Tile } from './types'
  * another's.
  *
  * Key:
- *   vitality:<userId>:dashboard   -> string[]  (placed tile ids, in display order)
+ *   healthcompanion:<userId>:dashboard   -> string[]  (placed tile ids, in display order)
  */
 
-const key = (userId: string) => `vitality:${userId}:dashboard`
+const key = (userId: string) => `healthcompanion:${userId}:dashboard`
 const hasStorage = () => typeof window !== 'undefined' && !!window.localStorage
 
 function read(userId: string): string[] {

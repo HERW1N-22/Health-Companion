@@ -8,7 +8,7 @@ export const dynamic = 'force-dynamic'
  * /app/forge - the storefront for Big Brother: describe ANY idea in plain
  * words, copy the build brief for whatever AI you have, and drop the finished
  * .html file on the drop zone. The server gate (/api/forge/gate) judges every
- * file with the same floor the MCP's vitality_add_tile enforces; a pass
+ * file with the same floor the MCP's healthcompanion_add_tile enforces; a pass
  * installs through the one importTile socket, a fail hands back a fix note
  * written for the AI. Claude Code users skip the file entirely via the
  * one-time `claude mcp add --scope user` block at the bottom.

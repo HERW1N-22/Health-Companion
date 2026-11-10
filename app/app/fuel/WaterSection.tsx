@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 
-import VitalityIcon from '@/components/VitalityIcon'
+import HealthCompanionIcon from '@/components/HealthCompanionIcon'
 import { getLocalDateKey } from '@/lib/dates'
 import SettingsModal from './water/SettingsModal'
 import { useWaterState, unitLabel as waterUnitLabel, fmtMl } from './water/state'
@@ -28,7 +28,7 @@ interface Props {
 
 /**
  * Water tracker, folded into the Fuel page as a stacked section. Reuses the
- * exact `useWaterState` hook + localStorage key (`vitality_water_v1`), so all
+ * exact `useWaterState` hook + localStorage key (`healthcompanion_water_v1`), so all
  * logged days survive and Peak's water read keeps working untouched. Settings
  * (units, sizes, caffeine, activity, substances, profile) reuse the existing
  * SettingsModal; the daily UI is rebuilt to match the macro tracker's look.
@@ -53,8 +53,8 @@ export default function WaterSection({ profile: initialProfile, seed, initialWat
       const ml = (e as CustomEvent<{ ml: number }>).detail?.ml
       if (typeof ml === 'number' && ml > 0) water.actions.logMl(ml)
     }
-    window.addEventListener('vitality:log-water', onLog)
-    return () => window.removeEventListener('vitality:log-water', onLog)
+    window.addEventListener('healthcompanion:log-water', onLog)
+    return () => window.removeEventListener('healthcompanion:log-water', onLog)
   }, [water.actions])
 
   // The Drinks library's "Log water" shortcut bounces here — scroll this
@@ -65,8 +65,8 @@ export default function WaterSection({ profile: initialProfile, seed, initialWat
       setFlash(true)
       window.setTimeout(() => setFlash(false), 1500)
     }
-    window.addEventListener('vitality:goto-water', onGoto)
-    return () => window.removeEventListener('vitality:goto-water', onGoto)
+    window.addEventListener('healthcompanion:goto-water', onGoto)
+    return () => window.removeEventListener('healthcompanion:goto-water', onGoto)
   }, [])
 
   const handleProfilePatch = useCallback(
@@ -130,11 +130,11 @@ export default function WaterSection({ profile: initialProfile, seed, initialWat
       <div className={`${styles.card} ${flash ? styles.flash : ''}`}>
         <div className={styles.tileTop}>
           <span className={styles.tileIc}>
-            <VitalityIcon name="drop" size={20} />
+            <HealthCompanionIcon name="drop" size={20} />
           </span>
           <span className={styles.tileLbl}>Water</span>
           <button className={styles.gear} onClick={() => setShowSettings(true)} aria-label="Water settings">
-            <VitalityIcon name="gear" size={16} />
+            <HealthCompanionIcon name="gear" size={16} />
           </button>
         </div>
 
@@ -151,7 +151,7 @@ export default function WaterSection({ profile: initialProfile, seed, initialWat
 
         <div className={styles.actions}>
           <button className={styles.drink} onClick={actions.drank}>
-            <VitalityIcon name="drop" size={16} /> Drank a {uSingular}
+            <HealthCompanionIcon name="drop" size={16} /> Drank a {uSingular}
           </button>
           <button className={styles.undo} onClick={actions.undo} disabled={todayCount <= 0} aria-label="Undo last">
             −

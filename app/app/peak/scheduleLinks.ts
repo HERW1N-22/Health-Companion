@@ -3,13 +3,13 @@
  * user's brands (or reads like a workout) becomes a deep-link to that module:
  * the calendar row shows a small ↗ that jumps straight there, tinted with the
  * brand's accent. Pure matching here; the brand list is read client-side from
- * the same localStorage the Brand module owns (`vitality_brand_v1`).
+ * the same localStorage the Brand module owns (`healthcompanion_brand_v1`).
  */
 
 import { ARCHETYPE_ACCENTS } from '../brand/archetypes'
 import type { Brand } from '../brand/types'
 
-const BRAND_LS_KEY = 'vitality_brand_v1'
+const BRAND_LS_KEY = 'healthcompanion_brand_v1'
 const HOUSE_MINT = '#6EE7B7'
 
 /** The slice of a Brand the schedule needs to match + link + tint. */

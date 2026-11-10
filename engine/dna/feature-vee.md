@@ -1,6 +1,6 @@
 # Vee chat surface, cards, and entrances (sealed-HTML recipes)
 
-Vee is Vitality's mentor: a warm character, not a chatbot widget. The Vee surface
+Vee is Health Companion's mentor: a warm character, not a chatbot widget. The Vee surface
 runs on an iris (soft violet) accent over the same near-black, with mint kept for
 "good / done" signals. The feel: cozy, springy, things settle in rather than snap.
 Everything below is plain HTML/CSS/vanilla JS, ready to inline in one sealed tile.
@@ -9,7 +9,7 @@ never red for a non-destructive state.
 
 ---
 
-## Tokens (iris-led, on the Vitality black)
+## Tokens (iris-led, on the Health Companion black)
 
 ```css
 :root{

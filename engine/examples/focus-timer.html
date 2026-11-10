@@ -43,8 +43,8 @@ button svg{width:15px;height:15px;display:block;flex:0 0 auto}
   </div>
 </div>
 <script>
-var Vitality={_w:{},save:function(d){parent.postMessage({source:'vitality-tile',type:'save',data:d},'*')},load:function(){return new Promise(function(res){var id=Math.random().toString(36).slice(2);Vitality._w[id]=res;parent.postMessage({source:'vitality-tile',type:'load',id:id},'*')})}};
-window.addEventListener('message',function(e){var m=e.data;if(m&&m.source==='vitality-host'&&m.type==='load:result'&&Vitality._w[m.id]){Vitality._w[m.id](m.data);delete Vitality._w[m.id]}});
+var HealthCompanion={_w:{},save:function(d){parent.postMessage({source:'healthcompanion-tile',type:'save',data:d},'*')},load:function(){return new Promise(function(res){var id=Math.random().toString(36).slice(2);HealthCompanion._w[id]=res;parent.postMessage({source:'healthcompanion-tile',type:'load',id:id},'*')})}};
+window.addEventListener('message',function(e){var m=e.data;if(m&&m.source==='healthcompanion-host'&&m.type==='load:result'&&HealthCompanion._w[m.id]){HealthCompanion._w[m.id](m.data);delete HealthCompanion._w[m.id]}});
 
 var DEFAULT_MIN=25;
 var R=54, CIRC=2*Math.PI*R;
@@ -71,7 +71,7 @@ function today(){
 }
 
 function persist(){
-  Vitality.save({date:state.date,sessions:state.sessions,minutes:state.minutes});
+  HealthCompanion.save({date:state.date,sessions:state.sessions,minutes:state.minutes});
 }
 
 function totalSecs(){return state.minutes*60;}
@@ -204,6 +204,6 @@ function boot(saved){
   persist();
 }
 
-Vitality.load().then(boot).catch(function(){boot(null);});
+HealthCompanion.load().then(boot).catch(function(){boot(null);});
 </script>
 </body></html>

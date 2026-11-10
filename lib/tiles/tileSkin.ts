@@ -7,7 +7,7 @@
  * Supabase swap seam applies later.
  *
  * Key:
- *   vitality:<userId>:tileSkins  -> Record<tileId, Skin>
+ *   healthcompanion:<userId>:tileSkins  -> Record<tileId, Skin>
  */
 
 /**
@@ -96,7 +96,7 @@ function normalizeSize(v: unknown): TileSize {
   return DEFAULT.size
 }
 
-const key = (userId: string) => `vitality:${userId}:tileSkins`
+const key = (userId: string) => `healthcompanion:${userId}:tileSkins`
 const hasStorage = () => typeof window !== 'undefined' && !!window.localStorage
 
 function readAll(userId: string): Record<string, Skin> {

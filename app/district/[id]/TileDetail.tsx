@@ -9,7 +9,7 @@
  *    'hub'), flip the button to the "Added" ghost, and show a toast that offers a
  *    small "View on your dashboard" link. No redirect.
  *  - Logged OUT → stash ONLY the opaque id in localStorage
- *    ('vitality:pending-tile' = { t, id }) and route to /signup?next=/app. The
+ *    ('healthcompanion:pending-tile' = { t, id }) and route to /signup?next=/app. The
  *    consume effect already living on /app lands the tile post-auth by resolving
  *    the envelope first-party (catalog / RLS-filtered published_tiles), never the
  *    stash. We never re-implement that consume here.
@@ -97,7 +97,7 @@ export default function TileDetail({ tile, svg }: TileDetailProps) {
   // safeNextPath on the auth page, so no open redirect.
   function stashAndSignup(t: 'featured' | 'published', id: string) {
     try {
-      localStorage.setItem('vitality:pending-tile', JSON.stringify({ t, id }))
+      localStorage.setItem('healthcompanion:pending-tile', JSON.stringify({ t, id }))
     } catch {
       /* private mode / storage full: signup still happens, the tile just won't ride */
     }
@@ -133,7 +133,7 @@ export default function TileDetail({ tile, svg }: TileDetailProps) {
 
       <div className={styles.shell}>
         <div className={styles.bar}>
-          <Link href="/" className={styles.mark} aria-label="Vitality">
+          <Link href="/" className={styles.mark} aria-label="Health Companion">
             V
           </Link>
           <Link href="/district" className={styles.crumb}>
@@ -205,7 +205,7 @@ export default function TileDetail({ tile, svg }: TileDetailProps) {
           </span>
           <div className={styles.circleBody}>
             <p>
-              Make a Vitality and this tile lands on <b>your dashboard</b>, alongside every other one you pick.
+              Make a HealthCompanion and this tile lands on <b>your dashboard</b>, alongside every other one you pick.
             </p>
             <span className={styles.circleSmall}>No credit card. Your tiles, your dashboard, always yours.</span>
           </div>

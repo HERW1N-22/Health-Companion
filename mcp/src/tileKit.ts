@@ -1,4 +1,4 @@
-// The Vitality tile kit: serve the reference pack (design DNA, data libraries, API
+// The HealthCompanion tile kit: serve the reference pack (design DNA, data libraries, API
 // recipes, and the hard-won gotchas rulebook) to a builder's Claude Code so a tile
 // comes out on-brand, knows the domain, and dodges the bugs Alex already fixed.
 //
@@ -52,7 +52,7 @@ export function readSection(name: string): string | null {
   }
 }
 
-// The universal Vitality look + rules every tile needs. Exported so a test can prove
+// The universal HealthCompanion look + rules every tile needs. Exported so a test can prove
 // every name resolves to a real file on disk (concat() silently skips a missing one).
 // Uses the distilled `gotchas-top` (~0.9K words) not the full `gotchas` (~6K words):
 // the 20 highest-leverage rules cover the common tile, and `check_tile` still enforces
@@ -173,8 +173,8 @@ export function buildKit(opts: KitRequest & { confirm?: boolean } = {}): string 
     .map((s) => `  - ${s.name} (${s.folder})`)
     .join('\n');
   return [
-    'VITALITY TILE KIT. Read this before building a tile. It hands your Claude the exact',
-    'Vitality look, the domain data, and the bugs Alex already fixed, so the tile lands',
+    'HEALTH_COMPANION TILE KIT. Read this before building a tile. It hands your Claude the exact',
+    'HealthCompanion look, the domain data, and the bugs Alex already fixed, so the tile lands',
     'pro and on-brand instead of generic. Then call again with',
     '{domain:"food|workout|supplement|vee|mentor|finance|vitals|goals|quiz"} for a focused',
     'bundle (use "mentor" or "ai" for a bring-your-own-key Claude chatbot tile), add',

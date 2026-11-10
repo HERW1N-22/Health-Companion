@@ -14,7 +14,7 @@
 create table if not exists public.mcp_write_log (
   id         uuid primary key default gen_random_uuid(),
   user_id    uuid not null references auth.users(id) on delete cascade,
-  tool       text not null,                 -- e.g. 'vitality_log_weight'
+  tool       text not null,                 -- e.g. 'healthcompanion_log_weight'
   summary    text,                          -- one-line, human-readable
   created_at timestamptz not null default now()
 );

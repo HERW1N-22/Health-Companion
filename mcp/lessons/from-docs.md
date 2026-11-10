@@ -1,7 +1,7 @@
-# Lessons from Vitality docs: conventions and traps for a tile
+# Lessons from Health Companion docs: conventions and traps for a tile
 
 A tile is ONE sealed HTML file: no libraries, no React, no build step. Everything inline:
-HTML, CSS, vanilla JS, inline SVG. These rules are mined from the Vitality codebase
+HTML, CSS, vanilla JS, inline SVG. These rules are mined from the Health Companion codebase
 (SKILL.md, globals.css, the date helpers, and shipped patch notes). Each is "Rule: why."
 
 ## Dates and day boundaries
@@ -19,7 +19,7 @@ HTML, CSS, vanilla JS, inline SVG. These rules are mined from the Vitality codeb
   ```
 
 - **Rule: if "the day" should not flip at midnight, subtract the rollover hour first.** Because
-  people log late-night events as part of the day they just finished. Vitality uses two
+  people log late-night events as part of the day they just finished. Health Companion uses two
   documented boundaries: supplements roll at 6am ("last night's dose"), food/macros roll at
   4am ("the 2am snack counts toward yesterday"). Pick what fits the tile, then:
   ```js

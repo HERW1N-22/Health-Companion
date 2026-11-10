@@ -31,7 +31,7 @@ describe('WHOOP webhook trust boundary', () => {
     expect(parseWhoopWebhookEvent(JSON.stringify({ user_id: '10129' }))).toBeNull()
   })
 
-  it('syncs only events that can change Vitality metrics', () => {
+  it('syncs only events that can change HealthCompanion metrics', () => {
     expect(WHOOP_SYNC_EVENT_TYPES.has('recovery.updated')).toBe(true)
     expect(WHOOP_SYNC_EVENT_TYPES.has('sleep.updated')).toBe(true)
     expect(WHOOP_SYNC_EVENT_TYPES.has('workout.updated')).toBe(false)

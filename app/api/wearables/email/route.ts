@@ -62,7 +62,7 @@ export async function POST(req: NextRequest) {
     console.error('[wearables/email] EMAIL_INGEST_SECRET not configured')
     return NextResponse.json({ error: 'unconfigured' }, { status: 503 })
   }
-  if (req.headers.get('x-vitality-ingest-secret') !== secret) {
+  if (req.headers.get('x-healthcompanion-ingest-secret') !== secret) {
     return NextResponse.json({ error: 'unauthorized' }, { status: 401 })
   }
 

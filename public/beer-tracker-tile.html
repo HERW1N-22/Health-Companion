@@ -4,10 +4,10 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <!--
-  Beer tracker — the canonical "I built a tile and Vitality noticed something" demo.
+  Beer tracker — the canonical "I built a tile and HealthCompanion noticed something" demo.
   Sealed: it runs in a sandboxed iframe (allow-scripts, no allow-same-origin) and
-  talks to Vitality only through the bridge. It saves its OWN history via
-  Vitality.save/load, and it feeds Vee ONE numeric life-stream via Vitality.report:
+  talks to HealthCompanion only through the bridge. It saves its OWN history via
+  HealthCompanion.save/load, and it feeds Vee ONE numeric life-stream via HealthCompanion.report:
       { key:'beer', label:'Beers', value, date, kind:'intake', goalDirection:'down' }
   The user just built a beer counter. What they actually did is hand Vee a
   categorized life-stream that the noticed engine correlates against recovery,
@@ -41,14 +41,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Inter','Segoe UI',sans-serif;
   <button class="step plus" id="plus" aria-label="one more">+</button>
 </div>
 <div class="week" id="week"></div>
-<div class="note">saved to your account. Vitality is watching this stream.</div>
+<div class="note">saved to your account. HealthCompanion is watching this stream.</div>
 <script>
-var Vitality={_w:{},
-  save:function(d){parent.postMessage({source:'vitality-tile',type:'save',data:d},'*')},
-  load:function(){return new Promise(function(res){var id=Math.random().toString(36).slice(2);Vitality._w[id]=res;parent.postMessage({source:'vitality-tile',type:'load',id:id},'*')})},
-  report:function(s){parent.postMessage({source:'vitality-tile',type:'report',stream:s},'*')}
+var HealthCompanion={_w:{},
+  save:function(d){parent.postMessage({source:'healthcompanion-tile',type:'save',data:d},'*')},
+  load:function(){return new Promise(function(res){var id=Math.random().toString(36).slice(2);HealthCompanion._w[id]=res;parent.postMessage({source:'healthcompanion-tile',type:'load',id:id},'*')})},
+  report:function(s){parent.postMessage({source:'healthcompanion-tile',type:'report',stream:s},'*')}
 };
-window.addEventListener('message',function(e){var m=e.data;if(m&&m.source==='vitality-host'&&m.type==='load:result'&&Vitality._w[m.id]){Vitality._w[m.id](m.data);delete Vitality._w[m.id]}});
+window.addEventListener('message',function(e){var m=e.data;if(m&&m.source==='healthcompanion-host'&&m.type==='load:result'&&HealthCompanion._w[m.id]){HealthCompanion._w[m.id](m.data);delete HealthCompanion._w[m.id]}});
 
 function today(){var d=new Date();var m=String(d.getMonth()+1).padStart(2,'0');var day=String(d.getDate()).padStart(2,'0');return d.getFullYear()+'-'+m+'-'+day}
 var history=[]; // [{date, beers}]
@@ -75,16 +75,16 @@ function render(){
 
 function commit(){
   render();
-  Vitality.save(history);
+  HealthCompanion.save(history);
   var t=get(today());
   // the one line that wires this tile into Vee.
-  Vitality.report({key:'beer',label:'Beers',value:t.beers,date:today(),kind:'intake',goalDirection:'down'});
+  HealthCompanion.report({key:'beer',label:'Beers',value:t.beers,date:today(),kind:'intake',goalDirection:'down'});
 }
 
 document.getElementById('plus').onclick=function(){var t=get(today());t.beers++;commit()};
 document.getElementById('minus').onclick=function(){var t=get(today());if(t.beers>0)t.beers--;commit()};
 
-Vitality.load().then(function(d){history=Array.isArray(d)?d:[];render()});
+HealthCompanion.load().then(function(d){history=Array.isArray(d)?d:[];render()});
 </script>
 </body>
 </html>

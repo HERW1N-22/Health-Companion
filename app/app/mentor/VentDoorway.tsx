@@ -17,7 +17,7 @@ function renderVee(text: string, emphasis?: string) {
   )
 }
 
-// The "Vent" hero. Preferred path: open Claude with full Vitality context over
+// The "Vent" hero. Preferred path: open Claude with full HealthCompanion context over
 // the MCP (zero API cost to us). In-app chat is the fallback (onVentHere focuses
 // the chat box just below). The connect UI lives at /account. The teaser bubble
 // is built from the user's REAL recent data (or an honest sample for new users)

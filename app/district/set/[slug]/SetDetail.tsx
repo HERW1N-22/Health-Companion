@@ -9,7 +9,7 @@
  *    'hub') per tile, flip buttons to the "Added" ghost, toast with a "View on
  *    your dashboard" link. No redirect.
  *  - Logged OUT, "Add all" -> stash ONLY the set's FIRST tile id in localStorage
- *    ('vitality:pending-tile' = { t:'featured', id }) as the backstop that rides
+ *    ('healthcompanion:pending-tile' = { t:'featured', id }) as the backstop that rides
  *    the existing DashboardGrid consume, then route to
  *    /signup?next=/district/set/[slug]?add=all. Sign-in and Google OAuth carry
  *    ?next back here (AuthForm + /auth/callback both run safeNextPath), the page
@@ -40,10 +40,10 @@ import type { SetTile } from './page'
 import styles from './set.module.css'
 
 const SIGNUP_NEXT = '/signup?next=/app'
-const PENDING_KEY = 'vitality:pending-tile'
+const PENDING_KEY = 'healthcompanion:pending-tile'
 /** Same-device proof that the user themselves tapped Add all before signup;
  *  the ?add=all return leg only fires when this stamp matches the slug. */
-const INTENT_KEY = 'vitality:set-add-intent'
+const INTENT_KEY = 'healthcompanion:set-add-intent'
 
 interface SetDetailProps {
   slug: string
@@ -106,7 +106,7 @@ export default function SetDetail({ slug, title, blurb, tiles }: SetDetailProps)
         setUserId(uid)
         if (uid) {
           try {
-            if (localStorage.getItem(`vitality:set-added:${slug}:${uid}`)) {
+            if (localStorage.getItem(`healthcompanion:set-added:${slug}:${uid}`)) {
               setAdded(new Set(tiles.map((t) => t.id)))
             }
           } catch {
@@ -195,7 +195,7 @@ export default function SetDetail({ slug, title, blurb, tiles }: SetDetailProps)
       localStorage.removeItem(PENDING_KEY)
       // Remember the landing per user+set so a revisit shows "on your
       // dashboard" instead of importing duplicates (verify LOW-3).
-      localStorage.setItem(`vitality:set-added:${slug}:${uid}`, '1')
+      localStorage.setItem(`healthcompanion:set-added:${slug}:${uid}`, '1')
     } catch {
       /* storage blocked: worst case the first tile arrives twice via /app */
     }
@@ -265,7 +265,7 @@ export default function SetDetail({ slug, title, blurb, tiles }: SetDetailProps)
 
       <div className={styles.shell}>
         <div className={styles.bar}>
-          <Link href="/" className={styles.mark} aria-label="Vitality">
+          <Link href="/" className={styles.mark} aria-label="Health Companion">
             V
           </Link>
           <Link href="/district" className={styles.crumb}>
@@ -382,7 +382,7 @@ export default function SetDetail({ slug, title, blurb, tiles }: SetDetailProps)
           </span>
           <div className={styles.circleBody}>
             <p>
-              Make a Vitality and this whole set lands on <b>your dashboard</b>, ready on day one.
+              Make a HealthCompanion and this whole set lands on <b>your dashboard</b>, ready on day one.
             </p>
             <span className={styles.circleSmall}>No credit card. Your tiles, your dashboard, always yours.</span>
           </div>

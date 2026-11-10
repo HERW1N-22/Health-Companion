@@ -5,7 +5,7 @@
 -- global WHOOP developer app (env WHOOP_CLIENT_ID/SECRET) we let each user
 -- bring their own. A user creates their own WHOOP developer app (the app
 -- owner can always authorize their own WHOOP account without WHOOP's prod
--- approval) and pastes its client_id + client_secret into Vitality.
+-- approval) and pastes its client_id + client_secret into HealthCompanion.
 --
 -- Stored per-user on the existing wearable_connections row (already RLS-
 -- scoped to the owner; secrets never leave the server). Plaintext for v1 to

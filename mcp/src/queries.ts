@@ -1,4 +1,4 @@
-// Read-only query layer for the Vitality MCP.
+// Read-only query layer for the HealthCompanion MCP.
 //
 // One function per domain. Each takes the authenticated client and returns a
 // shaped, typed object (never raw rows). Mirrors the column choices in
@@ -6,7 +6,7 @@
 // the in-app mentor does. Every query is scoped to the user id (redundant under
 // RLS in user mode, required in service mode).
 
-import type { VitalityDb } from './supabase.js';
+import type { HealthCompanionDb } from './supabase.js';
 import { dateKeyDaysAgo, getLocalDateKey, getNutritionDayKey, getSupplementDayKey, localDayStartISO, num, str, ageFromBirthday, round, daysBetweenKeys } from './util.js';
 import {
   weeklyWeightRate,
@@ -35,7 +35,7 @@ export interface Profile {
   currentPeriodEnd: string | null;
 }
 
-export async function getProfile({ db, userId }: VitalityDb): Promise<Profile> {
+export async function getProfile({ db, userId }: HealthCompanionDb): Promise<Profile> {
   const [up, pr] = await Promise.all([
     db
       .from('user_profile')
@@ -98,7 +98,7 @@ const DEFAULT_PREFS: SleepPrefs = {
   peakHour: null,
 };
 
-export async function getSleep(v: VitalityDb, days = 14): Promise<SleepData> {
+export async function getSleep(v: HealthCompanionDb, days = 14): Promise<SleepData> {
   const { db, userId } = v;
   const [wd, prefs] = await Promise.all([
     db
@@ -151,7 +151,7 @@ export interface WeightData {
   nEntries: number;
 }
 
-export async function getWeights(v: VitalityDb, days = 30): Promise<WeightData> {
+export async function getWeights(v: HealthCompanionDb, days = 30): Promise<WeightData> {
   const { db, userId } = v;
   const { data } = await db
     .from('weights')
@@ -194,7 +194,7 @@ export interface NutritionData {
   adherence: NutritionAdherence;
 }
 
-export async function getNutrition(v: VitalityDb, todayKey = getNutritionDayKey()): Promise<NutritionData> {
+export async function getNutrition(v: HealthCompanionDb, todayKey = getNutritionDayKey()): Promise<NutritionData> {
   const { db, userId } = v;
   const [goalsRes, mealsRes] = await Promise.all([
     db.from('nutrition_goals').select('*').eq('user_id', userId).maybeSingle(),
@@ -282,7 +282,7 @@ export async function getNutrition(v: VitalityDb, todayKey = getNutritionDayKey(
  * today), newest day_key first. RLS-scoped; degrades to [] on no data/error.
  */
 export async function getNutritionDaily(
-  v: VitalityDb,
+  v: HealthCompanionDb,
   days = 30,
 ): Promise<{ date: string; kcal: number }[]> {
   const { db, userId } = v;
@@ -320,7 +320,7 @@ export interface WorkoutData {
   windowDays: number;
 }
 
-export async function getWorkouts(v: VitalityDb, days = 14): Promise<WorkoutData> {
+export async function getWorkouts(v: HealthCompanionDb, days = 14): Promise<WorkoutData> {
   const { db, userId } = v;
   const { data } = await db
     .from('workouts')
@@ -383,7 +383,7 @@ export interface LiftProgressionData {
  * graph already computes, so the oracle can ask "is the bench behind the 225 goal?".
  * Extraction only; the stall verdict lives in insights.liftStall.
  */
-export async function getLiftProgression(v: VitalityDb, days = 120): Promise<LiftProgressionData> {
+export async function getLiftProgression(v: HealthCompanionDb, days = 120): Promise<LiftProgressionData> {
   const { db, userId } = v;
   const { data } = await db
     .from('workouts')
@@ -463,7 +463,7 @@ function toMonthlyChf(amountChf: number, period: string): number {
   }
 }
 
-export async function getSubscriptions(v: VitalityDb): Promise<SubscriptionData> {
+export async function getSubscriptions(v: HealthCompanionDb): Promise<SubscriptionData> {
   const { db, userId } = v;
   const [subsRes, prefsRes] = await Promise.all([
     db
@@ -513,7 +513,7 @@ export interface FinanceOverview {
   upcomingOrders: { name: string | null; amountChf: number; arrivalDate: string | null; direction: string }[];
 }
 
-export async function getFinanceOverview(v: VitalityDb): Promise<FinanceOverview> {
+export async function getFinanceOverview(v: HealthCompanionDb): Promise<FinanceOverview> {
   const { db, userId } = v;
   const [accRes, ordRes, prefsRes] = await Promise.all([
     db
@@ -556,7 +556,7 @@ export async function getFinanceOverview(v: VitalityDb): Promise<FinanceOverview
 
 // ── Notes / reminders ─────────────────────────────────────────────────────────
 
-export async function getNotes(v: VitalityDb, days = 10, limit = 25): Promise<{ body: string; createdAt: string }[]> {
+export async function getNotes(v: HealthCompanionDb, days = 10, limit = 25): Promise<{ body: string; createdAt: string }[]> {
   const { db, userId } = v;
   const { data } = await db
     .from('notes')
@@ -573,7 +573,7 @@ export async function getNotes(v: VitalityDb, days = 10, limit = 25): Promise<{ 
 // ── Durable user facts (shared mentor memory) ──────────────────────────────────
 
 export async function getUserFacts(
-  v: VitalityDb,
+  v: HealthCompanionDb,
   limit = 25,
 ): Promise<{ kind: string | null; body: string; salience: number | null; source: string | null }[]> {
   const { db, userId } = v;
@@ -652,7 +652,7 @@ export function shapeMoodDaily(
   return out.sort((a, b) => b.date.localeCompare(a.date));
 }
 
-export async function getMoodDaily(v: VitalityDb, days = 30): Promise<MoodDay[]> {
+export async function getMoodDaily(v: HealthCompanionDb, days = 30): Promise<MoodDay[]> {
   const { db, userId } = v;
   const sinceTs = localDayStartISO(days);
   const [moodRes, notesRes] = await Promise.all([
@@ -675,7 +675,7 @@ export interface PeakTask {
   eventType: string | null;
 }
 
-export async function getPeakToday(v: VitalityDb, todayKey = getLocalDateKey()): Promise<PeakTask[]> {
+export async function getPeakToday(v: HealthCompanionDb, todayKey = getLocalDateKey()): Promise<PeakTask[]> {
   const { db, userId } = v;
   const { data } = await db
     .from('peak_tracker_tasks')
@@ -697,7 +697,7 @@ export async function getPeakToday(v: VitalityDb, todayKey = getLocalDateKey()):
 // ── Active vitals goal ──────────────────────────────────────────────────────────
 
 export async function getVitalsGoal(
-  v: VitalityDb,
+  v: HealthCompanionDb,
 ): Promise<{ metric: string; direction: string; targetValue: number | null; confidence: string | null; status: string } | null> {
   const { db, userId } = v;
   const { data } = await db
@@ -745,7 +745,7 @@ function subExtraMl(s: Row): number {
   return Math.max(0, dose * (num(s.mlPerUnit) ?? 0));
 }
 
-export async function getWater(v: VitalityDb, todayKey = getLocalDateKey()): Promise<WaterData> {
+export async function getWater(v: HealthCompanionDb, todayKey = getLocalDateKey()): Promise<WaterData> {
   const { db, userId } = v;
   const [prefsRes, daysRes, profRes] = await Promise.all([
     db.from('water_prefs').select('*').eq('user_id', userId).maybeSingle(),
@@ -808,7 +808,7 @@ export async function getWater(v: VitalityDb, todayKey = getLocalDateKey()): Pro
 // These modules mirror their whole localStorage state into a single jsonb row
 // (BUILD36). We read the blob and extract just what a summary/nudge needs.
 
-async function readBlob(v: VitalityDb, table: string): Promise<Row | null> {
+async function readBlob(v: HealthCompanionDb, table: string): Promise<Row | null> {
   const { db, userId } = v;
   const { data } = await db.from(table).select('data').eq('user_id', userId).maybeSingle();
   const d = (data as Row | null)?.data;
@@ -847,7 +847,7 @@ export interface GoalsData {
   dueToday: number;
   completedToday: number;
   // BUILD50: the authoritative big personal goals + this-week habit goals, read
-  // from vitality_goals / vitality_habit_goals / goals_streak (not the legacy
+  // from healthcompanion_goals / healthcompanion_habit_goals / goals_streak (not the legacy
   // goals_state blob, which never held the user's real big goals).
   bigGoals: BigGoal[];
   dueTodayGoals: HabitGoalLite[];
@@ -934,19 +934,19 @@ export function shapeGoals(
   };
 }
 
-export async function getGoals(v: VitalityDb, todayKey = getLocalDateKey()): Promise<GoalsData> {
+export async function getGoals(v: HealthCompanionDb, todayKey = getLocalDateKey()): Promise<GoalsData> {
   const { db, userId } = v;
   const tomorrowKey = dateKeyDaysAgo(-1);
   const [big, habits, streak] = await Promise.all([
     db
-      .from('vitality_goals')
+      .from('healthcompanion_goals')
       .select(
         'title, clean_title, category, target_date, priority, push_level, progress_current, progress_target, progress_unit, identity_tag, status',
       )
       .eq('user_id', userId)
       .eq('status', 'active'),
     db
-      .from('vitality_habit_goals')
+      .from('healthcompanion_habit_goals')
       .select('title, kind, due_date, status, completed_at, is_tomorrow')
       .eq('user_id', userId),
     db.from('goals_streak').select('current, longest').eq('user_id', userId).maybeSingle(),
@@ -968,7 +968,7 @@ export interface SupplementsData {
   names: string[];
 }
 
-export async function getSupplements(v: VitalityDb, todayKey = getSupplementDayKey()): Promise<SupplementsData> {
+export async function getSupplements(v: HealthCompanionDb, todayKey = getSupplementDayKey()): Promise<SupplementsData> {
   const blob = await readBlob(v, 'supplements_state');
   if (!blob) return { hasData: false, total: 0, takenToday: 0, lowCount: 0, names: [] };
   const items = Array.isArray(blob.items) ? (blob.items as Row[]) : [];
@@ -1072,7 +1072,7 @@ function snapshotDelta(history: unknown, valueKey: string, days: number): number
 }
 
 /** Latest value per (provider, metric) synced from real connectors (BUILD50). */
-async function getConnectorMetrics(v: VitalityDb): Promise<ConnectorMetric[]> {
+async function getConnectorMetrics(v: HealthCompanionDb): Promise<ConnectorMetric[]> {
   const { db, userId } = v;
   const { data } = await db
     .from('brand_metrics')
@@ -1103,7 +1103,7 @@ async function getConnectorMetrics(v: VitalityDb): Promise<ConnectorMetric[]> {
   return out;
 }
 
-export async function getBrand(v: VitalityDb, todayKey = getLocalDateKey()): Promise<BrandData> {
+export async function getBrand(v: HealthCompanionDb, todayKey = getLocalDateKey()): Promise<BrandData> {
   const [blob, connectorMetrics] = await Promise.all([
     readBlob(v, 'brand_state'),
     getConnectorMetrics(v),
@@ -1269,7 +1269,7 @@ function kpiDelta(history: unknown, days: number): number | null {
  * per-brand Business view is the single source. `hasData` is true only when at
  * least one venture actually tracks a metric.
  */
-export async function getBusiness(v: VitalityDb): Promise<BusinessData> {
+export async function getBusiness(v: HealthCompanionDb): Promise<BusinessData> {
   const blob = await readBlob(v, 'brand_state');
   if (!blob) return { hasData: false, ventures: [] };
   const brands = (Array.isArray(blob.brands) ? (blob.brands as Row[]) : []).filter((b) => !b.archived);
@@ -1314,7 +1314,7 @@ export interface PeakStimulantsData {
  * name/category/unit at sync time, so no catalog is needed here. Answers "what
  * have I taken today / how wired am I / how am I feeling".
  */
-export async function getPeakStimulants(v: VitalityDb, todayKey = getLocalDateKey()): Promise<PeakStimulantsData> {
+export async function getPeakStimulants(v: HealthCompanionDb, todayKey = getLocalDateKey()): Promise<PeakStimulantsData> {
   const empty: PeakStimulantsData = { hasData: false, todayCount: 0, caffeineMgToday: null, substances: [], latestEnergy: null, tolerance: null };
   const blob = await readBlob(v, 'peak_state');
   if (!blob) return empty;
@@ -1387,7 +1387,7 @@ export interface StimulantDay {
  * Only days that actually logged caffeine are emitted (a zero day adds no signal).
  * Feeds the caffeine→recovery seam (insights.caffeineRecovery).
  */
-export async function getStimulantsDaily(v: VitalityDb, days = 30): Promise<StimulantDay[]> {
+export async function getStimulantsDaily(v: HealthCompanionDb, days = 30): Promise<StimulantDay[]> {
   const blob = await readBlob(v, 'peak_state');
   if (!blob) return [];
   const logs = Array.isArray(blob.substances) ? (blob.substances as Row[]) : [];
@@ -1418,7 +1418,7 @@ export interface ManualSleepDay {
  * the sleep→mood seam fire for users without a wearable. Only days with a logged
  * sleepHours > 0 are emitted; newest first.
  */
-export async function getManualSleepDaily(v: VitalityDb, days = 30): Promise<ManualSleepDay[]> {
+export async function getManualSleepDaily(v: HealthCompanionDb, days = 30): Promise<ManualSleepDay[]> {
   const blob = await readBlob(v, 'peak_state');
   if (!blob) return [];
   const manual = blob.manual && typeof blob.manual === 'object' ? (blob.manual as Record<string, Row>) : {};
@@ -1468,7 +1468,7 @@ export interface TilesList {
  * on/off the board by joining `tiles` against `board_layout.ordering` (the
  * saved arrangement the dashboard mirrors up). Both reads are RLS-scoped.
  */
-export async function getTiles(v: VitalityDb): Promise<TilesList> {
+export async function getTiles(v: HealthCompanionDb): Promise<TilesList> {
   const { db, userId } = v;
   let [tilesRes, boardRes] = await Promise.all([
     db

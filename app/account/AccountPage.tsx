@@ -146,9 +146,9 @@ interface AccountPageProps {
 }
 
 // Paste-in instructions that turn a Claude Project into an auto-rendering
-// Vitality dashboard (see docs/ideas/claude-project-dashboard.md). Copied to the
+// HealthCompanion dashboard (see docs/ideas/claude-project-dashboard.md). Copied to the
 // clipboard from the connect card so users don't have to retype it.
-const PROJECT_INSTRUCTIONS = `You are my Vitality dashboard. At the START of every conversation, WITHOUT being asked, call vitality_daily_briefing and vitality_weekly_recap. Then render ONE HTML artifact titled "Vitality — <today's date>" as a glanceable dashboard: a top banner with today's call (train hard / moderate / rest) and the single most important alert, then a responsive grid of cards — Recovery & Sleep, Training readiness, Nutrition (today + weekly consistency), Weight (rate + goal verdict), Hydration, Goals streak, and Finance/Subscriptions. Aesthetic: pure-black (#04060a) background, mint (#6ee7b7) accents, Inter font, rounded cards with a faint mint border, big numbers / small labels, plain HTML/CSS only. Pull EVERY number from the tools — never invent data; show "—" for any gap. Under the artifact, write ONE line: the highest-leverage action right now. If I ask you to log something (weight, meal, water, workout, supplement, note), use the matching write tool, confirm what changed, and re-render just the affected card. Keep replies short — the artifact is the main output.`
+const PROJECT_INSTRUCTIONS = `You are my HealthCompanion dashboard. At the START of every conversation, WITHOUT being asked, call healthcompanion_daily_briefing and healthcompanion_weekly_recap. Then render ONE HTML artifact titled "HealthCompanion — <today's date>" as a glanceable dashboard: a top banner with today's call (train hard / moderate / rest) and the single most important alert, then a responsive grid of cards — Recovery & Sleep, Training readiness, Nutrition (today + weekly consistency), Weight (rate + goal verdict), Hydration, Goals streak, and Finance/Subscriptions. Aesthetic: pure-black (#04060a) background, mint (#6ee7b7) accents, Inter font, rounded cards with a faint mint border, big numbers / small labels, plain HTML/CSS only. Pull EVERY number from the tools — never invent data; show "—" for any gap. Under the artifact, write ONE line: the highest-leverage action right now. If I ask you to log something (weight, meal, water, workout, supplement, note), use the matching write tool, confirm what changed, and re-render just the affected card. Keep replies short — the artifact is the main output.`
 
 /**
  * Personal settings page — the single source of truth for the user's
@@ -439,7 +439,7 @@ export default function AccountPage({ initial }: AccountPageProps) {
     if (!connectorUrl) return
     try {
       await navigator.clipboard.writeText(
-        `claude mcp add --scope user --transport http vitality ${connectorUrl}`,
+        `claude mcp add --scope user --transport http healthcompanion ${connectorUrl}`,
       )
       setCodeCmdCopied(true)
       setTimeout(() => setCodeCmdCopied(false), 2000)
@@ -971,7 +971,7 @@ export default function AccountPage({ initial }: AccountPageProps) {
               <p className={styles.mcpNote}>Paste once in any terminal, then just talk.</p>
               <div className={styles.mcpCommandCard}>
                 <code className={styles.mcpCommand}>
-                  {`claude mcp add --scope user --transport http vitality ${connectorUrl}`}
+                  {`claude mcp add --scope user --transport http healthcompanion ${connectorUrl}`}
                 </code>
                 <button type="button" className={styles.mcpCopyBtn} onClick={handleCopyCodeCmd}>
                   {codeCmdCopied ? 'copied ✓' : 'copy'}
@@ -998,7 +998,7 @@ export default function AccountPage({ initial }: AccountPageProps) {
                 </button>
               </div>
               <p className={styles.mcpNote}>
-                Then try: <em>&ldquo;Give me my Vitality daily briefing.&rdquo;</em>
+                Then try: <em>&ldquo;Give me my HealthCompanion daily briefing.&rdquo;</em>
               </p>
             </div>
           )}

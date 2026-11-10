@@ -34,7 +34,7 @@ libraries, no React, no runtime fonts.
 19. Add an explicit neutral state and require real data for the positive state, never let empty fall through to "on track" (because that reads falsely positive on an empty tile). Label only what the data actually says.
 
 ## The bridge and report (the whole point)
-20. Speak to the host through `Vitality.save`/`Vitality.load` (the tile's private data) and exactly ONE `Vitality.report({key,label,value,date,kind})` (the single life-number into Vee). Every measurable kind (`intake count duration rating measure money done`) MUST emit one contract-valid report of its REAL today-value, once data exists, never a fabricated zero. `key value date kind` are all required, `kind` must be in the taxonomy, `date` must be `YYYY-MM-DD`. A missing or malformed field is a hard-floor error.
+20. Speak to the host through `Health Companion.save`/`Health Companion.load` (the tile's private data) and exactly ONE `Health Companion.report({key,label,value,date,kind})` (the single life-number into Vee). Every measurable kind (`intake count duration rating measure money done`) MUST emit one contract-valid report of its REAL today-value, once data exists, never a fabricated zero. `key value date kind` are all required, `kind` must be in the taxonomy, `date` must be `YYYY-MM-DD`. A missing or malformed field is a hard-floor error.
 
 For the hard-error linter rules, the richness floor's seven marks, unit correctness, and
 the full color law, `check_tile` enforces them all on the finished HTML, so build, then

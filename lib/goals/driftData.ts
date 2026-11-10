@@ -58,7 +58,7 @@ export async function gatherDrift(
       supabase.from('goal_nudges').select('kind, last_nudged_at, resolution').eq('user_id', userId).order('last_nudged_at', { ascending: false }),
       // active, non-silent goals — so Vee can reach out about the SPECIFIC goal
       // whose domain has gone quiet, at the cadence its push level asks for.
-      supabase.from('vitality_goals').select('id, title, clean_title, category, push_level, target_date').eq('user_id', userId).eq('status', 'active').neq('push_level', 'silent'),
+      supabase.from('healthcompanion_goals').select('id, title, clean_title, category, push_level, target_date').eq('user_id', userId).eq('status', 'active').neq('push_level', 'silent'),
       // user-built tile streams (report contract) — the generic drift domain
       supabase.from('tile_streams').select('id, key, canonical_key, label').eq('user_id', userId),
       supabase.from('tile_reports').select('stream_id, stream_key, date').eq('user_id', userId).gte('date', since30).order('date', { ascending: false }),

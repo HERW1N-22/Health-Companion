@@ -10,8 +10,8 @@
 import { useEffect, useState } from 'react'
 import { getLocalDateKey } from '@/lib/dates'
 
-const SUPP_LS_KEY = 'vitality_supplements_v1'
-const GOALS_LS_KEY = 'vitality_goals_v1'
+const SUPP_LS_KEY = 'healthcompanion_supplements_v1'
+const GOALS_LS_KEY = 'healthcompanion_goals_v1'
 
 export interface SupplementSignal {
   taken: number

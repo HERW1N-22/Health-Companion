@@ -1,6 +1,6 @@
 # Feature DNA: Finance + Brand (money + KPI tiles)
 
-Sealed-HTML recipes distilled from Vitality's Finance and Brand modules. Plain
+Sealed-HTML recipes distilled from Health Companion's Finance and Brand modules. Plain
 HTML/CSS/vanilla-JS/inline-SVG. No libraries, no build step. Copy a block, rename
 the classes, feed it real numbers.
 

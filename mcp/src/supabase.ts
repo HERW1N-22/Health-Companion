@@ -1,4 +1,4 @@
-// Supabase access for the Vitality MCP.
+// Supabase access for the HealthCompanion MCP.
 //
 // Two auth modes, resolved in env.ts:
 //   • user    — anon key + email/password sign-in. Every query runs under the
@@ -13,7 +13,7 @@
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 import { getEnv } from './env.js';
 
-export interface VitalityDb {
+export interface HealthCompanionDb {
   db: SupabaseClient;
   userId: string;
   mode: 'user' | 'service';
@@ -39,10 +39,10 @@ export const WRITE_PAUSED_SCOPE = 'mcp:write:paused';
 /** Full local control — the stdio CLI is the user reading/writing their own data. */
 export const LOCAL_SCOPES = ['mcp:read', WRITE_SCOPE];
 
-let cached: VitalityDb | null = null;
-let pending: Promise<VitalityDb> | null = null;
+let cached: HealthCompanionDb | null = null;
+let pending: Promise<HealthCompanionDb> | null = null;
 
-async function connect(): Promise<VitalityDb> {
+async function connect(): Promise<HealthCompanionDb> {
   const env = getEnv();
 
   if (env.authMode === 'service') {
@@ -61,16 +61,16 @@ async function connect(): Promise<VitalityDb> {
     password: env.userPassword!,
   });
   if (error || !data.user) {
-    console.error('[vitality-mcp] sign-in failed:', error?.message ?? 'no user returned');
-    throw new Error(`Vitality sign-in failed: ${error?.message ?? 'unknown error'}`);
+    console.error('[healthcompanion-mcp] sign-in failed:', error?.message ?? 'no user returned');
+    throw new Error(`HealthCompanion sign-in failed: ${error?.message ?? 'unknown error'}`);
   }
-  console.error(`[vitality-mcp] signed in as ${data.user.email} (RLS-scoped).`);
+  console.error(`[healthcompanion-mcp] signed in as ${data.user.email} (RLS-scoped).`);
   return { db, userId: data.user.id, mode: 'user', scopes: LOCAL_SCOPES };
 }
 
 /** Get the authenticated client + user id. Authenticates once, then caches.
  *  This is the STDIO/local path: one process, one user, cached for its lifetime. */
-export function getDb(): Promise<VitalityDb> {
+export function getDb(): Promise<HealthCompanionDb> {
   if (cached) return Promise.resolve(cached);
   if (pending) return pending;
   pending = connect()
@@ -103,7 +103,7 @@ export function dbForAccessToken(opts: {
   accessToken: string;
   userId: string;
   scopes: string[];
-}): VitalityDb {
+}): HealthCompanionDb {
   const db = createClient(opts.supabaseUrl, opts.anonKey, {
     auth: { persistSession: false, autoRefreshToken: false },
     global: { headers: { Authorization: `Bearer ${opts.accessToken}` } },

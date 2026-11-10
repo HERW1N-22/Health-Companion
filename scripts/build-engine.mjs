@@ -1,8 +1,8 @@
-// Assemble the forkable Vitality Tile Engine (engine/) from the canonical sources.
+// Assemble the forkable HealthCompanion Tile Engine (engine/) from the canonical sources.
 //
 // The engine is a SLICE, not a copy of the app: the design DNA pack + the real
 // shipped tiles + a self-check, packaged so a fork "just adds it" and Claude Code
-// builds Vitality-native tiles as ambient context (no commands, no keys, no app).
+// builds HealthCompanion-native tiles as ambient context (no commands, no keys, no app).
 //
 // Single source of truth stays where it already lives:
 //   - mcp/dna/**            -> engine/dna/**        (the look/feel/voice reference)
@@ -11,7 +11,7 @@
 // untouched. Re-run this whenever the DNA pack or the featured tiles change:
 //   node scripts/build-engine.mjs
 //
-// It only reads from Vitality and writes under engine/. Nothing else.
+// It only reads from HealthCompanion and writes under engine/. Nothing else.
 
 import { readFileSync, writeFileSync, readdirSync, existsSync, mkdirSync, rmSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
@@ -47,10 +47,10 @@ for (const id of exampleIds) {
 // 3) A machine-readable manifest: what the slice contains + where it came from.
 //    (No timestamp — Date.now() is intentionally avoided so the build is deterministic.)
 const manifest = {
-  name: 'vitality-tile-engine',
-  what: 'A forkable slice of Vitality: the design DNA + real tiles that let Claude Code build Vitality-native dashboard tiles as ambient context. No commands, no keys, no app.',
+  name: 'healthcompanion-tile-engine',
+  what: 'A forkable slice of HealthCompanion: the design DNA + real tiles that let Claude Code build HealthCompanion-native dashboard tiles as ambient context. No commands, no keys, no app.',
   selfContained: true,
-  takesFrom: 'vitality-only',
+  takesFrom: 'healthcompanion-only',
   entry: 'ENGINE.md',
   selfCheck: 'lint.mjs',
   dna: dnaFiles.sort(),

@@ -362,7 +362,7 @@ test('honesty: a report:error reply from the host surfaces the same calm amber n
   const { html } = scaffoldTile({ goal: 'track my water' });
   const h = await mountReady(html, { now: NOW });
   // The host answered the report with a failure (the server write never landed).
-  h.win.postMessage({ source: 'vitality-host', type: 'report:error', reason: 'failed' }, '*');
+  h.win.postMessage({ source: 'healthcompanion-host', type: 'report:error', reason: 'failed' }, '*');
   await h.settle();
   const msg = h.win.document.getElementById('msg');
   assert.ok(msg, 'the shared msg line exists');
@@ -396,7 +396,7 @@ test('honesty: a LATE load reply carrying saved data reloads the tile (before an
   // The real reply finally lands (a stalled main thread), carrying weeks of history.
   const id = h.loads[h.loads.length - 1];
   h.win.postMessage(
-    { source: 'vitality-host', type: 'load:result', id, data: [{ date: '2026-06-01', value: 3 }] },
+    { source: 'healthcompanion-host', type: 'load:result', id, data: [{ date: '2026-06-01', value: 3 }] },
     '*',
   );
   await h.settle();
@@ -416,11 +416,11 @@ test('honesty: a LATE load reply never stomps fresh input - once the user has sa
   const h = await mountReady(html, { now: NOW, dropLoads: true });
   await new Promise((r) => setTimeout(r, 6600)); // past the fallback: tile booted empty
   await h.settle();
-  await h.click('#plus'); // the user logs something: Vitality._sv is set
+  await h.click('#plus'); // the user logs something: HealthCompanion._sv is set
   const before = h.errors.length;
   const id = h.loads[h.loads.length - 1];
   h.win.postMessage(
-    { source: 'vitality-host', type: 'load:result', id, data: [{ date: '2026-06-01', value: 3 }] },
+    { source: 'healthcompanion-host', type: 'load:result', id, data: [{ date: '2026-06-01', value: 3 }] },
     '*',
   );
   await h.settle();

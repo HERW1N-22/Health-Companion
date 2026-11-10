@@ -307,28 +307,28 @@ input{caret-color:var(--mint);user-select:text;-webkit-user-select:text}
 
 <script>
 /* ---- the host bridge: save/load/report, with a standalone fallback ---- */
-var Vitality = (function () {
-  var waiters = {}, LS = 'vitality-workout-tile';
+var Health Companion = (function () {
+  var waiters = {}, LS = 'healthcompanion-workout-tile';
   function lsGet(){ try { return JSON.parse(localStorage.getItem(LS) || 'null'); } catch (e) { return null; } }
   function lsSet(d){ try { localStorage.setItem(LS, JSON.stringify(d)); } catch (e) {} }
   window.addEventListener('message', function (e) {
     var m = e.data;
-    if (m && m.source === 'vitality-host' && m.type === 'load:result' && waiters[m.id]) {
+    if (m && m.source === 'healthcompanion-host' && m.type === 'load:result' && waiters[m.id]) {
       waiters[m.id](m.data); delete waiters[m.id];
     }
   });
   return {
-    save: function (d) { lsSet(d); try { parent.postMessage({ source:'vitality-tile', type:'save', data:d }, '*'); } catch (e) {} },
+    save: function (d) { lsSet(d); try { parent.postMessage({ source:'healthcompanion-tile', type:'save', data:d }, '*'); } catch (e) {} },
     load: function () {
       return new Promise(function (res) {
         if (window.parent === window) { res(lsGet()); return; }   // opened standalone, no host frame
         var id = Math.random().toString(36).slice(2);
         waiters[id] = res;
-        try { parent.postMessage({ source:'vitality-tile', type:'load', id:id }, '*'); } catch (e) {}
+        try { parent.postMessage({ source:'healthcompanion-tile', type:'load', id:id }, '*'); } catch (e) {}
         setTimeout(function () { if (waiters[id]) { delete waiters[id]; res(lsGet()); } }, 1200); // never stuck empty
       });
     },
-    report: function (s) { try { parent.postMessage({ source:'vitality-tile', type:'report', stream:s }, '*'); } catch (e) {} }
+    report: function (s) { try { parent.postMessage({ source:'healthcompanion-tile', type:'report', stream:s }, '*'); } catch (e) {} }
   };
 })();
 
@@ -439,7 +439,7 @@ function renderWeek(){
 function reportSets(){
   var n = todaySets().length;
   if (n > 0) {
-    Vitality.report({ key:'sets', label:'Sets logged', value:n, date:today(), kind:'count', goalDirection:'up' });
+    Health Companion.report({ key:'sets', label:'Sets logged', value:n, date:today(), kind:'count', goalDirection:'up' });
   }
 }
 
@@ -542,7 +542,7 @@ document.getElementById('today').addEventListener('click', function (e) {
 });
 
 /* ---- hydrate once, then allow saves (never persist empty defaults over real data) ---- */
-Vitality.load().then(function (saved) {
+Health Companion.load().then(function (saved) {
   if (saved && typeof saved === 'object') {
     if (typeof saved.restLen === 'number') state.restLen = saved.restLen;
     if (typeof saved.goal === 'number') state.goal = saved.goal;
@@ -555,7 +555,7 @@ Vitality.load().then(function (saved) {
   renderAll();
   reportSets();
 });
-function persist(){ if (loaded) Vitality.save({ restLen:state.restLen, goal:state.goal, sessions:state.sessions }); }
+function persist(){ if (loaded) Health Companion.save({ restLen:state.restLen, goal:state.goal, sessions:state.sessions }); }
 </script>
 </body>
 </html>
@@ -577,7 +577,7 @@ function persist(){ if (loaded) Vitality.save({ restLen:state.restLen, goal:stat
 
 **The bug-lessons are already applied.** `dayKey()` builds the date key from local getters, never `toISOString().slice`, which drifts a day. All motion is `transform`/`opacity` only, in both the `@keyframes` and the transitions (the session bar fills with `scaleX`, not an animated `width`, so it never trips the layout-motion rule). Persistence prefers the host bridge and falls back to localStorage only when the tile is opened standalone, every storage call wrapped in try/catch. Saves are held behind a `loaded` flag so the empty first paint never overwrites real saved data. The weight is clamped, the exercise name is length-capped and escaped with `esc()` before it lands in HTML. Glyphs are inline SVG. There is a mint `::selection` and a `prefers-reduced-motion` escape hatch.
 
-**It reports exactly one number.** `reportSets()` emits today's set count as a single `count` stream, and only when there is at least one real set, so the dashboard and the optional Vee tile get a true number and never a fabricated zero. One tile, one stream. The literal `Vitality.report(` appears exactly once in the file; everything else calls the `reportSets()` helper.
+**It reports exactly one number.** `reportSets()` emits today's set count as a single `count` stream, and only when there is at least one real set, so the dashboard and the optional Vee tile get a true number and never a fabricated zero. One tile, one stream. The literal `Health Companion.report(` appears exactly once in the file; everything else calls the `reportSets()` helper.
 
 ---
 
@@ -590,4 +590,4 @@ Keep the shell, change four things:
 3. **The felt moment.** The rest timer and the finish celebration are workout-flavoured. A meditation tile keeps the timer and drops the week bars; a habit tile keeps the week strip and drops the timer. Reuse the animation shells (`sweep`, `barGrow`, `restIn`, `celIn`), they are all transform/opacity and domain-agnostic.
 4. **The report.** Pick the one number that matters and the `kind` that fits it (`count`, `duration`, `intake`, `measure`, `rating`, `money`, `done`), and report it only when it is real. This tile uses `count` for sets; a timed practice would use `duration` for minutes.
 
-Everything else, the layout, the motion, the persistence, the states, the brand, the floor, is already correct. Build from here and the tile clears the Vitality bar by default. Run `check_tile` on your result and it should read PASS, zero errors, zero warnings, exactly as this one does.
+Everything else, the layout, the motion, the persistence, the states, the brand, the floor, is already correct. Build from here and the tile clears the Health Companion bar by default. Run `check_tile` on your result and it should read PASS, zero errors, zero warnings, exactly as this one does.

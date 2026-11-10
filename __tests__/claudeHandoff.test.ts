@@ -83,7 +83,7 @@ describe('contextBlock / composePrefill', () => {
   it('prefill = question first, context block after', () => {
     const p = composePrefill('am i overtraining?', FULL_CTX)
     expect(p.startsWith('am i overtraining?')).toBe(true)
-    expect(p).toContain('Context from my Vitality dashboard')
+    expect(p).toContain('Context from my HealthCompanion dashboard')
   })
 
   it('href encodes the whole prefill for claude.ai/new', () => {

@@ -1,4 +1,4 @@
-// Tool registration for the Vitality MCP — transport-agnostic.
+// Tool registration for the HealthCompanion MCP — transport-agnostic.
 //
 // This is the heart of the server: every read tool, defined once. It is
 // deliberately decoupled from HOW we authenticate. Instead of reaching for a
@@ -7,7 +7,7 @@
 //
 //   • stdio server (src/index.ts) passes `getDb` — one cached session for the
 //     whole process (one local user), exactly as before.
-//   • hosted route (app/api/mcp/*) will pass `() => Promise<VitalityDb>` that
+//   • hosted route (app/api/mcp/*) will pass `() => Promise<HealthCompanionDb>` that
 //     resolves the CALLER's own RLS-scoped client, fresh per request, so one
 //     process safely serves many users.
 //
@@ -17,7 +17,7 @@
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { z } from 'zod';
 
-import { WRITE_PAUSED_SCOPE, WRITE_SCOPE, type VitalityDb } from './supabase.js';
+import { WRITE_PAUSED_SCOPE, WRITE_SCOPE, type HealthCompanionDb } from './supabase.js';
 import { fmtHour, fmtKpi, getLocalDateKey, round } from './util.js';
 import {
   getProfile,
@@ -96,10 +96,10 @@ function fmtBusinessMetric(m: BusinessMetric): string {
 }
 
 /** A provider that yields the authenticated, RLS-scoped client for THIS caller. */
-export type VdbProvider = () => Promise<VitalityDb>;
+export type VdbProvider = () => Promise<HealthCompanionDb>;
 
 /**
- * Register every Vitality read tool on `server`, resolving data through `getVdb`.
+ * Register every HealthCompanion read tool on `server`, resolving data through `getVdb`.
  * Behaviour is identical regardless of transport — only the identity source
  * (which `getVdb` encapsulates) differs.
  */
@@ -110,19 +110,19 @@ export function registerTools(server: McpServer, getVdb: VdbProvider): void {
       return text(await fn());
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err);
-      console.error('[vitality-mcp] tool error:', msg); // full detail to stderr
-      return { content: [{ type: 'text', text: `Vitality error: ${sanitizeError(msg)}` }], isError: true };
+      console.error('[healthcompanion-mcp] tool error:', msg); // full detail to stderr
+      return { content: [{ type: 'text', text: `HealthCompanion error: ${sanitizeError(msg)}` }], isError: true };
     }
   };
 
   // ── whoami ──────────────────────────────────────────────────────────────────
   server.registerTool(
-    'vitality_whoami',
+    'healthcompanion_whoami',
     {
       annotations: { readOnlyHint: true },
       title: 'Who am I',
       description:
-        'Profile + plan summary for the connected Vitality user: name, age, sex, units, goal, focus areas, and billing tier/subscription status. Call this first to ground every other answer.',
+        'Profile + plan summary for the connected HealthCompanion user: name, age, sex, units, goal, focus areas, and billing tier/subscription status. Call this first to ground every other answer.',
     },
     safe(async () => {
       const v = await getVdb();
@@ -145,7 +145,7 @@ export function registerTools(server: McpServer, getVdb: VdbProvider): void {
 
   // ── daily briefing (the nudge engine) ─────────────────────────────────────────
   server.registerTool(
-    'vitality_daily_briefing',
+    'healthcompanion_daily_briefing',
     {
       annotations: { readOnlyHint: true },
       title: 'Daily briefing',
@@ -161,12 +161,12 @@ export function registerTools(server: McpServer, getVdb: VdbProvider): void {
 
   // ── start my day (the Vee greeting) ────────────────────────────────────────
   server.registerTool(
-    'vitality_start_my_day',
+    'healthcompanion_start_my_day',
     {
       annotations: { readOnlyHint: true },
       title: 'Start my day',
       description:
-        'Call this FIRST when opening a session for the person — the morning greeting. Greets them by name with a 3-second scannable read of their day (sleep/recovery, training, nutrition, hydration, goals, money) and the ONE insight that matters most right now, plus an optional one-tap offer backed by a real action. Returns finished, in-voice content — deliver it warmly as Vee, do not just list it. Use this instead of vitality_daily_briefing to OPEN a chat (daily_briefing is the raw prioritized list; this is the shaped greeting).',
+        'Call this FIRST when opening a session for the person — the morning greeting. Greets them by name with a 3-second scannable read of their day (sleep/recovery, training, nutrition, hydration, goals, money) and the ONE insight that matters most right now, plus an optional one-tap offer backed by a real action. Returns finished, in-voice content — deliver it warmly as Vee, do not just list it. Use this instead of healthcompanion_daily_briefing to OPEN a chat (daily_briefing is the raw prioritized list; this is the shaped greeting).',
     },
     safe(async () => {
       const v = await getVdb();
@@ -177,7 +177,7 @@ export function registerTools(server: McpServer, getVdb: VdbProvider): void {
 
   // ── sleep status ──────────────────────────────────────────────────────────────
   server.registerTool(
-    'vitality_sleep_status',
+    'healthcompanion_sleep_status',
     {
       annotations: { readOnlyHint: true },
       title: 'Sleep & recovery status',
@@ -250,7 +250,7 @@ export function registerTools(server: McpServer, getVdb: VdbProvider): void {
 
   // ── training readiness ─────────────────────────────────────────────────────────
   server.registerTool(
-    'vitality_training_readiness',
+    'healthcompanion_training_readiness',
     {
       annotations: { readOnlyHint: true },
       title: 'Training readiness',
@@ -296,7 +296,7 @@ export function registerTools(server: McpServer, getVdb: VdbProvider): void {
 
   // ── nutrition today ──────────────────────────────────────────────────────────
   server.registerTool(
-    'vitality_nutrition_today',
+    'healthcompanion_nutrition_today',
     {
       annotations: { readOnlyHint: true },
       title: "Today's nutrition",
@@ -325,7 +325,7 @@ export function registerTools(server: McpServer, getVdb: VdbProvider): void {
 
   // ── weight trend ──────────────────────────────────────────────────────────────
   server.registerTool(
-    'vitality_weight_trend',
+    'healthcompanion_weight_trend',
     {
       annotations: { readOnlyHint: true },
       title: 'Weight trend',
@@ -366,12 +366,12 @@ export function registerTools(server: McpServer, getVdb: VdbProvider): void {
 
   // ── subscriptions ──────────────────────────────────────────────────────────────
   server.registerTool(
-    'vitality_subscriptions',
+    'healthcompanion_subscriptions',
     {
       annotations: { readOnlyHint: true },
       title: 'Subscriptions',
       description:
-        'All recurring subscriptions with monthly-normalized cost, total burn, trials ending soon, recent price hikes, and renewals due this week. Note: Vitality stores no usage signal, so "unused" cannot be auto-detected — this surfaces cost, trials, and price changes instead.',
+        'All recurring subscriptions with monthly-normalized cost, total burn, trials ending soon, recent price hikes, and renewals due this week. Note: HealthCompanion stores no usage signal, so "unused" cannot be auto-detected — this surfaces cost, trials, and price changes instead.',
     },
     safe(async () => {
       const v = await getVdb();
@@ -398,7 +398,7 @@ export function registerTools(server: McpServer, getVdb: VdbProvider): void {
 
   // ── finance overview ──────────────────────────────────────────────────────────
   server.registerTool(
-    'vitality_finance_overview',
+    'healthcompanion_finance_overview',
     {
       annotations: { readOnlyHint: true },
       title: 'Finance overview',
@@ -433,7 +433,7 @@ export function registerTools(server: McpServer, getVdb: VdbProvider): void {
 
   // ── recent workouts ─────────────────────────────────────────────────────────────
   server.registerTool(
-    'vitality_recent_workouts',
+    'healthcompanion_recent_workouts',
     {
       annotations: { readOnlyHint: true },
       title: 'Recent workouts',
@@ -458,7 +458,7 @@ export function registerTools(server: McpServer, getVdb: VdbProvider): void {
 
   // ── hydration ──────────────────────────────────────────────────────────────────
   server.registerTool(
-    'vitality_hydration',
+    'healthcompanion_hydration',
     {
       annotations: { readOnlyHint: true },
       title: 'Hydration',
@@ -480,12 +480,12 @@ export function registerTools(server: McpServer, getVdb: VdbProvider): void {
 
   // ── goals / streak ─────────────────────────────────────────────────────────────
   server.registerTool(
-    'vitality_goals',
+    'healthcompanion_goals',
     {
       annotations: { readOnlyHint: true },
       title: 'Goals & streak',
       description:
-        "The user's goals: the BIG personal goals they're chasing (title, target date + days left, progress, priority, identity) plus the Duolingo-style streak and this-week habit goals (current/longest streak, due today, completed today, due tomorrow). Use this to know what the user is actually working toward and whether a deadline is near. Reads the authoritative vitality_goals + vitality_habit_goals + goals_streak tables.",
+        "The user's goals: the BIG personal goals they're chasing (title, target date + days left, progress, priority, identity) plus the Duolingo-style streak and this-week habit goals (current/longest streak, due today, completed today, due tomorrow). Use this to know what the user is actually working toward and whether a deadline is near. Reads the authoritative healthcompanion_goals + healthcompanion_habit_goals + goals_streak tables.",
     },
     safe(async () => {
       const v = await getVdb();
@@ -521,7 +521,7 @@ export function registerTools(server: McpServer, getVdb: VdbProvider): void {
 
   // ── supplements ──────────────────────────────────────────────────────────────
   server.registerTool(
-    'vitality_supplements',
+    'healthcompanion_supplements',
     {
       annotations: { readOnlyHint: true },
       title: 'Supplements',
@@ -543,7 +543,7 @@ export function registerTools(server: McpServer, getVdb: VdbProvider): void {
 
   // ── brand ────────────────────────────────────────────────────────────────────
   server.registerTool(
-    'vitality_brand',
+    'healthcompanion_brand',
     {
       annotations: { readOnlyHint: true },
       title: 'Brand / creator business',
@@ -608,7 +608,7 @@ export function registerTools(server: McpServer, getVdb: VdbProvider): void {
 
   // ── business overview (per-brand money/ops KPIs) ──────────────────────────────
   server.registerTool(
-    'vitality_business_overview',
+    'healthcompanion_business_overview',
     {
       annotations: { readOnlyHint: true },
       title: 'Business overview',
@@ -632,7 +632,7 @@ export function registerTools(server: McpServer, getVdb: VdbProvider): void {
 
   // ── notes / reminders ────────────────────────────────────────────────────────
   server.registerTool(
-    'vitality_notes',
+    'healthcompanion_notes',
     {
       annotations: { readOnlyHint: true },
       title: 'Notes & reminders',
@@ -651,7 +651,7 @@ export function registerTools(server: McpServer, getVdb: VdbProvider): void {
 
   // ── durable user facts ──────────────────────────────────────────────────────────
   server.registerTool(
-    'vitality_user_facts',
+    'healthcompanion_user_facts',
     {
       annotations: { readOnlyHint: true },
       title: 'Durable user facts',
@@ -667,7 +667,7 @@ export function registerTools(server: McpServer, getVdb: VdbProvider): void {
 
   // ── peak schedule today ──────────────────────────────────────────────────────
   server.registerTool(
-    'vitality_peak_today',
+    'healthcompanion_peak_today',
     {
       annotations: { readOnlyHint: true },
       title: "Today's schedule (Peak)",
@@ -692,7 +692,7 @@ export function registerTools(server: McpServer, getVdb: VdbProvider): void {
 
   // ── peak stimulants (substance log + subjective energy) ───────────────────────
   server.registerTool(
-    'vitality_peak_stimulants',
+    'healthcompanion_peak_stimulants',
     {
       annotations: { readOnlyHint: true },
       title: 'Stimulants & energy (Peak)',
@@ -727,7 +727,7 @@ export function registerTools(server: McpServer, getVdb: VdbProvider): void {
 
   // ── weekly recap (retrospective cross-domain) ─────────────────────────────────
   server.registerTool(
-    'vitality_weekly_recap',
+    'healthcompanion_weekly_recap',
     {
       annotations: { readOnlyHint: true },
       title: 'Weekly recap',
@@ -828,7 +828,7 @@ export function registerTools(server: McpServer, getVdb: VdbProvider): void {
 
   // ── add note ───────────────────────────────────────────────────────────────────
   server.registerTool(
-    'vitality_add_note',
+    'healthcompanion_add_note',
     {
       annotations: { destructiveHint: true },
       title: 'Add a note',
@@ -847,7 +847,7 @@ export function registerTools(server: McpServer, getVdb: VdbProvider): void {
 
   // ── log weight ─────────────────────────────────────────────────────────────────
   server.registerTool(
-    'vitality_log_weight',
+    'healthcompanion_log_weight',
     {
       annotations: { destructiveHint: true },
       title: 'Log a weigh-in',
@@ -875,7 +875,7 @@ export function registerTools(server: McpServer, getVdb: VdbProvider): void {
 
   // ── log meal ───────────────────────────────────────────────────────────────────
   server.registerTool(
-    'vitality_log_meal',
+    'healthcompanion_log_meal',
     {
       annotations: { destructiveHint: true },
       title: 'Log a meal',
@@ -902,7 +902,7 @@ export function registerTools(server: McpServer, getVdb: VdbProvider): void {
 
   // ── log water ──────────────────────────────────────────────────────────────────
   server.registerTool(
-    'vitality_log_water',
+    'healthcompanion_log_water',
     {
       annotations: { destructiveHint: true },
       title: 'Log water',
@@ -925,7 +925,7 @@ export function registerTools(server: McpServer, getVdb: VdbProvider): void {
 
   // ── log workout ────────────────────────────────────────────────────────────────
   server.registerTool(
-    'vitality_log_workout',
+    'healthcompanion_log_workout',
     {
       annotations: { destructiveHint: true },
       title: 'Log a workout',
@@ -959,7 +959,7 @@ export function registerTools(server: McpServer, getVdb: VdbProvider): void {
 
   // ── mark supplement taken ──────────────────────────────────────────────────────
   server.registerTool(
-    'vitality_mark_supplement_taken',
+    'healthcompanion_mark_supplement_taken',
     {
       annotations: { destructiveHint: true },
       title: 'Mark supplement taken',
@@ -983,12 +983,12 @@ export function registerTools(server: McpServer, getVdb: VdbProvider): void {
 
   // ── log business metric ─────────────────────────────────────────────────────
   server.registerTool(
-    'vitality_log_business_metric',
+    'healthcompanion_log_business_metric',
     {
       annotations: { destructiveHint: true },
       title: 'Log a business metric',
       description:
-        'WRITE. Log (or correct) a business number — a brand/venture\'s custom KPI (revenue, MRR, leads, reviews, etc.). Matches an existing metric by label (updates it + charts the change) or creates it if new. If the user has more than one business, pass `business` to disambiguate. Reads back via vitality_business_overview. Requires a write-enabled connection.',
+        'WRITE. Log (or correct) a business number — a brand/venture\'s custom KPI (revenue, MRR, leads, reviews, etc.). Matches an existing metric by label (updates it + charts the change) or creates it if new. If the user has more than one business, pass `business` to disambiguate. Reads back via healthcompanion_business_overview. Requires a write-enabled connection.',
       inputSchema: {
         metric: z.string().min(1).max(24).describe('Metric label, e.g. "Revenue", "MRR", "Leads", "Rating"'),
         value: z.number().describe('The metric value (a plain number — no currency symbols or commas)'),
@@ -1013,31 +1013,31 @@ export function registerTools(server: McpServer, getVdb: VdbProvider): void {
   // the SAME three states apart: read+write, paused (the global kill-switch -
   // reconnecting cannot help), and genuinely read-only.
   server.registerTool(
-    'vitality_connection',
+    'healthcompanion_connection',
     {
       annotations: { readOnlyHint: true },
       title: 'Check this connection\'s access level',
       description:
-        'Report this Vitality connection\'s access level: read+write, temporarily paused (a server-side pause by the Vitality team - waiting is the only fix), or read-only. Call it BEFORE a build/log session (or when a write tool refuses) so you know whether the write tools (vitality_add_tile, upload_tile, the loggers) will work. If it reports read-only, relay its fix steps to the user and have them reconnect with write access; if paused, say so honestly and try again later. Never quietly fall back to handing them HTML to paste.',
+        'Report this HealthCompanion connection\'s access level: read+write, temporarily paused (a server-side pause by the HealthCompanion team - waiting is the only fix), or read-only. Call it BEFORE a build/log session (or when a write tool refuses) so you know whether the write tools (healthcompanion_add_tile, upload_tile, the loggers) will work. If it reports read-only, relay its fix steps to the user and have them reconnect with write access; if paused, say so honestly and try again later. Never quietly fall back to handing them HTML to paste.',
       inputSchema: {},
     },
     safe(async () => {
       const v = await getVdb();
       if (v.scopes.includes(WRITE_SCOPE)) {
-        return 'This Vitality connection has READ + WRITE access. Everything works: reads, logging, and vitality_add_tile / upload_tile land tiles straight on the dashboard with no copy-paste.';
+        return 'This HealthCompanion connection has READ + WRITE access. Everything works: reads, logging, and healthcompanion_add_tile / upload_tile land tiles straight on the dashboard with no copy-paste.';
       }
       if (v.scopes.includes(WRITE_PAUSED_SCOPE)) {
         // Mirrors requireWrite's paused copy: the pause is server-side, so
         // reconnect advice here would send the user into a loop that cannot help.
         return (
-          'Writes are temporarily paused by the Vitality team, so nothing can be added or logged right now. ' +
+          'Writes are temporarily paused by the HealthCompanion team, so nothing can be added or logged right now. ' +
           'Your data is safe and reading still works. The pause is on our side, so reconnecting will not change it. Try again in a little while.'
         );
       }
       return (
-        'This Vitality connection is READ-ONLY: reads work, but logging and the tile-landing tools will refuse. ' +
-        'Fix it in one step: disconnect the Vitality connector in your MCP client, then Allow it again - new connections are granted read and write by default. ' +
-        '(Or connect from Claude Code with a Vitality CLI token from the /account page, which always carries full access.) ' +
+        'This HealthCompanion connection is READ-ONLY: reads work, but logging and the tile-landing tools will refuse. ' +
+        'Fix it in one step: disconnect the HealthCompanion connector in your MCP client, then Allow it again - new connections are granted read and write by default. ' +
+        '(Or connect from Claude Code with a HealthCompanion CLI token from the /account page, which always carries full access.) ' +
         'Reconnect rather than falling back to copy-paste.'
       );
     }),
@@ -1045,7 +1045,7 @@ export function registerTools(server: McpServer, getVdb: VdbProvider): void {
 
   // ── my tiles (READ: the registry + board placement) ───────────────────────────
   server.registerTool(
-    'vitality_my_tiles',
+    'healthcompanion_my_tiles',
     {
       annotations: { readOnlyHint: true },
       title: 'List the user\'s tiles (board vs library)',
@@ -1056,7 +1056,7 @@ export function registerTools(server: McpServer, getVdb: VdbProvider): void {
     safe(async () => {
       const v = await getVdb();
       const { tiles, boardKnown } = await getTiles(v);
-      if (!tiles.length) return 'No custom tiles yet. scaffold_tile / vitality_add_tile can build the first one.';
+      if (!tiles.length) return 'No custom tiles yet. scaffold_tile / healthcompanion_add_tile can build the first one.';
       const mark = (onBoard: boolean | null): string =>
         onBoard === null ? 'PLACEMENT UNKNOWN' : onBoard ? 'ON BOARD' : 'IN LIBRARY (removed from the board - not active)';
       const lines = tiles.map((t) => {
@@ -1079,17 +1079,17 @@ export function registerTools(server: McpServer, getVdb: VdbProvider): void {
   // Targets the shared `tiles` table (docs/tiles-table-contract.md); until that table is
   // applied it fails with a clear "ask the dashboard to apply it" line.
   server.registerTool(
-    'vitality_add_tile',
+    'healthcompanion_add_tile',
     {
       annotations: { destructiveHint: true },
       title: 'Add a tile to the dashboard',
       description:
-        'WRITE. Build a finished, on-brand Vitality tile and put it straight onto the user\'s dashboard (their tile registry), no copy-paste. Use when the user says "add X to my dashboard" / "make me a Y tile". DEFAULT PATH: pass `goal` in plain English; it runs the same deterministic builder as scaffold_tile (full Vitality signature, floor-clean at 0 errors, no tokens spent, cannot break) and persists the tile. Right for essentially every tracker. ADVANCED PATH: only for what the templates cannot express (multi-metric, an AI bring-your-own-key chat, a bespoke multi-section layout or domain visual), hand-author from vitality_tile_kit, run check_tile to green, and pass it here as `html` (floor-enforced on the way in; an off-brand or unsealed tile is refused). Returns the new tile\'s id, name, and category. Requires a write-enabled connection: a read-only one gets one-step reconnect instructions - relay them to the user and try again; never quietly fall back to copy-paste.',
+        'WRITE. Build a finished, on-brand HealthCompanion tile and put it straight onto the user\'s dashboard (their tile registry), no copy-paste. Use when the user says "add X to my dashboard" / "make me a Y tile". DEFAULT PATH: pass `goal` in plain English; it runs the same deterministic builder as scaffold_tile (full HealthCompanion signature, floor-clean at 0 errors, no tokens spent, cannot break) and persists the tile. Right for essentially every tracker. ADVANCED PATH: only for what the templates cannot express (multi-metric, an AI bring-your-own-key chat, a bespoke multi-section layout or domain visual), hand-author from healthcompanion_tile_kit, run check_tile to green, and pass it here as `html` (floor-enforced on the way in; an off-brand or unsealed tile is refused). Returns the new tile\'s id, name, and category. Requires a write-enabled connection: a read-only one gets one-step reconnect instructions - relay them to the user and try again; never quietly fall back to copy-paste.',
       inputSchema: {
-        goal: z.string().min(1).max(300).optional().describe('What the tile tracks, in plain words. The DEFAULT: builds the deterministic, floor-clean Vitality template (full signature, live chart, report wired). Right for essentially every tracker. Omit only if you pass `html`.'),
-        html: z.string().min(1).max(400000).optional().describe('ADVANCED. A ready-made sealed tile to add AS-IS, only for what the templates cannot express (multi-metric, AI chat, bespoke layout). Build it from vitality_tile_kit and pass check_tile first; it is floor-enforced on the way in. If the tile tracks a number or a done-mark, ALSO pass `kind`: that wires its stream registration and enforces the Vitality.report() call it must carry to feed Vee.'),
+        goal: z.string().min(1).max(300).optional().describe('What the tile tracks, in plain words. The DEFAULT: builds the deterministic, floor-clean HealthCompanion template (full signature, live chart, report wired). Right for essentially every tracker. Omit only if you pass `html`.'),
+        html: z.string().min(1).max(400000).optional().describe('ADVANCED. A ready-made sealed tile to add AS-IS, only for what the templates cannot express (multi-metric, AI chat, bespoke layout). Build it from healthcompanion_tile_kit and pass check_tile first; it is floor-enforced on the way in. If the tile tracks a number or a done-mark, ALSO pass `kind`: that wires its stream registration and enforces the HealthCompanion.report() call it must carry to feed Vee.'),
         check: z.string().min(8).max(64).optional().describe('The Proof value from this exact html\'s PASSING check_tile receipt. When it matches, the identical re-lint is skipped; absent or stale, the full lint runs. Only meaningful with `html`.'),
-        kind: z.enum(['intake', 'count', 'duration', 'rating', 'measure', 'money', 'done']).optional().describe('The tile type. Goal path: overrides the inferred type. Html path: REQUIRED whenever the tile is measurable (tracks a number or a done-mark); it registers the tile\'s report stream and refuses html that lacks Vitality.report() wiring, so the tile cannot land dark.'),
+        kind: z.enum(['intake', 'count', 'duration', 'rating', 'measure', 'money', 'done']).optional().describe('The tile type. Goal path: overrides the inferred type. Html path: REQUIRED whenever the tile is measurable (tracks a number or a done-mark); it registers the tile\'s report stream and refuses html that lacks HealthCompanion.report() wiring, so the tile cannot land dark.'),
         name: z.string().min(1).max(60).optional().describe('Tile title (also the dashboard display name); required-ish when passing html'),
         unit: z.string().min(1).max(24).optional().describe('Unit for the copy, e.g. "min", "kg", "glasses" (goal path)'),
         goalDirection: z.enum(['up', 'down', 'neutral']).optional().describe('Override whether up, down, or neither is the goal (goal path; on the html path it is stamped onto the registered stream when the tile\'s own report() does not declare one)'),
@@ -1117,29 +1117,29 @@ export function registerTools(server: McpServer, getVdb: VdbProvider): void {
       return safe(async () => {
         const v = await getVdb();
         const t = await addTile(v, args);
-        return `Added "${t.name}" (${t.category}) to your Vitality Library. Open it here: http://localhost:3000/app?open=library - tap Place next to "${t.name}" to put it on your board. Give the user that link as a clickable line.`;
+        return `Added "${t.name}" (${t.category}) to your HealthCompanion Library. Open it here: http://localhost:3000/app?open=library - tap Place next to "${t.name}" to put it on your board. Give the user that link as a clickable line.`;
       })();
     },
   );
 
   // ── scaffold_tile (PURE builder: no DB, no getVdb) ────────────────────────────
   // The "sauce": one plain-English goal becomes one finished, themed, bridge-wired
-  // Vitality tile. Deterministic — the caller's own Claude Code is the intelligence;
-  // this guarantees the output is correct Vitality every time. Ignores getVdb.
+  // HealthCompanion tile. Deterministic — the caller's own Claude Code is the intelligence;
+  // this guarantees the output is correct HealthCompanion every time. Ignores getVdb.
   server.registerTool(
     'scaffold_tile',
     {
       annotations: { readOnlyHint: true },
-      title: 'Build a Vitality tile',
+      title: 'Build a Health Companion tile',
       description:
-        'The default tile builder. Start here for essentially any tracker ("beer tracker", "cold plunges", "reading minutes", "daily savings", "mood 1-5", "meditation done"). One plain-English goal becomes ONE finished, on-brand, full-grade tile in a single call: sealed self-contained HTML with the Vitality signature baked in (Instrument Serif hero number, eyebrow, status pill, a real section with a live 7-day chart / streak grid / rating week, honest empty state), 60fps motion, safe-area insets, and the bridge pre-wired (save/load + one Vitality.report() so it feeds Vee and lands on the dashboard, no keys/Supabase/Vercel). Deterministic: no LLM, no API key, no tokens spent, and it cannot break the floor because it is generated FROM the floor (passes check_tile at 0 errors). Seven kinds cover the common shapes (intake / count / duration / rating / measure / money / done); infer picks the kind and unit. Returns the inferred {key,label,kind,goalDirection,template}, a Vitality-grade receipt, then the HTML; edit it freely (re-run check_tile after). Do NOT read vitality_tile_kit first for a normal tracker; this call already IS on-brand. Reach for the kit only to hand-author something the templates cannot express (multi-metric, an AI bring-your-own-key chat, a bespoke multi-section layout or domain visual).',
+        'The default tile builder. Start here for essentially any tracker ("beer tracker", "cold plunges", "reading minutes", "daily savings", "mood 1-5", "meditation done"). One plain-English goal becomes ONE finished, on-brand, full-grade tile in a single call: sealed self-contained HTML with the HealthCompanion signature baked in (Instrument Serif hero number, eyebrow, status pill, a real section with a live 7-day chart / streak grid / rating week, honest empty state), 60fps motion, safe-area insets, and the bridge pre-wired (save/load + one HealthCompanion.report() so it feeds Vee and lands on the dashboard, no keys/Supabase/Vercel). Deterministic: no LLM, no API key, no tokens spent, and it cannot break the floor because it is generated FROM the floor (passes check_tile at 0 errors). Seven kinds cover the common shapes (intake / count / duration / rating / measure / money / done); infer picks the kind and unit. Returns the inferred {key,label,kind,goalDirection,template}, a HealthCompanion-grade receipt, then the HTML; edit it freely (re-run check_tile after). Do NOT read healthcompanion_tile_kit first for a normal tracker; this call already IS on-brand. Reach for the kit only to hand-author something the templates cannot express (multi-metric, an AI bring-your-own-key chat, a bespoke multi-section layout or domain visual).',
       inputSchema: {
         goal: z.string().min(1).max(300).describe('What the tile tracks, in plain words'),
         kind: z.enum(['intake', 'count', 'duration', 'rating', 'measure', 'money', 'done']).optional().describe('Override the inferred tile type'),
         name: z.string().min(1).max(60).optional().describe('Override the tile title/label'),
         unit: z.string().min(1).max(24).optional().describe('Unit for the copy, e.g. "min", "kg", "glasses"'),
         goalDirection: z.enum(['up', 'down', 'neutral']).optional().describe('Override whether up, down, or neither is the goal'),
-        unitSystem: z.enum(['metric', 'imperial']).optional().describe("The user's measurement preference; flips physical units (kg/lb, km/mi, cm/in). Pass what vitality_profile reports so weight/distance read in their units. Defaults to metric."),
+        unitSystem: z.enum(['metric', 'imperial']).optional().describe("The user's measurement preference; flips physical units (kg/lb, km/mi, cm/in). Pass what healthcompanion_profile reports so weight/distance read in their units. Defaults to metric."),
         currency: z.string().min(3).max(3).optional().describe("The user's currency as an ISO 4217 code ('USD','GBP','EUR','JPY',…). Money tiles print its symbol ($/£/€/¥) instead of a hardcoded '$'. Defaults to USD."),
       },
     },
@@ -1156,7 +1156,7 @@ export function registerTools(server: McpServer, getVdb: VdbProvider): void {
         return text(scaffoldTile(args).text);
       } catch (err) {
         const msg = err instanceof Error ? err.message : String(err);
-        return { content: [{ type: 'text', text: `Vitality error: ${sanitizeError(msg)}` }], isError: true };
+        return { content: [{ type: 'text', text: `HealthCompanion error: ${sanitizeError(msg)}` }], isError: true };
       }
     },
   );
@@ -1165,7 +1165,7 @@ export function registerTools(server: McpServer, getVdb: VdbProvider): void {
   // The Library upload socket, server side (brick 3 of the platform): builds the
   // same envelope as before, but now POSTS it straight into the user's tile
   // registry via addTile (RLS-scoped, mcp:write-gated, floor-enforced), so the
-  // tile auto-lands on the dashboard exactly like vitality_add_tile. The pure
+  // tile auto-lands on the dashboard exactly like healthcompanion_add_tile. The pure
   // packager behavior survives behind {package_only:true} for hand-carrying the
   // envelope in through the dashboard's "Add a tile" door (its paste box takes
   // the envelope and raw HTML alike - see PASTE_INSTRUCTIONS in scaffoldTile.ts).
@@ -1176,7 +1176,7 @@ export function registerTools(server: McpServer, getVdb: VdbProvider): void {
       annotations: { destructiveHint: true },
       title: 'Build a tile and post it onto the dashboard',
       description:
-        'Build a tile from a plain-English goal and POST it straight onto the user\'s dashboard through the Library upload socket - no copy-paste. Same deterministic full-grade builder as scaffold_tile (no kit read, no tokens spent); numbers auto-label in the user\'s own units and currency. Category/color auto-fill from the tile and are overridable. Gated on the Vitality floor: a hard lint error REFUSES (error names the rule) rather than land something off-brand or unsealed; polish warnings never block. Requires a write-enabled connection: a read-only one gets one-step reconnect instructions - relay them and try again; never quietly fall back to copy-paste. Pass package_only:true (rare) to skip the dashboard write and get the raw upload envelope JSON to paste in through the dashboard\'s "Add a tile" door instead.',
+        'Build a tile from a plain-English goal and POST it straight onto the user\'s dashboard through the Library upload socket - no copy-paste. Same deterministic full-grade builder as scaffold_tile (no kit read, no tokens spent); numbers auto-label in the user\'s own units and currency. Category/color auto-fill from the tile and are overridable. Gated on the HealthCompanion floor: a hard lint error REFUSES (error names the rule) rather than land something off-brand or unsealed; polish warnings never block. Requires a write-enabled connection: a read-only one gets one-step reconnect instructions - relay them and try again; never quietly fall back to copy-paste. Pass package_only:true (rare) to skip the dashboard write and get the raw upload envelope JSON to paste in through the dashboard\'s "Add a tile" door instead.',
       inputSchema: {
         goal: z.string().min(1).max(300).describe('What the tile tracks, in plain words'),
         kind: z.enum(['intake', 'count', 'duration', 'rating', 'measure', 'money', 'done']).optional().describe('Override the inferred tile type'),
@@ -1212,7 +1212,7 @@ export function registerTools(server: McpServer, getVdb: VdbProvider): void {
           return text(buildUploadTile(args).text);
         } catch (err) {
           const msg = err instanceof Error ? err.message : String(err);
-          return { content: [{ type: 'text', text: `Vitality error: ${sanitizeError(msg)}` }], isError: true };
+          return { content: [{ type: 'text', text: `HealthCompanion error: ${sanitizeError(msg)}` }], isError: true };
         }
       }
       // The socket: same floor-enforced build, then the row lands in the user's
@@ -1221,24 +1221,24 @@ export function registerTools(server: McpServer, getVdb: VdbProvider): void {
       return safe(async () => {
         const v = await getVdb();
         const t = await addTile(v, args);
-        return `Posted "${t.name}" (${t.category}) straight onto your dashboard through the Library upload socket - no paste needed. Open Vitality and it lands placed on your board (it also syncs to your other devices). Its report stream is pre-wired, so Vee starts reading it as soon as you log in the tile.`;
+        return `Posted "${t.name}" (${t.category}) straight onto your dashboard through the Library upload socket - no paste needed. Open HealthCompanion and it lands placed on your board (it also syncs to your other devices). Its report stream is pre-wired, so Vee starts reading it as soon as you log in the tile.`;
       })();
     },
   );
 
-  // ── vitality_tile_kit (PURE — serves the captured Vitality DNA pack) ───────────
-  // The payoff: before building a tile, the caller's Claude pulls Vitality's design
+  // ── healthcompanion_tile_kit (PURE — serves the captured HealthCompanion DNA pack) ───────────
+  // The payoff: before building a tile, the caller's Claude pulls HealthCompanion's design
   // DNA, data libraries (food/lifts/supplements), API recipes, and the hard-won
   // gotchas rulebook, so the tile is on-brand, knows the domain, and avoids the bugs
   // already fixed over two months. This is what makes the MCP overpowered vs plain
   // Claude Code. Reads files under mcp/{dna,data,recipes,lessons}. Ignores getVdb.
   server.registerTool(
-    'vitality_tile_kit',
+    'healthcompanion_tile_kit',
     {
       annotations: { readOnlyHint: true },
-      title: 'Vitality tile kit (design DNA, data, fixes)',
+      title: 'Health Companion tile kit (design DNA, data, fixes)',
       description:
-        'OPT-IN, for HAND-AUTHORED tiles only. For a normal tracker use scaffold_tile / vitality_add_tile with a plain goal: that path is already on-brand and floor-clean and spends no tokens here. Reach for this kit ONLY to hand-write a tile the templates cannot express (multi-metric, an AI bring-your-own-key chat, a bespoke multi-section layout or domain visual). It serves Vitality\'s design DNA, data libraries (real foods, lifts, supplements), API recipes, and the distilled bug-fix rules so the tile comes out on-brand and dodges bugs already fixed. No args = lean orientation (value + top-rules digest + section list). Then {domain:"food|workout|supplement|vee|finance|vitals|goals|quiz"} for a focused bundle (base look + that domain\'s data + recipes, the usual read); add {lean:true} for the lightest bundle that still clears the floor. Or {section:"<name>"} for one file. For the ceiling pattern read a sealed 0/0 example and swap its domain: {section:"example-markets-tile"} (finance) or {section:"example-workout-tile"} (workout). The base ships lean motion-core/icons-core; pull {section:"motion"} or {section:"icons"} for the full set, and {section:"gotchas"} for a rule\'s reasoning or the overlay/chart/form rules. {full:true} is rarely worth it. Finish with check_tile.',
+        'OPT-IN, for HAND-AUTHORED tiles only. For a normal tracker use scaffold_tile / healthcompanion_add_tile with a plain goal: that path is already on-brand and floor-clean and spends no tokens here. Reach for this kit ONLY to hand-write a tile the templates cannot express (multi-metric, an AI bring-your-own-key chat, a bespoke multi-section layout or domain visual). It serves HealthCompanion\'s design DNA, data libraries (real foods, lifts, supplements), API recipes, and the distilled bug-fix rules so the tile comes out on-brand and dodges bugs already fixed. No args = lean orientation (value + top-rules digest + section list). Then {domain:"food|workout|supplement|vee|finance|vitals|goals|quiz"} for a focused bundle (base look + that domain\'s data + recipes, the usual read); add {lean:true} for the lightest bundle that still clears the floor. Or {section:"<name>"} for one file. For the ceiling pattern read a sealed 0/0 example and swap its domain: {section:"example-markets-tile"} (finance) or {section:"example-workout-tile"} (workout). The base ships lean motion-core/icons-core; pull {section:"motion"} or {section:"icons"} for the full set, and {section:"gotchas"} for a rule\'s reasoning or the overlay/chart/form rules. {full:true} is rarely worth it. Finish with check_tile.',
       inputSchema: {
         domain: z.string().max(40).optional().describe('Tile domain for a focused bundle: food, workout, supplement, vee, finance, vitals, goals, quiz. The usual read.'),
         lean: z.boolean().optional().describe('With {domain}, serve the lightest bundle (top rules + theme + components + the domain\'s data + sealed example) instead of the full base. check_tile still enforces the whole floor.'),
@@ -1252,23 +1252,23 @@ export function registerTools(server: McpServer, getVdb: VdbProvider): void {
         return text(buildKit(args));
       } catch (err) {
         const msg = err instanceof Error ? err.message : String(err);
-        return { content: [{ type: 'text', text: `Vitality error: ${sanitizeError(msg)}` }], isError: true };
+        return { content: [{ type: 'text', text: `HealthCompanion error: ${sanitizeError(msg)}` }], isError: true };
       }
     },
   );
 
   // ── check_tile (PURE — the quality gate / magic-wand loop) ────────────────────
   // Run any finished tile HTML (scaffolded OR hand-authored by the caller's Claude)
-  // through the Vitality linter and return a pass/fail receipt with every rule it
+  // through the HealthCompanion linter and return a pass/fail receipt with every rule it
   // breaks. This is what turns ~80 advisory rules into a hard floor: the caller
   // iterates to green before shipping. Ignores getVdb.
   server.registerTool(
     'check_tile',
     {
       annotations: { readOnlyHint: true },
-      title: 'Check a tile against the Vitality floor',
+      title: 'Check a tile against the Health Companion floor',
       description:
-        'Lint a finished tile\'s HTML against Vitality\'s hard floor (sealed isolation, local date keys, buttery 60fps motion (transform/opacity only, never layout props), no emoji or em dashes, on-brand tokens, contract-valid report() shape) and return a "Vitality-grade" receipt: PASS or FAIL with the exact rule each problem breaks and how to fix it. ALWAYS call this after you build or edit a tile by hand, and fix every error until it passes, before you hand the tile back or upload it. A PASSING receipt includes a Proof value: pass it to vitality_add_tile as `check` with the identical html and the re-lint is skipped.',
+        'Lint a finished tile\'s HTML against HealthCompanion\'s hard floor (sealed isolation, local date keys, buttery 60fps motion (transform/opacity only, never layout props), no emoji or em dashes, on-brand tokens, contract-valid report() shape) and return a "HealthCompanion-grade" receipt: PASS or FAIL with the exact rule each problem breaks and how to fix it. ALWAYS call this after you build or edit a tile by hand, and fix every error until it passes, before you hand the tile back or upload it. A PASSING receipt includes a Proof value: pass it to healthcompanion_add_tile as `check` with the identical html and the re-lint is skipped.',
       inputSchema: {
         html: z.string().min(1).max(400000).describe('The complete tile HTML to check'),
       },
@@ -1278,7 +1278,7 @@ export function registerTools(server: McpServer, getVdb: VdbProvider): void {
         return text(checkTile(html).text);
       } catch (err) {
         const msg = err instanceof Error ? err.message : String(err);
-        return { content: [{ type: 'text', text: `Vitality error: ${sanitizeError(msg)}` }], isError: true };
+        return { content: [{ type: 'text', text: `HealthCompanion error: ${sanitizeError(msg)}` }], isError: true };
       }
     },
   );

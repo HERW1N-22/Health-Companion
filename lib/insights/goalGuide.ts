@@ -1,9 +1,9 @@
 /**
- * The per-goal "how Vitality gets you there" guide, the recommendation set that
+ * The per-goal "how HealthCompanion gets you there" guide, the recommendation set that
  * fills a goal's dropdown (Layer B of the goal surface).
  *
  * The locked safety rule mirrors the ticker: every recommendation points to a
- * REAL, shipped Vitality feature from a fixed whitelist. The brain may pick and
+ * REAL, shipped HealthCompanion feature from a fixed whitelist. The brain may pick and
  * order from that list per goal, but can NEVER invent a feature. So across any
  * goal from any user, the worst case is a real-but-imperfect suggestion, never
  * vaporware, never a dead link.
@@ -16,7 +16,7 @@
  * goal gets a hyper-personal call-out computed from the user's real data: a
  * train-led goal whose lifts have gone flat reads "your bench has not moved in a
  * month, push harder" instead of the generic "beat last time". The strike is rare
- * and earned (a 3+ week stall) so it lands like the golden-URL "Vitality noticed"
+ * and earned (a 3+ week stall) so it lands like the golden-URL "HealthCompanion noticed"
  * moment. Rules over data, instant and free, the deep AI version stays on the
  * golden URL. Reuses the canonical `liftStall` + `matchGoalToLift` (no second
  * source of truth). More holes (macros, weigh-in timing, missed days) plug in here.
@@ -52,7 +52,7 @@ export interface GuideItem {
   why: string
   /** The phrase inside `why` to highlight + turn into the demo trigger. */
   key: string
-  /** A real, shipped Vitality route. */
+  /** A real, shipped HealthCompanion route. */
   href: string
   /** Already logging this domain → a compact quick-link; else → a demo tile. */
   using: boolean
@@ -1246,7 +1246,7 @@ export function guideGroundedWhy(items: GuideItem[] | undefined, module: GuideMo
 }
 
 /**
- * THE STRONGEST BINDING (TRAIN 4): for a goal, name the ONE metric Vitality can
+ * THE STRONGEST BINDING (TRAIN 4): for a goal, name the ONE metric HealthCompanion can
  * draw best, preferring a module the user already feeds (their data is the
  * strongest signal), else the guide's top-ranked module (the highest-value
  * thing to START logging). Pure and deterministic: it reuses buildGoalGuide's

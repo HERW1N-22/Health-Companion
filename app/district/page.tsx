@@ -20,15 +20,15 @@ import DistrictGallery from './DistrictGallery'
  */
 
 export const metadata: Metadata = {
-  title: 'Arts District | Vitality',
+  title: 'Arts District | Health Companion',
   description:
-    'Browse the Vitality Arts District. Add beautiful, useful dashboard tiles built by us and the community in one tap. No setup.',
+    'Browse the HealthCompanion Arts District. Add beautiful, useful dashboard tiles built by us and the community in one tap. No setup.',
   openGraph: {
-    title: 'Arts District | Vitality',
+    title: 'Arts District | Health Companion',
     description:
-      'A gallery of dashboard tiles you can add to your Vitality in one tap. Built by us and the community.',
+      'A gallery of dashboard tiles you can add to your HealthCompanion in one tap. Built by us and the community.',
     url: '/district',
-    siteName: 'Vitality',
+    siteName: 'Health Companion',
     type: 'website',
   },
 }

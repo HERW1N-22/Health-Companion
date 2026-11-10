@@ -28,7 +28,7 @@ import type {
   UploadRating,
 } from './types'
 
-const LS_KEY = 'vitality_brand_v1'
+const LS_KEY = 'healthcompanion_brand_v1'
 
 /**
  * Upper bound on per-account follower history. ~200 entries lets us

@@ -67,7 +67,7 @@ export default function SocialsView() {
         <header className={styles.header}>
           <div className={styles.headerLeft}>
             <Link href="/app" className={styles.back}>
-              <span className={styles.backArrow}>←</span> Vitality
+              <span className={styles.backArrow}>←</span> HealthCompanion
             </Link>
             <span className={styles.countPill}>
               {flat.length === 0

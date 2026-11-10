@@ -17,7 +17,7 @@ function ex(id: string, sets: Array<{ w: number | null; r: number | null; done?:
 
 describe('pendingSnapshot helpers', () => {
   test('pendingKey is scoped to user, date and day', () => {
-    expect(pendingKey('u1', '2026-06-17', 'Pull')).toBe('vitality_pending_workout:u1:2026-06-17:Pull')
+    expect(pendingKey('u1', '2026-06-17', 'Pull')).toBe('healthcompanion_pending_workout:u1:2026-06-17:Pull')
     expect(pendingKey('u1', '2026-06-17', 'Pull')).not.toBe(pendingKey('u2', '2026-06-17', 'Pull'))
     expect(pendingKey('u1', '2026-06-17', 'Pull')).not.toBe(pendingKey('u1', '2026-06-18', 'Pull'))
   })

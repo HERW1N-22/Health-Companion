@@ -1,6 +1,6 @@
 // Client-side meal builders. Each returns a SaveMealInput (no id / loggedAt —
 // the server assigns those). Mirrors the standalone's mealFrom* helpers but
-// emits Vitality's camelCase Meal shape.
+// emits HealthCompanion's camelCase Meal shape.
 
 import type {
   Macros,

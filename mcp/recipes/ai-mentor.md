@@ -1,8 +1,8 @@
 # AI mentor / chatbot tile (bring your own Anthropic key)
 
-This is the Aikido move on the AI-key problem. A tile cannot hold one of Vitality's keys, but it CAN hold the USER'S OWN key and talk to Claude directly. The user pastes their key once into the tile's settings, the key lives in the tile's saved data, the request goes from the user's own browser to Anthropic, and the user spends their own (tiny) quota. Cost and trust stay with the person who built the tile. This is how a tile becomes a real mentor instead of a toy.
+This is the Aikido move on the AI-key problem. A tile cannot hold one of Health Companion's keys, but it CAN hold the USER'S OWN key and talk to Claude directly. The user pastes their key once into the tile's settings, the key lives in the tile's saved data, the request goes from the user's own browser to Anthropic, and the user spends their own (tiny) quota. Cost and trust stay with the person who built the tile. This is how a tile becomes a real mentor instead of a toy.
 
-The voice here is Vee, Vitality's mentor. Build the chat surface from `feature-vee.md` (bubbles, ask bar, thinking dots, the cozy loader) so it is unmistakably on-brand. Honor the color law: mint/iris mean good, amber is caution, never red for a non-destructive state.
+The voice here is Vee, Health Companion's mentor. Build the chat surface from `feature-vee.md` (bubbles, ask bar, thinking dots, the cozy loader) so it is unmistakably on-brand. Honor the color law: mint/iris mean good, amber is caution, never red for a non-destructive state.
 
 This file gives you (1) when to flag that a tile needs a key, (2) the directions to get one, (3) the settings gear that takes the key, (4) the exact browser-direct Claude call, (5) the mentor's system prompt grounded in Vee, and (6) how it all wires together while staying sealed.
 
@@ -20,7 +20,7 @@ Then build the tile so a missing key shows a warm "add your key to wake Vee up" 
 
 The reason to get a separate key is privacy, and that is a feature, not a chore. Keep the pitch short, warm, and professional:
 
-> "Your mentor talks straight to Claude with your own key, so your conversations stay yours alone and never pass through Vitality. It costs only fractions of a cent a message, and setup takes about two minutes, once."
+> "Your mentor talks straight to Claude with your own key, so your conversations stay yours alone and never pass through Health Companion. It costs only fractions of a cent a message, and setup takes about two minutes, once."
 
 A one-line chip version:
 
@@ -28,7 +28,7 @@ A one-line chip version:
 
 And say the future plan plainly, so it reads as a deliberate choice and not a gap:
 
-> "A built-in Vitality option may arrive in a future update. For now, while Vitality is new, we will not route your private conversations through our own key. Your privacy is worth the one small step."
+> "A built-in Health Companion option may arrive in a future update. For now, while Health Companion is new, we will not route your private conversations through our own key. Your privacy is worth the one small step."
 
 ---
 
@@ -54,7 +54,7 @@ Default to `claude-opus-4-8` for quality. Offer `claude-haiku-4-5` as the budget
 
 ## 3. The settings gear (where the key is pasted)
 
-A small gear button opens a settings panel with one row: a password input for the key and a Save button. The key is stored in the tile's saved data via `Vitality.save`, so it survives reloads. Never hardcode a key. Never use a Vitality-owned key.
+A small gear button opens a settings panel with one row: a password input for the key and a Save button. The key is stored in the tile's saved data via `Health Companion.save`, so it survives reloads. Never hardcode a key. Never use a Health Companion-owned key.
 
 ```html
 <button class="gear" id="gear" aria-label="settings">
@@ -97,13 +97,13 @@ A small gear button opens a settings panel with one row: a password input for th
 ```js
 var state = { apiKey: '', model: 'claude-opus-4-8', history: [] };
 
-Vitality.load().then(function (saved) {
+Health Companion.load().then(function (saved) {
   if (saved && typeof saved === 'object') state = Object.assign(state, saved);
   document.getElementById('key').value = state.apiKey || '';
   render();
 });
 
-function persist(){ Vitality.save(state); }                 // saves key AND history together
+function persist(){ Health Companion.save(state); }                 // saves key AND history together
 
 document.getElementById('gear').onclick = function () {
   var s = document.getElementById('settings');
@@ -156,17 +156,17 @@ async function askClaude(history, apiKey, model){
 }
 ```
 
-Keep the key out of any `Vitality.report` payload; report carries a number, never a secret. A mentor tile usually has no single meaningful stream, so it simply never calls `report()`, and nothing breaks.
+Keep the key out of any `Health Companion.report` payload; report carries a number, never a secret. A mentor tile usually has no single meaningful stream, so it simply never calls `report()`, and nothing breaks.
 
 ---
 
 ## 5. The mentor's voice (grounded in Vee)
 
-Distill Vee into the system prompt so the tile sounds like Vitality, not a generic assistant. Vee listens first, then says the one true thing that helps; concrete and kind; celebrates real wins; never shames a slip.
+Distill Vee into the system prompt so the tile sounds like Health Companion, not a generic assistant. Vee listens first, then says the one true thing that helps; concrete and kind; celebrates real wins; never shames a slip.
 
 ```js
 var MENTOR_SYSTEM = [
-  "You are Vee, a warm, grounded mentor living inside the user's Vitality dashboard.",
+  "You are Vee, a warm, grounded mentor living inside the user's Health Companion dashboard.",
   "You are a caring character, not a chatbot. Listen first, then say the one true thing that helps.",
   "Be concrete and kind. Keep replies short and human, plain words, no clinical tone, no bullet lists unless asked.",
   "Celebrate real wins out loud. Never shame a slip; offer one small next step instead.",
@@ -206,7 +206,7 @@ async function send(text){
 
 ## 7. The seal, honestly
 
-The tile stays sealed: it loads no external code or stylesheet, it only sends messages to Anthropic with the user's own key. The rules are simple. Never hardcode a key. Never carry a Vitality-owned key (those live server-side in Vitality and never reach a tile). Keep the user's key in `Vitality.save` data, not in the HTML and not in a `report()` call. Fail warm when the key is missing or rejected. Do that, and a one-file tile becomes a real, private mentor that costs the user fractions of a cent and feels like magic.
+The tile stays sealed: it loads no external code or stylesheet, it only sends messages to Anthropic with the user's own key. The rules are simple. Never hardcode a key. Never carry a Health Companion-owned key (those live server-side in Health Companion and never reach a tile). Keep the user's key in `Health Companion.save` data, not in the HTML and not in a `report()` call. Fail warm when the key is missing or rejected. Do that, and a one-file tile becomes a real, private mentor that costs the user fractions of a cent and feels like magic.
 
 For the whole thing assembled into one complete, sealed, floor-clean tile, see `example-mentor-tile.md`: a full chat mentor with bubbles, an ask bar, thinking dots, the settings gear, the warm no-key gate, and the safe `textContent` rendering, ready to build any coach or chatbot from.
 

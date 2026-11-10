@@ -47,10 +47,10 @@ import styles from './coachSection.module.css'
  * FinanceModule already holds, passed down as props (no second data hook).
  */
 
-const CACHE_KEY = 'vitality_finance_coach_v1'
+const CACHE_KEY = 'healthcompanion_finance_coach_v1'
 
 const STARTERS = ['am I overspending?', 'what should I cancel?', "how's my month?"]
-const CELEBRATED_KEY = 'vitality_finance_coach_celebrated_v1'
+const CELEBRATED_KEY = 'healthcompanion_finance_coach_celebrated_v1'
 
 // Celebration burst — deterministic mint particles flung out from the gem center.
 const BURST_PARTICLES = Array.from({ length: 14 }, (_, i) => {

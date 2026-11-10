@@ -47,9 +47,9 @@ function loadUsdaKey(): string | null {
   }
   const candidates = [
     join(process.cwd(), '.env.local'),
-    // process.cwd() is the worktree (…/vitality/.claude/worktrees/<name>); the
+    // process.cwd() is the worktree (…/healthcompanion/.claude/worktrees/<name>); the
     // main repo checkout that owns the real .env.local is three levels up
-    // (<name> → worktrees → .claude → vitality).
+    // (<name> → worktrees → .claude → healthcompanion).
     join(process.cwd(), '..', '..', '..', '.env.local'),
     // Belt-and-suspenders: also try four up in case of a deeper nesting.
     join(process.cwd(), '..', '..', '..', '..', '.env.local'),

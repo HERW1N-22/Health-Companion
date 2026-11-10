@@ -4,7 +4,7 @@
  * phrasing, but never a false match: a goal about a lift they don't log returns
  * null, so the oracle never claims a stall on a lift that isn't theirs.
  *
- * Goals are freeform today (vitality_goals has no lift_id), so this token-overlap
+ * Goals are freeform today (healthcompanion_goals has no lift_id), so this token-overlap
  * match is the bridge that makes a "bench vs 225 goal" notice possible.
  */
 

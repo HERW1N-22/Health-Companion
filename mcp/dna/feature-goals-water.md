@@ -1,6 +1,6 @@
 # Feature DNA: Goals streak + Water hydration
 
-Sealed-HTML recipes distilled from Vitality's Goals (Duolingo-style streak,
+Sealed-HTML recipes distilled from Health Companion's Goals (Duolingo-style streak,
 identity-tagged big goals with progress and days-left, plan-tomorrow queue)
 and Water (hydration ring with servings target). One file, no libraries, no
 React. Plain HTML, CSS, vanilla JS, inline SVG. Color law: mint/azure good,

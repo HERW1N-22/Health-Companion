@@ -6,7 +6,7 @@
  * the generated opener. Kept tiny and typed so both sides agree on the shape.
  */
 
-const KEY = 'vitality.mentorSeed'
+const KEY = 'healthcompanion.mentorSeed'
 
 export interface MentorSeed {
   topic: string       // e.g. 'recovery'

@@ -1,12 +1,12 @@
 /**
- * Tests for the Vitality Score engine pure functions (lib/vitality/*).
+ * Tests for the HealthCompanion Score engine pure functions (lib/healthcompanion/*).
  * No IO — these exercise the blending math, score combination, and the
  * per-contributor done/rate calculations. Run with:
- *   npx jest vitalityScore --testPathIgnorePatterns "/node_modules/"
+ *   npx jest healthcompanionScore --testPathIgnorePatterns "/node_modules/"
  */
-import { WEIGHTS, weightedBlend, combineResults, runContributors, type ContributorResult, type Contributor, type ScoreContext } from '@/lib/vitality/score'
-import { fuelDoneByDay } from '@/lib/vitality/contributors/fuel'
-import { trainTargetPerWeek, trainRate } from '@/lib/vitality/contributors/train'
+import { WEIGHTS, weightedBlend, combineResults, runContributors, type ContributorResult, type Contributor, type ScoreContext } from '@/lib/healthcompanion/score'
+import { fuelDoneByDay } from '@/lib/healthcompanion/contributors/fuel'
+import { trainTargetPerWeek, trainRate } from '@/lib/healthcompanion/contributors/train'
 
 describe('weightedBlend', () => {
   it('returns 0 for an all-zero week', () => {

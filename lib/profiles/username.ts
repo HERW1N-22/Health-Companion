@@ -24,7 +24,7 @@ const USERNAME_RE = /^[a-z0-9_]+$/
  *  - route collisions: `/u`, `/app`, `/account`, `/api`, `/mcp`, `/vee` etc.
  *    (a handle that shadows a real path is a footgun even though `/u/<h>` is
  *    namespaced — it reads as official).
- *  - brand / impersonation: `vitality`, `admin`, `support`, `team`, `official`.
+ *  - brand / impersonation: `healthcompanion`, `admin`, `support`, `team`, `official`.
  */
 const RESERVED = new Set<string>([
   // routes / namespaces
@@ -34,7 +34,7 @@ const RESERVED = new Set<string>([
   // legal / meta
   'about', 'terms', 'privacy', 'help', 'contact', 'support', 'not-found', 'notfound',
   // brand / authority
-  'vitality', 'admin', 'administrator', 'root', 'team', 'official', 'staff',
+  'healthcompanion', 'admin', 'administrator', 'root', 'team', 'official', 'staff',
   'mod', 'moderator', 'system', 'null', 'undefined', 'anonymous', 'me',
 ])
 

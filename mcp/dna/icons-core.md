@@ -1,6 +1,6 @@
 This is the lean icon core. For the full motif set (every domain's bespoke glyphs), read {section:"icons"}.
 
-# Vitality DNA: Icon Core (inlinable SVG)
+# Health Companion DNA: Icon Core (inlinable SVG)
 
 Everything here is plain HTML, CSS, and inline SVG. No libraries, no React, no
 Three.js, no emoji. This core covers what EVERY tile build needs: the house icon
@@ -130,7 +130,7 @@ tanks the frame rate); pulse `opacity` on a pre-blurred twin instead.
 
 ---
 
-## 4. Quick checklist for a Vitality-grade tile visual
+## 4. Quick checklist for a Health Companion-grade tile visual
 
 - Icons: `viewBox 0 0 24 24`, `fill="none"`, `stroke="currentColor"`,
   `stroke-width="1.7"`, round caps and joins. Color from CSS.

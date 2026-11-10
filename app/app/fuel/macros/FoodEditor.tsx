@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { PORTION_UNITS, type PortionUnit, gramsToUnit, portionStrToGrams } from '@/lib/nutrition/portions'
 import type { MealFood, UsdaCandidate, SearchMode } from '@/lib/nutrition/types'
 import { explainFood } from '@/lib/nutrition/client'
-import VitalityIcon from '@/components/VitalityIcon'
+import HealthCompanionIcon from '@/components/HealthCompanionIcon'
 import styles from './macros.module.css'
 import FoodSearchPicker from './FoodSearchPicker'
 
@@ -91,17 +91,17 @@ export default function FoodEditor({
           />
           <div className={styles.foodMetaRow}>
             <button type="button" className={styles.whatIsBtn} onClick={askWhatIsThis} disabled={explaining}>
-              <VitalityIcon name="sparkles" size={13} />
+              <HealthCompanionIcon name="sparkles" size={13} />
               {explaining ? 'Looking it up…' : 'What is this?'}
             </button>
             <button type="button" className={styles.removeBtn} onClick={onRemove}>
-              <VitalityIcon name="trash" size={13} />
+              <HealthCompanionIcon name="trash" size={13} />
               Remove
             </button>
           </div>
           {explain && (
             <div className={styles.explainPanel}>
-              <span className={styles.explainTag}><VitalityIcon name="sparkles" size={11} /> the gist</span>
+              <span className={styles.explainTag}><HealthCompanionIcon name="sparkles" size={11} /> the gist</span>
               <p className={styles.explainText}>{explain}</p>
             </div>
           )}

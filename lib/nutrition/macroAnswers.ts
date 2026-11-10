@@ -6,7 +6,7 @@
 
 import type { QuizAnswers } from '@/components/Quiz'
 
-export const MACRO_ANSWERS_KEY = 'vitality_macro_answers_v1'
+export const MACRO_ANSWERS_KEY = 'healthcompanion_macro_answers_v1'
 
 // One summarized pick, ready to render as a chip (e.g. {label:'Goal', value:'Lose weight'}).
 export interface MacroPick {

@@ -6,7 +6,7 @@
 -- MCP window in mcp/docs/tiles-table-contract.md so both sides build to one
 -- target and a single prod migration covers it.
 --
--- Runtime data a tile persists via Vitality.save() lives in a SEPARATE row
+-- Runtime data a tile persists via HealthCompanion.save() lives in a SEPARATE row
 -- (tile_data) so a growing payload never rewrites the html — exactly how
 -- tileStore splits index vs data today.
 --
@@ -34,7 +34,7 @@ create policy "tiles owner rw" on public.tiles
 
 create index if not exists tiles_user_idx on public.tiles(user_id, updated_at desc);
 
--- Runtime data a tile persists via Vitality.save(), kept separate from the html.
+-- Runtime data a tile persists via HealthCompanion.save(), kept separate from the html.
 create table if not exists public.tile_data (
   user_id    uuid not null references auth.users(id) on delete cascade,
   tile_id    uuid not null references public.tiles(id) on delete cascade,
